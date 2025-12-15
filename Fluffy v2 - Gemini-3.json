@@ -1,0 +1,678 @@
+{
+  "name": "Fluffy v2 - Gemini",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1YBr8sNEbyNzOAK2yYmnAnfVDypuJm89evy_MtbBLQDo",
+          "mode": "list",
+          "cachedResultName": "Fluffy automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YBr8sNEbyNzOAK2yYmnAnfVDypuJm89evy_MtbBLQDo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1822052618,
+          "mode": "list",
+          "cachedResultName": "Sign Up",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YBr8sNEbyNzOAK2yYmnAnfVDypuJm89evy_MtbBLQDo/edit#gid=1822052618"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        -240
+      ],
+      "id": "a54fb222-cd3e-4954-b645-028d00973624",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "sydXjuIBsD6mRZm8",
+          "name": "Google Sheets Trigger account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const out = [];\n\nfunction cleanSpaces(s){ return (s || '').trim().replace(/\\s+/g, ' '); }\nfunction normaliseEmail(emailRaw){\n  const e = cleanSpaces(emailRaw).toLowerCase();\n  return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/.test(e) ? e : '';\n}\nfunction normaliseINPhone(mobileRaw){\n  const digits = (mobileRaw || '').replace(/\\D/g, '');\n  let ten = digits;\n  if (digits.length === 10) ten = digits;\n  else if (digits.length === 11 && digits.startsWith('0')) ten = digits.slice(1);\n  else if (digits.length === 12 && digits.startsWith('91')) ten = digits.slice(2);\n  else if (digits.length === 13 && digits.startsWith('091')) ten = digits.slice(3);\n  else if (digits.startsWith('91') && digits.length > 12) ten = digits.slice(-10);\n  if (!/^[6-9]\\d{9}$/.test(ten)) return '';\n  return `+91${ten}`;\n}\n\nfor (const item of items) {\n  const emailRaw  = item.json[\"Registered Email\"]  ?? '';\n  const mobileRaw = item.json[\"Registered Number\"] ?? '';\n\n  item.json.emailRaw     = emailRaw;\n  item.json.mobileRaw    = mobileRaw;\n  item.json.email        = normaliseEmail(emailRaw);\n  item.json.mobileE164   = normaliseINPhone(mobileRaw);\n  item.json.isValid      = !!item.json.email && !!item.json.mobileE164;\n\n  out.push(item);\n}\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        -256
+      ],
+      "id": "05d9f87e-ec64-4d7f-9bb5-36e084d98395",
+      "name": "Normalize"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "278195a7-f3f2-4b60-bb15-ecb7d5e73ec7",
+              "leftValue": "={{ $json.Processed }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c197ade9-b96e-4e4e-b212-87359fa26ec4",
+              "leftValue": "={{ $json['Registered Number'] }}",
+              "rightValue": "ph : +91 97455 82525",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -992,
+        -240
+      ],
+      "id": "048fca8c-c6c7-4d7e-9ab7-d7467b4daa9d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1YBr8sNEbyNzOAK2yYmnAnfVDypuJm89evy_MtbBLQDo",
+          "mode": "list",
+          "cachedResultName": "Fluffy automation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YBr8sNEbyNzOAK2yYmnAnfVDypuJm89evy_MtbBLQDo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1822052618,
+          "mode": "list",
+          "cachedResultName": "Sign Up",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YBr8sNEbyNzOAK2yYmnAnfVDypuJm89evy_MtbBLQDo/edit#gid=1822052618"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Processed": "DONE",
+            "Username": "={{ $('Normalize').item.json.Username }}"
+          },
+          "matchingColumns": [
+            "Username"
+          ],
+          "schema": [
+            {
+              "id": "Username",
+              "displayName": "Username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Password",
+              "displayName": "Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Registered Email",
+              "displayName": "Registered Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Registered Number",
+              "displayName": "Registered Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Processed",
+              "displayName": "Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -256,
+        -256
+      ],
+      "id": "b5f4c4ee-eca6-4ba7-8a19-0e366555591f",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mWTrSEDehWLuMtnV",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telinfy.net/gagp/whatsapp/templates/message",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Api-Key",
+              "value": "f26b1e94-49c0-4270-ba6e-1b8538b50de0"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"to\": \"{{ $json.mobileE164 }}\",\n  \"templateName\": \"fluffy_signup_new\",\n  \"language\": \"en\",\n  \"header\": {\n    \"parameters\": [\n      {\n        \"type\": \"image\",\n        \"image\": {\n          \"link\": \"https://drive.google.com/uc?export=view&id=1VjWrn1wvtie5YDgWiw3Pk591QVE641YB\"\n        }\n      }\n    ]\n  },\n  \"body\": {\n    \"parameters\": [\n      {\n        \"type\": \"text\",\n        \"text\": \"Pranav\"\n      }\n    ]\n  },\n  \"button\": null\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -480,
+        -256
+      ],
+      "id": "347a8b7a-cdd2-4a09-9636-f56a507747cb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-reply",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1456,
+        224
+      ],
+      "id": "7ab28667-ecdf-46ac-b716-577477d169e7",
+      "name": "Webhook",
+      "webhookId": "6eb22009-1f00-47e2-b7af-e010396f350f"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8481d99c-5275-4405-ae9d-727cfd1577e0",
+              "name": "rawMessage",
+              "value": "={{ $json.body?.userMessage || $json.body?.message || $json.body?.text || $json.body }}",
+              "type": "string"
+            },
+            {
+              "id": "1eccc88c-b116-4fee-b30c-f36037995515",
+              "name": "product",
+              "value": "={{ $json.body.product }}",
+              "type": "string"
+            },
+            {
+              "id": "dc616952-4f84-4875-b4b3-eb5fc561d399",
+              "name": "=sessionId",
+              "value": "={{ ($json.body.PhoneNumber || 'unknown') + '::' + ($json.body.product || 'generic') }}",
+              "type": "string"
+            },
+            {
+              "id": "a4ee6d50-0ba0-4f06-b075-d768e7961c1a",
+              "name": "businessInfo",
+              "value": "={{ $json.body.MyBusinessIs }}",
+              "type": "string"
+            },
+            {
+              "id": "60e35821-8e5c-41e7-82fa-8ecd3378c4ba",
+              "name": "phoneNumber",
+              "value": "={{ $json.body.PhoneNumber }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1248,
+        224
+      ],
+      "id": "e5449174-d7bb-421e-b375-30bffa7f1fcb",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize1 - pass only required fields, and normalize phone number\nconst rawMsg = $json.rawMessage || \"\";\n\n// Extract any phone number in formats like +91XXXXXXXXXX or 91XXXXXXXXXX\nconst phoneMatch = rawMsg.match(/(\\+?91)?(\\d{10})/);\n\nlet formattedPhone = \"\";\nif (phoneMatch) {\n  const full = phoneMatch[0].replace(/\\D/g, \"\");       // keep digits only\n  const digits = full.replace(/^91/, \"\");              // remove leading 91 if duplicated\n  // Format: +91 85465 32471\n  formattedPhone = `+91 ${digits.slice(0, 5)} ${digits.slice(5)}`;\n}\n\nreturn [{\n  json: {\n    message: rawMsg,\n    product: $json.product || 'no product',\n    sessionId: $json.sessionId,\n    businessInfo: $json.businessInfo || '',\n    phone: $('Webhook').first().json.body.PhoneNumber   // normalized phone number\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1040,
+        224
+      ],
+      "id": "9836ea9a-77b1-476f-ace9-d5ebfb6b9112",
+      "name": "Normalize1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════════════════════════════\n// BUILD CHAT - FIXED FOR NEW METADATA FORMAT\n// Now reads both OLD format (array) and NEW format (object with metadata)\n// ═══════════════════════════════════════════════════════════════════\n\nconst normNode = $('Normalize1').first();\nconst norm = normNode && normNode.json ? normNode.json : ($json || {});\n\n// 1. Get Redis history (raw)\nconst redisRaw = ($json && $json.result)\n  ? $json.result\n  : (Array.isArray($items) && $items[0] && $items[0].json && $items[0].json.result)\n    ? $items[0].json.result\n    : null;\n\nlet history = [];\nif (typeof redisRaw === 'string' && redisRaw && redisRaw !== 'null') {\n  try {\n    const parsed = JSON.parse(redisRaw);\n    \n    // NEW FORMAT: Check if data has messages + metadata structure\n    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {\n      if (Array.isArray(parsed.messages)) {\n        history = parsed.messages;  // ✓ Extract messages from new format\n      } else {\n        history = [];\n      }\n    }\n    // OLD FORMAT: Just array of messages\n    else if (Array.isArray(parsed)) {\n      history = parsed;\n    } else {\n      history = [];\n    }\n  } catch (e) {\n    history = [];\n  }\n}\n\n// 2. Extract new user message (raw)\nconst userMessage = (\n  typeof norm.message === 'string'\n    ? norm.message\n    : (norm.rawMessage || '')\n).trim();\n\nconst sessionId = norm.sessionId ?? null;\nconst businessInfo = (norm.businessInfo || '').trim();\n\n// 3. Build messages for the Assistant:\n//    - last 20 messages from history\n//    - plus the new user message\nconst messages = [\n  ...(Array.isArray(history) ? history.slice(-20) : []),\n  { role: 'user', content: userMessage }\n];\n\n// 4. Return context for next nodes\nreturn [{\n  json: {\n    messages,           // used by Message a model2\n    sessionId,\n    userMessage,        // raw user text\n    businessInfo,\n    product: norm.product ?? null,\n    // Debug info\n    _debug: {\n      historyCount: history.length,\n      messagesCount: messages.length,\n      hasHistory: history.length > 0\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -624,
+        224
+      ],
+      "id": "fd42cbef-f42e-481c-b199-045c481b92a6",
+      "name": "Build Chat"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://clear-woodcock-13031.upstash.io",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ATLnAAIncDJhZjkwZTE2MzM3OTI0NmM5ODI1ZGY3Y2RkMDY4NDhlNHAyMTMwMzE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ [\"GET\", \"chat:\" + $json.sessionId] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        224
+      ],
+      "id": "229984b2-b969-447d-a3f7-27da7cf89cf0",
+      "name": "Redis Get History",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "fR4XQAgboNIH04aw",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "ylvdiuTnk3fhSeY6",
+          "name": "Upstash-Redis-Rest"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ═══════════════════════════════════════════════════════════════════\n// PREPARE REDIS SET - PRESERVES PROCESSED FLAG + CAPTURES BUSINESS INFO + USERNAME\n// Saves conversations WITH metadata AND preserves processedToSheets flag\n// ═══════════════════════════════════════════════════════════════════\n\n// Helper: safe access to another node's first item\nfunction getNodeFirst(nodeName) {\n  try {\n    const items = $items(nodeName);\n    if (Array.isArray(items) && items.length) return items[0].json;\n  } catch (e) {}\n  try {\n    if ($node && $node[nodeName] && $node[nodeName].json) return $node[nodeName].json;\n  } catch(e){}\n  return null;\n}\n\n// 1) Get existing metadata from Redis GET History to preserve flags\nlet existingMetadata = {};\nconst redisGetHistory = getNodeFirst(\"Redis Get History\");\nif (redisGetHistory && redisGetHistory.result) {\n  try {\n    const parsed = JSON.parse(redisGetHistory.result);\n    if (parsed && parsed.metadata) {\n      existingMetadata = parsed.metadata;\n    }\n  } catch(e) {}\n}\n\n// 2) Build Chat context (try \"Build Chat\" node, fallback to current input)\nconst buildChat = getNodeFirst(\"Build Chat\") || $input.first().json || {};\nlet history = Array.isArray(buildChat.messages) ? buildChat.messages.slice() : [];\n\n// 3) Extract assistant reply from this node's input (openai / ai node)\nconst openaiResult = $input.first().json || {};\n\n// Robust extractor for many possible shapes\nfunction extractAssistantText(obj) {\n  if (!obj || typeof obj !== 'object') return '';\n  if (typeof obj.output === 'string' && obj.output.trim() !== '') return obj.output.trim();\n  if (typeof obj.output_text === 'string' && obj.output_text.trim() !== '') return obj.output_text.trim();\n  if (typeof obj.text === 'string' && obj.text.trim() !== '') return obj.text.trim();\n  if (typeof obj.response === 'string' && obj.response.trim() !== '') return obj.response.trim();\n\n  // OpenAI-type choices\n  if (obj.choices && Array.isArray(obj.choices) && obj.choices.length) {\n    const c = obj.choices[0];\n    if (c.message && c.message.content) return (c.message.content || '').toString().trim();\n    if (c.text) return (c.text || '').toString().trim();\n  }\n\n  // langchain-like wrappers\n  if (obj.body && typeof obj.body === 'object') {\n    return extractAssistantText(obj.body);\n  }\n  if (obj.result && typeof obj.result === 'string') {\n    return obj.result.trim();\n  }\n\n  return '';\n}\n\nconst assistantText = extractAssistantText(openaiResult) || '';\n\n// 4) Append assistant message to existing history\nconst nextHistory = [\n  ...history,\n  ...(assistantText ? [{ \n    role: 'assistant', \n    content: assistantText, \n    ts: Date.now() \n  }] : [])\n].slice(-50); // keep last 50 entries\n\n// 5) Get sessionId (prefer Build Chat, then Normalize1, then current item)\nlet sessionId = (buildChat && (buildChat.sessionId || buildChat.session_id || buildChat.session)) || null;\nif (!sessionId) {\n  const normalize1 = getNodeFirst(\"Normalize1\");\n  if (normalize1 && normalize1.sessionId) sessionId = normalize1.sessionId;\n}\nif (!sessionId) sessionId = $json.sessionId || null;\n\n// 6) Extract phone number from multiple sources\nlet phoneNumber = null;\n\n// Try to get from Webhook node\nconst webhookNode = getNodeFirst(\"Webhook\");\nif (webhookNode && webhookNode.body) {\n  phoneNumber = webhookNode.body.PhoneNumber || \n                webhookNode.body.phone || \n                webhookNode.body.phoneNumber || \n                webhookNode.body.Phone;\n}\n\n// Fallback: Try Normalize1 node\nif (!phoneNumber) {\n  const norm = getNodeFirst(\"Normalize1\");\n  if (norm) {\n    phoneNumber = norm.phone || norm.Phone || norm.PhoneNumber || norm.phoneNumber;\n  }\n}\n\n// Fallback: Try Build Chat\nif (!phoneNumber && buildChat) {\n  phoneNumber = buildChat.phone || buildChat.Phone || buildChat.phoneNumber;\n}\n\n// Fallback: Try Edit Fields node\nif (!phoneNumber) {\n  const editFields = getNodeFirst(\"Edit Fields\");\n  if (editFields) {\n    phoneNumber = editFields.phoneNumber || editFields.phone || editFields.Phone;\n  }\n}\n\n// Final fallback: Extract from sessionId if it exists\nif (!phoneNumber && sessionId) {\n  const parts = sessionId.split('::');\n  if (parts[0] && parts[0].match(/^\\+?\\d{10,15}$/)) {\n    phoneNumber = parts[0];\n  }\n}\n\n// 7) Extract PRODUCT from multiple sources\nlet product = null;\n\n// Try to get from Webhook node\nif (webhookNode && webhookNode.body) {\n  product = webhookNode.body.product || \n            webhookNode.body.Product ||\n            webhookNode.body.service;\n}\n\n// Fallback: Try Normalize1 node\nif (!product) {\n  const norm = getNodeFirst(\"Normalize1\");\n  if (norm) {\n    product = norm.product || norm.Product;\n  }\n}\n\n// Fallback: Try Build Chat\nif (!product && buildChat) {\n  product = buildChat.product || buildChat.Product;\n}\n\n// Fallback: Try Edit Fields node\nif (!product) {\n  const editFields = getNodeFirst(\"Edit Fields\");\n  if (editFields) {\n    product = editFields.product || editFields.Product;\n  }\n}\n\n// Final fallback: Extract from sessionId\nif (!product && sessionId) {\n  const parts = sessionId.split('::');\n  if (parts.length > 1 && parts[1]) {\n    product = parts[1].trim();\n  }\n}\n\n// Default to \"generic\" if still not found\nif (!product || product === '') {\n  product = \"generic\";\n}\n\n// 8) Extract BUSINESS INFO from Webhook\nlet businessInfo = null;\n\n// Try to get from Webhook node body - MyBusinessIs field\nif (webhookNode && webhookNode.body) {\n  businessInfo = webhookNode.body.MyBusinessIs || \n                 webhookNode.body.myBusinessIs ||\n                 webhookNode.body.businessInfo ||\n                 webhookNode.body.BusinessInfo ||\n                 webhookNode.body.company ||\n                 webhookNode.body.Company ||\n                 webhookNode.body.companyName ||\n                 webhookNode.body.CompanyName;\n}\n\n// Fallback: Try Normalize1 node\nif (!businessInfo) {\n  const norm = getNodeFirst(\"Normalize1\");\n  if (norm) {\n    businessInfo = norm.MyBusinessIs || norm.businessInfo || norm.company || norm.companyName;\n  }\n}\n\n// Fallback: Try Build Chat\nif (!businessInfo && buildChat) {\n  businessInfo = buildChat.MyBusinessIs || buildChat.businessInfo || buildChat.company;\n}\n\n// Fallback: Preserve from existing metadata\nif (!businessInfo && existingMetadata.businessInfo) {\n  businessInfo = existingMetadata.businessInfo;\n}\n\n// 9) Extract USERNAME from Webhook (only available on first message)\nlet username = null;\n\n// Try to get from Webhook node body - Username field\nif (webhookNode && webhookNode.body) {\n  username = webhookNode.body.Username || \n             webhookNode.body.username ||\n             webhookNode.body.name ||\n             webhookNode.body.Name ||\n             webhookNode.body.userName ||\n             webhookNode.body.user_name;\n}\n\n// Fallback: Preserve from existing metadata (critical for subsequent messages)\nif (!username && existingMetadata.username) {\n  username = existingMetadata.username;\n}\n\n// 10) Prepare payload for Redis SET - PRESERVE processedToSheets flag!\nconst payloadData = {\n  messages: nextHistory,\n  metadata: {\n    phone: phoneNumber || \"\",\n    sessionId: sessionId || \"\",\n    product: product || \"generic\",\n    lastUpdated: Date.now(),\n    // Store business info\n    businessInfo: businessInfo || \"\",\n    // Store username (captured on first message, preserved thereafter)\n    username: username || \"\",\n    // CRITICAL: Preserve the processed flag from sheets workflow!\n    processedToSheets: existingMetadata.processedToSheets || false,\n    processedAt: existingMetadata.processedAt || null\n  }\n};\n\nconst payloadStr = JSON.stringify(payloadData);\n\n// 11) Return a well-formed object\nreturn [{\n  json: {\n    answer: assistantText,\n    payload: payloadStr,\n    sessionId: sessionId,\n    phoneNumber: phoneNumber || \"\",\n    product: product || \"generic\",\n    businessInfo: businessInfo || \"\",\n    username: username || \"\",\n    // Debug info\n    _debug: {\n      historyLength: nextHistory.length,\n      hasPhone: !!phoneNumber,\n      hasSessionId: !!sessionId,\n      hasProduct: !!product,\n      hasBusinessInfo: !!businessInfo,\n      hasUsername: !!username,\n      preservedProcessedFlag: existingMetadata.processedToSheets || false,\n      usernameSource: username ?\n        (webhookNode?.body?.Username ? \"webhook.Username\" : \n         existingMetadata.username ? \"existing\" : \"unknown\") : \"none\"\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        32
+      ],
+      "id": "6736e141-4de9-47cb-bae3-236baac11b96",
+      "name": "Prepare Redis SET"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://clear-woodcock-13031.upstash.io",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ [\"SET\", \"chat:\" + $('Edit Fields').item.json.sessionId, $json.payload, \"EX\", \"7200\"] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        128,
+        32
+      ],
+      "id": "102b7bf5-b00a-4f87-9411-331e7a8ee8d5",
+      "name": "Save Redis History",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ylvdiuTnk3fhSeY6",
+          "name": "Upstash-Redis-Rest"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        128,
+        416
+      ],
+      "id": "bc55d9ea-7991-43a8-a59a-41d3f238e3b7",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Flatten $input.first().json.output to a plain string for webhook\nconst raw = $input.first().json.output;\n\nlet text;\nif (Array.isArray(raw)) {\n  // join array items with newlines if needed\n  text = raw.join('\\n');\n} else if (typeof raw === 'string') {\n  text = raw;\n} else if (raw && typeof raw === 'object') {\n  text = JSON.stringify(raw);\n} else {\n  text = '';\n}\n\nreturn [{ json: { content: text } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        416
+      ],
+      "id": "2f5e668d-4bc8-4d54-a46d-c5ae975aa4a8",
+      "name": "Clear Thread ID"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_2eYZxaiZNWyIDStkv4BypRLU",
+          "mode": "id"
+        },
+        "prompt": "define",
+        "text": "={{ JSON.stringify({\n  messages: $json.messages,\n  product: $json.product,\n  businessInfo: $json.businessInfo,\n  Name: $('Webhook').item.json.body.Username\n}) }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -432,
+        224
+      ],
+      "id": "95486372-8993-44a4-ae94-7bd8ed488429",
+      "name": "Fluffy",
+      "credentials": {
+        "openAiApi": {
+          "id": "JjyR8g4U8HrI5h6C",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "greenads.app.n8n.cloud",
+            "user-agent": "axios/0.21.4",
+            "content-length": "100",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "13.202.87.207",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "IN",
+            "cf-ray": "9ad225af7040fb88-BOM",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "13.202.87.207, 172.71.198.160",
+            "x-forwarded-host": "greenads.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-31-674f44b4c9-fkhk6",
+            "x-is-trusted": "yes",
+            "x-real-ip": "13.202.87.207"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "userMessage": "Fgjj",
+            "PhoneNumber": "+919074416976",
+            "product": "whatsapp api",
+            "MyBusinessIs": "Nnndf"
+          },
+          "webhookUrl": "https://greenads.app.n8n.cloud/webhook/ai-reply",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Normalize1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize1": {
+      "main": [
+        [
+          {
+            "node": "Redis Get History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Chat": {
+      "main": [
+        [
+          {
+            "node": "Fluffy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Get History": {
+      "main": [
+        [
+          {
+            "node": "Build Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Redis SET": {
+      "main": [
+        [
+          {
+            "node": "Save Redis History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear Thread ID": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fluffy": {
+      "main": [
+        [
+          {
+            "node": "Prepare Redis SET",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Clear Thread ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "68fff73c-dbcb-4680-a804-271627a951e4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8f6fef332a948cb82719393e8f1a16026e7cc4d867f7c5c50c98c7cc8d378043"
+  },
+  "id": "TMySpkx3lnpoKwBW",
+  "tags": []
+}
