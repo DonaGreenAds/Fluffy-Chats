@@ -330,11 +330,11 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)]">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-[var(--accent-solid)]">
                           {lead.prospect_name.charAt(0).toUpperCase()}
                         </div>
                         {lead.is_hot_lead && (
-                          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-[var(--danger)] ring-2 ring-[var(--surface)] flex items-center justify-center">
+                          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-[var(--warning)] ring-2 ring-[var(--surface)] flex items-center justify-center">
                             <Flame className="w-1.5 h-1.5 text-white" />
                           </div>
                         )}
