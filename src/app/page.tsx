@@ -188,48 +188,54 @@ export default function DashboardPage() {
         {/* Subtle purple gradient accent on right */}
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[var(--accent-soft)] via-[var(--accent-soft-2)] to-transparent pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-6 lg:p-8">
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-6 py-4 lg:px-8 lg:py-5">
           {/* Left Content */}
-          <div className="flex-1 space-y-4 max-w-xl">
+          <div className="flex-1 space-y-3 max-w-xl">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-semibold text-[var(--text)] tracking-tight">
+              <h1 className="text-xl lg:text-2xl font-semibold text-[var(--text)] tracking-tight">
                 {greeting}, <span className="text-[var(--text)]">{displayName || 'there'}</span>
               </h1>
-              <p className="mt-2 text-base text-[var(--text-2)] leading-relaxed">
+              <p className="mt-1 text-sm text-[var(--text-2)] leading-relaxed">
                 You have <span className="font-medium text-[var(--text)]">{actionableLeads.length} pending follow-ups</span> and{' '}
                 <span className="font-medium text-[var(--text)]">{hotLeadsCount} hot leads</span> waiting for action.
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-3 pt-1">
+            <div className="flex flex-wrap gap-3">
               <Link
                 href="/leads"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white rounded-xl font-medium text-sm hover:opacity-90 hover:shadow-lg hover:shadow-[var(--accent-1)]/20 transition-all duration-200 focus:ring-2 focus:ring-[var(--focus)]"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white rounded-lg font-medium text-sm hover:opacity-90 hover:shadow-lg hover:shadow-[var(--accent-1)]/20 transition-all duration-200 focus:ring-2 focus:ring-[var(--focus)]"
               >
                 View Leads <ArrowUpRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/analytics"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] rounded-xl font-medium text-sm hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)] transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--surface)] rounded-lg font-medium text-sm transition-all duration-200 relative overflow-hidden group"
+                style={{
+                  background: 'linear-gradient(var(--surface), var(--surface)) padding-box, linear-gradient(to right, var(--accent-1), var(--accent-2)) border-box',
+                  border: '2px solid transparent'
+                }}
               >
-                View Reports
+                <span className="bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] bg-clip-text text-transparent font-medium">
+                  View Reports
+                </span>
               </Link>
             </div>
           </div>
 
           {/* Right: Mascot Stage with Purple Halo */}
-          <div className="hidden md:block relative w-[280px] h-[240px]">
+          <div className="hidden md:block relative w-[200px] h-[160px]">
             {/* Purple gradient halo */}
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-soft)] via-[var(--accent-soft-2)] to-transparent rounded-full blur-3xl scale-110" />
             {/* Secondary subtle blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-tr from-[var(--accent-soft)] to-[var(--accent-soft-2)] rounded-full blur-2xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-tr from-[var(--accent-soft)] to-[var(--accent-soft-2)] rounded-full blur-2xl" />
             {/* Mascot */}
             <div className="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 hover:scale-105 hover:rotate-1">
               <Image
                 src="/images/mascot.png"
                 alt="Fluffy - Your AI Assistant"
-                width={220}
-                height={220}
+                width={150}
+                height={150}
                 className="object-contain drop-shadow-xl"
                 priority
               />
