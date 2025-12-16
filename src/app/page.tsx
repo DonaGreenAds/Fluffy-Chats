@@ -249,8 +249,8 @@ export default function DashboardPage() {
         {/* Total Leads - Purple accent */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)]">
-              <Users className="w-5 h-5 text-white" />
+            <div className="p-2.5 rounded-lg bg-[var(--accent-soft)]">
+              <Users className="w-5 h-5 text-[var(--accent-solid)]" />
             </div>
             <span className="flex items-center gap-1 text-xs font-medium text-[#15803D] bg-[var(--success-soft)] px-2 py-1 rounded-full">
               +{leadStats.growthPercent}% <TrendingUp className="w-3 h-3" />
@@ -263,7 +263,7 @@ export default function DashboardPage() {
         {/* Contacted */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-xl bg-[var(--success-soft)]">
+            <div className="p-2.5 rounded-lg bg-[var(--success-soft)]">
               <CheckCircle2 className="w-5 h-5 text-[var(--success)]" />
             </div>
           </div>
@@ -274,7 +274,7 @@ export default function DashboardPage() {
         {/* Pending */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-xl bg-[var(--warning-soft)]">
+            <div className="p-2.5 rounded-lg bg-[var(--warning-soft)]">
               <Phone className="w-5 h-5 text-[var(--warning)]" />
             </div>
             {stats.needsFollowup > 0 && (
@@ -290,7 +290,7 @@ export default function DashboardPage() {
         {/* Avg Response */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-xl bg-[var(--info-soft)]">
+            <div className="p-2.5 rounded-lg bg-[var(--info-soft)]">
               <Clock className="w-5 h-5 text-[var(--info)]" />
             </div>
           </div>
