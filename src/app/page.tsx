@@ -10,14 +10,14 @@ import {
   Phone,
   Clock,
   ChevronRight,
-  MessageCircle,
   CheckCircle2,
   ArrowUpRight,
   Flame,
   Globe,
-  Target,
   Zap,
-  BarChart3
+  Thermometer,
+  Snowflake,
+  Sun
 } from 'lucide-react';
 import { useLeads } from '@/context/LeadContext';
 import { useAuth } from '@/context/AuthContext';
@@ -123,15 +123,16 @@ export default function DashboardPage() {
     return leads.filter(l => l.is_hot_lead).length;
   }, [leads]);
 
+  // Lead temperature breakdown (Hot/Warm/Cold based on score)
+  const leadTemperature = useMemo(() => {
+    const hot = leads.filter(l => l.is_hot_lead || (l.lead_score || 0) >= 80).length;
+    const warm = leads.filter(l => !l.is_hot_lead && (l.lead_score || 0) >= 50 && (l.lead_score || 0) < 80).length;
+    const cold = leads.filter(l => !l.is_hot_lead && (l.lead_score || 0) < 50).length;
+    return { hot, warm, cold, total: leads.length };
+  }, [leads]);
+
   // Analytics data
   const analyticsData = useMemo(() => {
-    const useCases = Object.entries(
-      leads.reduce((acc, l) => {
-        acc[l.use_case_category] = (acc[l.use_case_category] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>)
-    ).sort((a, b) => b[1] - a[1]).slice(0, 3);
-
     const products = Object.entries(
       leads.reduce((acc, l) => {
         acc[l.primary_topic] = (acc[l.primary_topic] || 0) + 1;
@@ -147,7 +148,7 @@ export default function DashboardPage() {
       }, {} as Record<string, number>)
     ).sort((a, b) => b[1] - a[1]).slice(0, 3);
 
-    return { useCases, products, regions };
+    return { products, regions };
   }, [leads]);
 
   // Generate mock sparkline data
@@ -160,13 +161,15 @@ export default function DashboardPage() {
 
   // Key insight generator
   const keyInsight = useMemo(() => {
-    if (analyticsData.useCases.length > 0) {
-      const topUseCase = analyticsData.useCases[0];
-      const percentage = Math.round((topUseCase[1] / leads.length) * 100);
-      return `${topUseCase[0]} represents ${percentage}% of your leads — consider prioritizing this segment.`;
+    if (leadTemperature.hot > 0) {
+      const hotPercent = Math.round((leadTemperature.hot / leadTemperature.total) * 100);
+      return `${leadTemperature.hot} hot leads (${hotPercent}%) ready for immediate action — prioritize these for quick wins.`;
     }
-    return 'Start collecting leads to see insights about your best-performing segments.';
-  }, [analyticsData.useCases, leads.length]);
+    if (leadTemperature.warm > 0) {
+      return `${leadTemperature.warm} warm leads need nurturing — follow up within 24-48 hours.`;
+    }
+    return 'Start collecting leads to see insights about your pipeline temperature.';
+  }, [leadTemperature]);
 
   // Priority indicator for follow-ups
   const getPriorityColor = (dateStr: string) => {
@@ -291,116 +294,136 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Main Content Row - Equal Heights */}
-      <div className="grid lg:grid-cols-5 gap-6 items-stretch">
+      {/* Main Content Row - Compact Cards with Scroll */}
+      <div className="grid lg:grid-cols-5 gap-5 items-start">
 
-        {/* Recent Leads - 3 columns */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col min-h-[420px]">
+        {/* Recent Leads - 3 columns - Compact */}
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
-            <h2 className="text-base font-semibold text-gray-900">Recent Leads</h2>
+          <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-gray-900">Recent Leads</h2>
+              <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-md">{recentLeads.length}</span>
+            </div>
             <Link
               href="/leads"
-              className="text-sm font-medium text-[#7427FF] hover:text-[#5B1FCC] transition-colors"
+              className="text-xs font-medium text-[#7427FF] hover:text-[#5B1FCC] transition-colors"
             >
               View all →
             </Link>
           </div>
 
-          {/* Scrollable Body */}
-          <div className="flex-1 overflow-y-auto min-h-0">
-            <div className="divide-y divide-gray-50">
-              {recentLeads.map((lead) => (
-                <Link
-                  key={lead.id}
-                  href={`/leads?id=${lead.id}`}
-                  className="px-6 py-4 flex items-center justify-between hover:bg-gray-50/70 transition-colors group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium text-sm bg-gradient-to-br from-gray-700 to-gray-900">
-                        {lead.prospect_name.charAt(0).toUpperCase()}
-                      </div>
-                      {lead.is_hot_lead && (
-                        <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-orange-400 ring-2 ring-white flex items-center justify-center">
-                          <Flame className="w-2 h-2 text-white" />
+          {/* Scrollable Body with fade indicator */}
+          <div className="relative">
+            <div className="overflow-y-auto max-h-[240px] scrollbar-thin">
+              <div className="divide-y divide-gray-50">
+                {recentLeads.map((lead) => (
+                  <Link
+                    key={lead.id}
+                    href={`/leads?id=${lead.id}`}
+                    className="px-5 py-3 flex items-center justify-between hover:bg-gray-50/70 transition-colors group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-gradient-to-br from-gray-700 to-gray-900">
+                          {lead.prospect_name.charAt(0).toUpperCase()}
                         </div>
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 text-sm">{lead.prospect_name}</h4>
-                      <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
-                        <span>{lead.company_name || 'No company'}</span>
-                        <span className="text-gray-300">·</span>
-                        <span className="truncate max-w-[120px]">{lead.primary_topic}</span>
+                        {lead.is_hot_lead && (
+                          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-orange-400 ring-2 ring-white flex items-center justify-center">
+                            <Flame className="w-1.5 h-1.5 text-white" />
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-900 text-sm">{lead.prospect_name}</h4>
+                        <p className="text-xs text-gray-500 truncate max-w-[180px]">
+                          {lead.company_name || lead.primary_topic}
+                        </p>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100 text-gray-600 hidden sm:block">
-                      {lead.lead_score || 0} pts
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
-                  </div>
-                </Link>
-              ))}
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 hidden sm:block">
+                        {lead.lead_score || 0}
+                      </span>
+                      <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
+                    </div>
+                  </Link>
+                ))}
 
-              {recentLeads.length === 0 && (
-                <div className="p-8 text-center">
-                  <Users className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-                  <p className="text-sm text-gray-500">No leads yet</p>
-                  <p className="text-xs text-gray-400 mt-1">Leads will appear here once collected</p>
-                </div>
-              )}
+                {recentLeads.length === 0 && (
+                  <div className="p-6 text-center">
+                    <Users className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                    <p className="text-sm text-gray-500">No leads yet</p>
+                  </div>
+                )}
+              </div>
             </div>
+            {/* Bottom fade indicator */}
+            {recentLeads.length > 4 && (
+              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+            )}
           </div>
         </div>
 
-        {/* Follow-ups - 2 columns */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col min-h-[420px]">
+        {/* Follow-ups - 2 columns - Compact */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
-            <h2 className="text-base font-semibold text-gray-900">Follow-ups</h2>
-            <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
-              {actionableLeads.length} pending
-            </span>
-          </div>
-
-          {/* Scrollable Body */}
-          <div className="flex-1 overflow-y-auto min-h-0 p-4">
-            <div className="space-y-3">
-              {actionableLeads.map((lead) => (
-                <div
-                  key={lead.id}
-                  className={`p-4 bg-gray-50 rounded-xl border-l-4 ${getPriorityColor(lead.conversation_date)} hover:bg-gray-100 transition-colors`}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-medium text-gray-900 text-sm">{lead.prospect_name}</h4>
-                    <span className="text-xs text-gray-400">{lead.conversation_date}</span>
-                  </div>
-                  <p className="text-xs text-gray-500 line-clamp-2 mb-3">
-                    {lead.next_action || 'Follow up regarding recent inquiry...'}
-                  </p>
-                  <Link
-                    href={`/leads?id=${lead.id}`}
-                    className="text-xs font-medium text-[#7427FF] hover:text-[#5B1FCC] transition-colors"
-                  >
-                    Take action →
-                  </Link>
-                </div>
-              ))}
-
-              {actionableLeads.length === 0 && (
-                <div className="py-12 text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-emerald-50 flex items-center justify-center">
-                    <CheckCircle2 className="w-6 h-6 text-emerald-500" />
-                  </div>
-                  <p className="text-sm font-medium text-gray-900">All caught up!</p>
-                  <p className="text-xs text-gray-400 mt-1">No pending follow-ups</p>
-                </div>
+          <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-gray-900">Follow-ups</h2>
+              {actionableLeads.length > 0 && (
+                <span className="text-xs font-medium text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md">
+                  {actionableLeads.length}
+                </span>
               )}
             </div>
+            <Link
+              href="/leads"
+              className="text-xs font-medium text-[#7427FF] hover:text-[#5B1FCC] transition-colors"
+            >
+              View all →
+            </Link>
+          </div>
+
+          {/* Scrollable Body with fade */}
+          <div className="relative">
+            <div className="overflow-y-auto max-h-[240px] p-3 scrollbar-thin">
+              <div className="space-y-2">
+                {actionableLeads.map((lead) => (
+                  <Link
+                    key={lead.id}
+                    href={`/leads?id=${lead.id}`}
+                    className={`block p-3 bg-gray-50 rounded-xl border-l-4 ${getPriorityColor(lead.conversation_date)} hover:bg-gray-100 transition-colors`}
+                  >
+                    <div className="flex justify-between items-start mb-1.5">
+                      <h4 className="font-medium text-gray-900 text-sm">{lead.prospect_name}</h4>
+                      <span className="text-xs text-gray-400">{lead.conversation_date}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 line-clamp-1 mb-2">
+                      {lead.next_action || 'Follow up regarding inquiry...'}
+                    </p>
+                    <span className="text-xs font-medium text-[#7427FF]">
+                      Take action →
+                    </span>
+                  </Link>
+                ))}
+
+                {actionableLeads.length === 0 && (
+                  <div className="py-8 text-center">
+                    <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-emerald-50 flex items-center justify-center">
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-900">All caught up!</p>
+                    <p className="text-xs text-gray-400 mt-0.5">No pending follow-ups</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* Bottom fade indicator */}
+            {actionableLeads.length > 3 && (
+              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+            )}
           </div>
         </div>
       </div>
@@ -498,36 +521,53 @@ export default function DashboardPage() {
 
         {/* Breakdown Cards */}
         <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Top Use Cases */}
+          {/* Lead Temperature */}
           <div className="p-5 bg-gray-50 rounded-xl">
             <div className="flex items-center gap-2 mb-4">
               <div className="p-2 rounded-lg bg-white shadow-sm">
-                <Target className="w-4 h-4 text-gray-600" />
+                <Thermometer className="w-4 h-4 text-gray-600" />
               </div>
-              <h3 className="font-semibold text-sm text-gray-800">Top Use Cases</h3>
+              <h3 className="font-semibold text-sm text-gray-800">Lead Temperature</h3>
             </div>
-            <div className="space-y-3">
-              {analyticsData.useCases.length > 0 ? (
-                (() => {
-                  const maxCount = analyticsData.useCases[0]?.[1] || 1;
-                  return analyticsData.useCases.map(([category, count], index) => (
-                    <div key={category} className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">{category}</span>
-                        <span className="text-sm font-semibold text-gray-900">{count}</span>
-                      </div>
-                      <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#7427FF] to-[#9D4EDD] rounded-full transition-all duration-500"
-                          style={{ width: `${(count / maxCount) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ));
-                })()
-              ) : (
-                <p className="text-sm text-gray-400">No data yet</p>
-              )}
+            <div className="space-y-2.5">
+              {/* Hot Leads */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-red-50 transition-all hover:scale-[1.01]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+                    <Flame className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Hot</span>
+                </div>
+                <span className="text-sm font-bold text-gray-900 bg-white px-2.5 py-0.5 rounded-md shadow-sm">
+                  {leadTemperature.hot}
+                </span>
+              </div>
+
+              {/* Warm Leads */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-amber-50 transition-all hover:scale-[1.01]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
+                    <Sun className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Warm</span>
+                </div>
+                <span className="text-sm font-bold text-gray-900 bg-white px-2.5 py-0.5 rounded-md shadow-sm">
+                  {leadTemperature.warm}
+                </span>
+              </div>
+
+              {/* Cold Leads */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-blue-50 transition-all hover:scale-[1.01]">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
+                    <Snowflake className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Cold</span>
+                </div>
+                <span className="text-sm font-bold text-gray-900 bg-white px-2.5 py-0.5 rounded-md shadow-sm">
+                  {leadTemperature.cold}
+                </span>
+              </div>
             </div>
           </div>
 

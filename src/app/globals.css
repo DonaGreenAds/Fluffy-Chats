@@ -107,6 +107,24 @@ body {
   background: var(--foreground);
 }
 
+/* Thin scrollbar for compact cards */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
 /* WhatsApp chat styling */
 .chat-message {
   max-width: 85%;
