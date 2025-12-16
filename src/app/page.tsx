@@ -34,7 +34,7 @@ function MiniSparkline({ data, trend }: { data: number[]; trend: 'up' | 'down' |
     `${(i / (data.length - 1)) * 56},${24 - ((v - min) / range) * 20}`
   ).join(' ');
 
-  const colorClass = trend === 'up' ? 'text-emerald-400' : trend === 'down' ? 'text-red-400' : 'text-gray-300';
+  const colorClass = trend === 'up' ? 'text-emerald-500' : trend === 'down' ? 'text-rose-500' : 'text-gray-400';
 
   return (
     <svg className="w-14 h-6" viewBox="0 0 56 24">
@@ -107,7 +107,6 @@ export default function DashboardPage() {
       .slice(0, 5);
   }, [leads]);
 
-  const totalMessages = useMemo(() => leads.reduce((acc, l) => acc + l.total_messages, 0), [leads]);
   const avgDuration = useMemo(() => {
     if (leads.length === 0) return 0;
     return Math.round(leads.reduce((acc, l) => acc + l.duration_minutes, 0) / leads.length);
@@ -176,18 +175,18 @@ export default function DashboardPage() {
     const date = new Date(dateStr);
     const now = new Date();
     const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    if (diffDays >= 3) return 'border-l-red-400';
-    if (diffDays >= 1) return 'border-l-amber-400';
-    return 'border-l-blue-400';
+    if (diffDays >= 3) return 'border-l-rose-500';
+    if (diffDays >= 1) return 'border-l-amber-500';
+    return 'border-l-[#7427FF]';
   };
 
   return (
-    <div className="p-6 lg:p-8 space-y-6 min-h-screen bg-gray-50/50">
+    <div className="p-6 lg:p-8 space-y-6 min-h-screen bg-[#FAFAFA]">
 
-      {/* Hero Section - Premium Design */}
-      <div className="relative w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
-        {/* Subtle gradient accent */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-purple-50/60 via-pink-50/30 to-transparent pointer-events-none" />
+      {/* Hero Section - Clean with Purple Accent */}
+      <div className="relative w-full overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm">
+        {/* Subtle purple gradient accent on right */}
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#7427FF]/5 via-[#EE82EE]/3 to-transparent pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-6 lg:p-8">
           {/* Left Content */}
@@ -196,34 +195,34 @@ export default function DashboardPage() {
               <h1 className="text-2xl lg:text-3xl font-semibold text-gray-900 tracking-tight">
                 {greeting}, <span className="text-gray-900">{displayName || 'there'}</span>
               </h1>
-              <p className="mt-2 text-base text-gray-500 leading-relaxed">
-                You have <span className="font-medium text-gray-800">{actionableLeads.length} pending follow-ups</span> and{' '}
-                <span className="font-medium text-gray-800">{hotLeadsCount} hot leads</span> waiting for action.
+              <p className="mt-2 text-base text-gray-600 leading-relaxed">
+                You have <span className="font-medium text-gray-900">{actionableLeads.length} pending follow-ups</span> and{' '}
+                <span className="font-medium text-gray-900">{hotLeadsCount} hot leads</span> waiting for action.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3 pt-1">
               <Link
                 href="/leads"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#7427FF] to-[#9D4EDD] text-white rounded-xl font-medium text-sm hover:shadow-lg hover:shadow-purple-200/50 transition-all duration-200"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7427FF] text-white rounded-xl font-medium text-sm hover:bg-[#6320E0] hover:shadow-lg hover:shadow-[#7427FF]/25 transition-all duration-200"
               >
                 View Leads <ArrowUpRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/analytics"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-gray-700 border border-gray-200 rounded-xl font-medium text-sm hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-gray-700 border border-gray-300 rounded-xl font-medium text-sm hover:border-gray-400 hover:bg-gray-50 transition-colors"
               >
                 View Reports
               </Link>
             </div>
           </div>
 
-          {/* Right: Mascot Stage */}
+          {/* Right: Mascot Stage with Purple Halo */}
           <div className="hidden md:block relative w-[280px] h-[240px]">
-            {/* Gradient halo blob */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#7427FF]/15 via-[#EE82EE]/10 to-transparent rounded-full blur-3xl scale-110" />
+            {/* Purple gradient halo */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#7427FF]/10 via-[#EE82EE]/8 to-transparent rounded-full blur-3xl scale-110" />
             {/* Secondary subtle blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-tr from-purple-200/30 to-pink-200/20 rounded-full blur-2xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-tr from-[#7427FF]/5 to-[#EE82EE]/5 rounded-full blur-2xl" />
             {/* Mascot */}
             <div className="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 hover:scale-105 hover:rotate-1">
               <Image
@@ -239,15 +238,15 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Stats Cards Row - Consistent Design */}
+      {/* Stats Cards Row - Clean Minimal Design */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Leads */}
-        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+        {/* Total Leads - Purple accent */}
+        <div className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#7427FF] to-[#9D4EDD]">
+            <div className="p-2.5 rounded-xl bg-[#7427FF]">
               <Users className="w-5 h-5 text-white" />
             </div>
-            <span className="flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+            <span className="flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
               +{leadStats.growthPercent}% <TrendingUp className="w-3 h-3" />
             </span>
           </div>
@@ -256,10 +255,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Contacted */}
-        <div className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-sm transition-shadow">
+        <div className="bg-white rounded-2xl p-5 border border-gray-200 hover:shadow-sm transition-shadow">
           <div className="flex items-start justify-between mb-3">
             <div className="p-2.5 rounded-xl bg-emerald-50">
-              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
             </div>
           </div>
           <h3 className="text-2xl lg:text-3xl font-bold text-gray-900">{stats.contacted}</h3>
@@ -267,13 +266,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Pending */}
-        <div className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-sm transition-shadow">
+        <div className="bg-white rounded-2xl p-5 border border-gray-200 hover:shadow-sm transition-shadow">
           <div className="flex items-start justify-between mb-3">
             <div className="p-2.5 rounded-xl bg-amber-50">
-              <Phone className="w-5 h-5 text-amber-500" />
+              <Phone className="w-5 h-5 text-amber-600" />
             </div>
             {stats.needsFollowup > 0 && (
-              <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
+              <span className="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-1 rounded-full">
                 Action needed
               </span>
             )}
@@ -283,10 +282,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Avg Response */}
-        <div className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-sm transition-shadow">
+        <div className="bg-white rounded-2xl p-5 border border-gray-200 hover:shadow-sm transition-shadow">
           <div className="flex items-start justify-between mb-3">
             <div className="p-2.5 rounded-xl bg-blue-50">
-              <Clock className="w-5 h-5 text-blue-500" />
+              <Clock className="w-5 h-5 text-blue-600" />
             </div>
           </div>
           <h3 className="text-2xl lg:text-3xl font-bold text-gray-900">{avgDuration}m</h3>
@@ -294,16 +293,16 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Main Content Row - Compact Cards with Scroll */}
+      {/* Main Content Row - Compact Cards */}
       <div className="grid lg:grid-cols-5 gap-5 items-start">
 
-        {/* Recent Leads - 3 columns - Compact */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+        {/* Recent Leads - 3 columns */}
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col">
           {/* Header */}
           <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-gray-900">Recent Leads</h2>
-              <span className="text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-md">{recentLeads.length}</span>
+              <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md">{recentLeads.length}</span>
             </div>
             <Link
               href="/leads"
@@ -313,7 +312,7 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {/* Scrollable Body with fade indicator */}
+          {/* Scrollable Body */}
           <div className="relative">
             <div className="overflow-y-auto max-h-[240px] scrollbar-thin">
               <div className="divide-y divide-gray-50">
@@ -321,15 +320,15 @@ export default function DashboardPage() {
                   <Link
                     key={lead.id}
                     href={`/leads?id=${lead.id}`}
-                    className="px-5 py-3 flex items-center justify-between hover:bg-gray-50/70 transition-colors group"
+                    className="px-5 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors group"
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-gradient-to-br from-gray-700 to-gray-900">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-gradient-to-br from-[#7427FF] to-[#9D4EDD]">
                           {lead.prospect_name.charAt(0).toUpperCase()}
                         </div>
                         {lead.is_hot_lead && (
-                          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-orange-400 ring-2 ring-white flex items-center justify-center">
+                          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-rose-500 ring-2 ring-white flex items-center justify-center">
                             <Flame className="w-1.5 h-1.5 text-white" />
                           </div>
                         )}
@@ -346,7 +345,7 @@ export default function DashboardPage() {
                       <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 hidden sm:block">
                         {lead.lead_score || 0}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#7427FF] transition-colors" />
                     </div>
                   </Link>
                 ))}
@@ -359,21 +358,21 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
-            {/* Bottom fade indicator */}
+            {/* Bottom fade */}
             {recentLeads.length > 4 && (
               <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none" />
             )}
           </div>
         </div>
 
-        {/* Follow-ups - 2 columns - Compact */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+        {/* Follow-ups - 2 columns */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col">
           {/* Header */}
           <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-gray-900">Follow-ups</h2>
               {actionableLeads.length > 0 && (
-                <span className="text-xs font-medium text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md">
+                <span className="text-xs font-medium text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded-md">
                   {actionableLeads.length}
                 </span>
               )}
@@ -386,7 +385,7 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {/* Scrollable Body with fade */}
+          {/* Scrollable Body */}
           <div className="relative">
             <div className="overflow-y-auto max-h-[240px] p-3 scrollbar-thin">
               <div className="space-y-2">
@@ -412,7 +411,7 @@ export default function DashboardPage() {
                 {actionableLeads.length === 0 && (
                   <div className="py-8 text-center">
                     <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-emerald-50 flex items-center justify-center">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                     </div>
                     <p className="text-sm font-medium text-gray-900">All caught up!</p>
                     <p className="text-xs text-gray-400 mt-0.5">No pending follow-ups</p>
@@ -420,7 +419,7 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
-            {/* Bottom fade indicator */}
+            {/* Bottom fade */}
             {actionableLeads.length > 3 && (
               <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent pointer-events-none" />
             )}
@@ -428,9 +427,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Analytics Overview - Premium Module */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        {/* Header with Time Range Tabs */}
+      {/* Analytics Overview */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        {/* Header */}
         <div className="px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-base font-semibold text-gray-900">Analytics Overview</h2>
 
@@ -452,15 +451,15 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Key Insight Banner */}
-        <div className="px-6 py-3 bg-gradient-to-r from-[#7427FF]/5 via-purple-50/50 to-[#EE82EE]/5 border-b border-gray-100">
+        {/* Key Insight Banner - Purple accent */}
+        <div className="px-6 py-3 bg-gradient-to-r from-[#7427FF]/5 via-[#EE82EE]/3 to-transparent border-b border-gray-100">
           <p className="text-sm text-gray-700">
             <span className="font-medium text-[#7427FF]">Insight:</span>{' '}
             {keyInsight}
           </p>
         </div>
 
-        {/* KPI Tiles Grid */}
+        {/* KPI Tiles */}
         <div className="p-6 grid grid-cols-2 lg:grid-cols-4 gap-4 border-b border-gray-100">
           {/* Conversations */}
           <div className="p-4 bg-gray-50 rounded-xl">
@@ -476,7 +475,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Qualified Leads */}
+          {/* Qualified */}
           <div className="p-4 bg-gray-50 rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Qualified</span>
@@ -490,7 +489,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Avg Response Time */}
+          {/* Avg Time */}
           <div className="p-4 bg-gray-50 rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Avg Time</span>
@@ -504,7 +503,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Follow-ups Due */}
+          {/* Follow-ups */}
           <div className="p-4 bg-gray-50 rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Follow-ups</span>
@@ -524,16 +523,16 @@ export default function DashboardPage() {
           {/* Lead Temperature */}
           <div className="p-5 bg-gray-50 rounded-xl">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-white shadow-sm">
+              <div className="p-2 rounded-lg bg-white shadow-sm border border-gray-100">
                 <Thermometer className="w-4 h-4 text-gray-600" />
               </div>
-              <h3 className="font-semibold text-sm text-gray-800">Lead Temperature</h3>
+              <h3 className="font-semibold text-sm text-gray-900">Lead Temperature</h3>
             </div>
             <div className="space-y-2.5">
-              {/* Hot Leads */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-red-50 transition-all hover:scale-[1.01]">
+              {/* Hot */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-rose-50 transition-all hover:scale-[1.01]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center">
                     <Flame className="w-3.5 h-3.5 text-white" />
                   </div>
                   <span className="text-sm font-medium text-gray-700">Hot</span>
@@ -543,10 +542,10 @@ export default function DashboardPage() {
                 </span>
               </div>
 
-              {/* Warm Leads */}
+              {/* Warm */}
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-amber-50 transition-all hover:scale-[1.01]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center">
                     <Sun className="w-3.5 h-3.5 text-white" />
                   </div>
                   <span className="text-sm font-medium text-gray-700">Warm</span>
@@ -556,10 +555,10 @@ export default function DashboardPage() {
                 </span>
               </div>
 
-              {/* Cold Leads */}
+              {/* Cold */}
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-blue-50 transition-all hover:scale-[1.01]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
                     <Snowflake className="w-3.5 h-3.5 text-white" />
                   </div>
                   <span className="text-sm font-medium text-gray-700">Cold</span>
@@ -574,10 +573,10 @@ export default function DashboardPage() {
           {/* Product Interest */}
           <div className="p-5 bg-gray-50 rounded-xl">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-white shadow-sm">
+              <div className="p-2 rounded-lg bg-white shadow-sm border border-gray-100">
                 <Zap className="w-4 h-4 text-gray-600" />
               </div>
-              <h3 className="font-semibold text-sm text-gray-800">Product Interest</h3>
+              <h3 className="font-semibold text-sm text-gray-900">Product Interest</h3>
             </div>
             <div className="space-y-3">
               {analyticsData.products.length > 0 ? (
@@ -586,7 +585,7 @@ export default function DashboardPage() {
                   return analyticsData.products.map(([topic, count]) => (
                     <div key={topic} className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700 truncate max-w-[65%]">{topic}</span>
+                        <span className="text-sm text-gray-600 truncate max-w-[65%]">{topic}</span>
                         <span className="text-sm font-semibold text-gray-900">{count}</span>
                       </div>
                       <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
@@ -607,18 +606,18 @@ export default function DashboardPage() {
           {/* Regions */}
           <div className="p-5 bg-gray-50 rounded-xl">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-white shadow-sm">
+              <div className="p-2 rounded-lg bg-white shadow-sm border border-gray-100">
                 <Globe className="w-4 h-4 text-gray-600" />
               </div>
-              <h3 className="font-semibold text-sm text-gray-800">Regions</h3>
+              <h3 className="font-semibold text-sm text-gray-900">Regions</h3>
             </div>
             <div className="space-y-2">
               {analyticsData.regions.length > 0 ? (
                 (() => {
                   const colors = [
-                    { dot: 'bg-[#7427FF]', bg: 'bg-purple-50' },
-                    { dot: 'bg-[#9D4EDD]', bg: 'bg-violet-50' },
-                    { dot: 'bg-[#EE82EE]', bg: 'bg-pink-50' },
+                    { dot: 'bg-[#7427FF]', bg: 'bg-[#7427FF]/5' },
+                    { dot: 'bg-[#9D4EDD]', bg: 'bg-[#9D4EDD]/5' },
+                    { dot: 'bg-[#EE82EE]', bg: 'bg-[#EE82EE]/10' },
                   ];
                   return analyticsData.regions.map(([region, count], index) => (
                     <div
