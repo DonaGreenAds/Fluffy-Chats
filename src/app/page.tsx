@@ -330,7 +330,7 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-[var(--accent-solid)]">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-[var(--accent-1)]">
                           {lead.prospect_name.charAt(0).toUpperCase()}
                         </div>
                         {lead.is_hot_lead && (
