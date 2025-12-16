@@ -23,7 +23,7 @@ import { useLeads } from '@/context/LeadContext';
 import { useAuth } from '@/context/AuthContext';
 
 // Mini Sparkline Component
-function MiniSparkline({ data, trend }: { data: number[]; trend: 'up' | 'down' | 'neutral' }) {
+function MiniSparkline({ data, trend }: { data: number[]; trend: 'up' | 'down' | 'warning' | 'neutral' }) {
   if (data.length < 2) return null;
 
   const max = Math.max(...data);
@@ -34,8 +34,8 @@ function MiniSparkline({ data, trend }: { data: number[]; trend: 'up' | 'down' |
     `${(i / (data.length - 1)) * 56},${24 - ((v - min) / range) * 20}`
   ).join(' ');
 
-  // Use CSS variables for colors - success for up, danger for down, muted for neutral
-  const strokeColor = trend === 'up' ? 'var(--success)' : trend === 'down' ? 'var(--danger)' : 'var(--muted)';
+  // Colors: green for up, red for down, amber for warning (action needed), violet for neutral
+  const strokeColor = trend === 'up' ? 'var(--success)' : trend === 'down' ? 'var(--danger)' : trend === 'warning' ? '#FBBF24' : 'var(--accent-1)';
 
   return (
     <svg className="w-14 h-6" viewBox="0 0 56 24">
@@ -170,16 +170,6 @@ export default function DashboardPage() {
     return 'Start collecting leads to see insights about your pipeline temperature.';
   }, [leadTemperature]);
 
-  // Priority indicator for follow-ups
-  const getPriorityColor = (dateStr: string) => {
-    const date = new Date(dateStr);
-    const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    if (diffDays >= 3) return 'border-l-[var(--danger)]';
-    if (diffDays >= 1) return 'border-l-[var(--warning)]';
-    return 'border-l-[var(--accent-solid)]';
-  };
-
   return (
     <div className="p-6 lg:p-8 space-y-6 min-h-screen bg-[var(--bg)]">
 
@@ -312,7 +302,7 @@ export default function DashboardPage() {
             </div>
             <Link
               href="/leads"
-              className="text-xs font-medium text-[var(--accent-solid)] hover:bg-[var(--accent-soft)] px-2 py-1 rounded-md transition-colors"
+              className="text-xs font-medium text-[var(--accent-1)] hover:bg-[var(--accent-soft)] px-2 py-1 rounded-md transition-colors"
             >
               View all →
             </Link>
@@ -334,8 +324,8 @@ export default function DashboardPage() {
                           {lead.prospect_name.charAt(0).toUpperCase()}
                         </div>
                         {lead.is_hot_lead && (
-                          <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-[var(--warning)] ring-2 ring-[var(--surface)] flex items-center justify-center">
-                            <Flame className="w-1.5 h-1.5 text-white" />
+                          <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[var(--warning)] ring-2 ring-[var(--surface)] flex items-center justify-center">
+                            <Flame className="w-2 h-2 text-white" />
                           </div>
                         )}
                       </div>
@@ -385,7 +375,7 @@ export default function DashboardPage() {
             </div>
             <Link
               href="/leads"
-              className="text-xs font-medium text-[var(--accent-solid)] hover:bg-[var(--accent-soft)] px-2 py-1 rounded-md transition-colors"
+              className="text-xs font-medium text-[var(--accent-1)] hover:bg-[var(--accent-soft)] px-2 py-1 rounded-md transition-colors"
             >
               View all →
             </Link>
@@ -399,7 +389,7 @@ export default function DashboardPage() {
                   <Link
                     key={lead.id}
                     href={`/leads?id=${lead.id}`}
-                    className={`block p-3 bg-[var(--surface-2)] rounded-xl border-l-[3px] ${getPriorityColor(lead.conversation_date)} hover:bg-[var(--hover-row)] transition-colors`}
+                    className="block p-3 bg-[var(--surface-2)] rounded-xl border-l-[3px] border-l-[#FBBF24] hover:bg-[var(--hover-row)] transition-colors"
                   >
                     <div className="flex justify-between items-start mb-1.5">
                       <h4 className="font-medium text-[var(--text)] text-sm">{lead.prospect_name}</h4>
@@ -408,7 +398,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-[var(--muted)] line-clamp-1 mb-2">
                       {lead.next_action || 'Follow up regarding inquiry...'}
                     </p>
-                    <span className="text-xs font-medium text-[var(--accent-solid)]">
+                    <span className="text-xs font-medium text-[var(--accent-1)]">
                       Take action →
                     </span>
                   </Link>
@@ -440,15 +430,15 @@ export default function DashboardPage() {
           <h2 className="text-base font-semibold text-[var(--text)]">Analytics Overview</h2>
 
           {/* Time Range Tabs */}
-          <div className="flex items-center gap-1 p-1 bg-[var(--surface-2)] rounded-lg w-fit">
+          <div className="flex items-center gap-1 p-1 bg-[var(--accent-soft)] rounded-lg w-fit">
             {(['today', '7d', '30d'] as const).map((range) => (
               <button
                 key={range}
                 onClick={() => setTimeRange(range)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                   timeRange === range
-                    ? 'bg-[var(--surface)] text-[var(--text)] shadow-sm'
-                    : 'text-[var(--muted)] hover:text-[var(--text-2)]'
+                    ? 'bg-[var(--surface)] text-[var(--accent-solid)] shadow-sm'
+                    : 'text-[var(--accent-solid)] hover:text-[var(--accent-1)]'
                 }`}
               >
                 {range === 'today' ? 'Today' : range === '7d' ? '7 days' : '30 days'}
@@ -468,7 +458,7 @@ export default function DashboardPage() {
         {/* KPI Tiles */}
         <div className="p-6 grid grid-cols-2 lg:grid-cols-4 gap-4 border-b border-[var(--border)]">
           {/* Conversations */}
-          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
+          <div className="p-4 bg-[var(--accent-soft)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Conversations</span>
               <span className="flex items-center gap-0.5 text-xs font-medium text-[#15803D]">
@@ -482,7 +472,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Qualified */}
-          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
+          <div className="p-4 bg-[var(--success-soft)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Qualified</span>
               <span className="flex items-center gap-0.5 text-xs font-medium text-[#15803D]">
@@ -496,7 +486,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Avg Time */}
-          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
+          <div className="p-4 bg-[var(--info-soft)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Avg Time</span>
               <span className="flex items-center gap-0.5 text-xs font-medium text-[#15803D]">
@@ -510,7 +500,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Follow-ups */}
-          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
+          <div className="p-4 bg-[var(--warning-soft)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Follow-ups</span>
               {stats.needsFollowup > 0 && (
@@ -519,7 +509,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-end justify-between">
               <span className="text-2xl font-bold text-[var(--text)]">{stats.needsFollowup}</span>
-              <MiniSparkline data={sparklineData.followups} trend="neutral" />
+              <MiniSparkline data={sparklineData.followups} trend="warning" />
             </div>
           </div>
         </div>
@@ -527,7 +517,7 @@ export default function DashboardPage() {
         {/* Breakdown Cards */}
         <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Lead Temperature */}
-          <div className="p-5 bg-[var(--surface-2)] rounded-xl">
+          <div className="p-5 bg-[var(--accent-soft)] rounded-xl">
             <div className="flex items-center gap-2 mb-4">
               <div className="p-2 rounded-lg bg-[var(--surface)] shadow-[var(--shadow-subtle)] border border-[var(--border)]">
                 <Thermometer className="w-4 h-4 text-[var(--text-2)]" />
@@ -577,7 +567,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Product Interest */}
-          <div className="p-5 bg-[var(--surface-2)] rounded-xl">
+          <div className="p-5 bg-[var(--success-soft)] rounded-xl">
             <div className="flex items-center gap-2 mb-4">
               <div className="p-2 rounded-lg bg-[var(--surface)] shadow-[var(--shadow-subtle)] border border-[var(--border)]">
                 <Zap className="w-4 h-4 text-[var(--text-2)]" />
@@ -610,7 +600,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Regions */}
-          <div className="p-5 bg-[var(--surface-2)] rounded-xl">
+          <div className="p-5 bg-[var(--accent-soft-2)] rounded-xl">
             <div className="flex items-center gap-2 mb-4">
               <div className="p-2 rounded-lg bg-[var(--surface)] shadow-[var(--shadow-subtle)] border border-[var(--border)]">
                 <Globe className="w-4 h-4 text-[var(--text-2)]" />
