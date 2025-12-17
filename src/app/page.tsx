@@ -580,7 +580,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#8B5CF6] rounded-full transition-all duration-500"
+                          className="h-full bg-[#9333EA] rounded-full transition-all duration-500"
                           style={{ width: `${(count / maxCount) * 100}%` }}
                         />
                       </div>
@@ -605,14 +605,14 @@ export default function DashboardPage() {
               {analyticsData.regions.length > 0 ? (
                 (() => {
                   const colors = [
-                    { dot: 'bg-[var(--accent-solid)]', bg: 'bg-[var(--accent-soft)]' },
-                    { dot: 'bg-[var(--accent-1)]', bg: 'bg-[var(--accent-soft)]' },
-                    { dot: 'bg-[var(--accent-2)]', bg: 'bg-[var(--accent-soft-2)]' },
+                    { dot: 'bg-[#8B5CF6]', bg: 'bg-[#F5F3FF]', hover: 'hover:bg-[#EDE9FE]' },
+                    { dot: 'bg-[#10B981]', bg: 'bg-[#ECFDF5]', hover: 'hover:bg-[#D1FAE5]' },
+                    { dot: 'bg-[#F59E0B]', bg: 'bg-[#FFFBEB]', hover: 'hover:bg-[#FEF3C7]' },
                   ];
                   return analyticsData.regions.map(([region, count], index) => (
                     <div
                       key={region}
-                      className={`flex items-center justify-between p-2.5 rounded-lg ${colors[index]?.bg || 'bg-[var(--surface)]'} transition-all hover:scale-[1.01]`}
+                      className={`flex items-center justify-between p-2.5 rounded-lg ${colors[index]?.bg || 'bg-[var(--surface-2)]'} ${colors[index]?.hover || ''} transition-all`}
                     >
                       <div className="flex items-center gap-2.5">
                         <div className={`w-2 h-2 rounded-full ${colors[index]?.dot || 'bg-[var(--muted)]'}`} />
