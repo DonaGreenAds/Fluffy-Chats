@@ -489,13 +489,13 @@ export default function DashboardPage() {
           <div className="p-4 bg-[var(--info-soft)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Avg Time</span>
-              <span className="flex items-center gap-0.5 text-xs font-medium text-[#15803D]">
+              <span className="flex items-center gap-0.5 text-xs font-medium text-[var(--danger)]">
                 -5% <TrendingDown className="w-3 h-3" />
               </span>
             </div>
             <div className="flex items-end justify-between">
               <span className="text-2xl font-bold text-[var(--text)]">{avgDuration}m</span>
-              <MiniSparkline data={sparklineData.avgTime} trend="up" />
+              <MiniSparkline data={sparklineData.avgTime} trend="down" />
             </div>
           </div>
 
