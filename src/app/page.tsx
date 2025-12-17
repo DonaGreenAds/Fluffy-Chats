@@ -427,7 +427,7 @@ export default function DashboardPage() {
       <div className="bg-[var(--surface)] rounded-2xl border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
         {/* Header */}
         <div className="px-6 py-4 border-b border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <h2 className="text-base font-semibold text-[var(--text)]">Analytics Overview</h2>
+          <h2 className="text-base font-semibold text-[var(--text)]">Overview</h2>
 
           {/* Time Range Tabs */}
           <div className="flex items-center gap-1 p-1 bg-[var(--accent-soft)] rounded-lg w-fit">
@@ -524,44 +524,56 @@ export default function DashboardPage() {
               </div>
               <h3 className="font-semibold text-sm text-[var(--text)]">Lead Temperature</h3>
             </div>
-            <div className="space-y-2.5">
+            <div className="space-y-4">
               {/* Hot */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--danger-soft)] transition-all hover:scale-[1.01]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[var(--danger)] flex items-center justify-center">
-                    <Flame className="w-3.5 h-3.5 text-white" />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[var(--danger)]" />
+                    <span className="text-sm text-[var(--text-2)]">Hot</span>
                   </div>
-                  <span className="text-sm font-medium text-[var(--text-2)]">Hot</span>
+                  <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.hot}</span>
                 </div>
-                <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2.5 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
-                  {leadTemperature.hot}
-                </span>
+                <div className="h-1.5 bg-[var(--surface-2)] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[var(--danger)] rounded-full transition-all duration-500"
+                    style={{ width: `${leadTemperature.total > 0 ? (leadTemperature.hot / leadTemperature.total) * 100 : 0}%` }}
+                  />
+                </div>
               </div>
 
               {/* Warm */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--warning-soft)] transition-all hover:scale-[1.01]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[var(--warning)] flex items-center justify-center">
-                    <Sun className="w-3.5 h-3.5 text-white" />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[var(--warning)]" />
+                    <span className="text-sm text-[var(--text-2)]">Warm</span>
                   </div>
-                  <span className="text-sm font-medium text-[var(--text-2)]">Warm</span>
+                  <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.warm}</span>
                 </div>
-                <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2.5 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
-                  {leadTemperature.warm}
-                </span>
+                <div className="h-1.5 bg-[var(--surface-2)] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[var(--warning)] rounded-full transition-all duration-500"
+                    style={{ width: `${leadTemperature.total > 0 ? (leadTemperature.warm / leadTemperature.total) * 100 : 0}%` }}
+                  />
+                </div>
               </div>
 
               {/* Cold */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--info-soft)] transition-all hover:scale-[1.01]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-full bg-[var(--info)] flex items-center justify-center">
-                    <Snowflake className="w-3.5 h-3.5 text-white" />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[var(--info)]" />
+                    <span className="text-sm text-[var(--text-2)]">Cold</span>
                   </div>
-                  <span className="text-sm font-medium text-[var(--text-2)]">Cold</span>
+                  <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.cold}</span>
                 </div>
-                <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2.5 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
-                  {leadTemperature.cold}
-                </span>
+                <div className="h-1.5 bg-[var(--surface-2)] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[var(--info)] rounded-full transition-all duration-500"
+                    style={{ width: `${leadTemperature.total > 0 ? (leadTemperature.cold / leadTemperature.total) * 100 : 0}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>
