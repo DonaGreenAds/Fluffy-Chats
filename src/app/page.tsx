@@ -525,10 +525,10 @@ export default function DashboardPage() {
               <h3 className="font-semibold text-sm text-[var(--text)]">Lead Temperature</h3>
             </div>
             <div className="space-y-2">
-              {/* Hot */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--surface-2)] transition-all hover:bg-[var(--hover-row)]">
+              {/* Hot - Soft rose/coral pastel bg, medium coral dot */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#FEF2F2] transition-all hover:bg-[#FEE2E2]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-[var(--accent-1)]" />
+                  <div className="w-2 h-2 rounded-full bg-[#F87171]" />
                   <span className="text-sm font-medium text-[var(--text-2)]">Hot</span>
                 </div>
                 <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
@@ -536,10 +536,10 @@ export default function DashboardPage() {
                 </span>
               </div>
 
-              {/* Warm */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--surface-2)] transition-all hover:bg-[var(--hover-row)]">
+              {/* Warm - Soft amber pastel bg, medium amber dot */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#FFFBEB] transition-all hover:bg-[#FEF3C7]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-[var(--accent-2)]" />
+                  <div className="w-2 h-2 rounded-full bg-[#FBBF24]" />
                   <span className="text-sm font-medium text-[var(--text-2)]">Warm</span>
                 </div>
                 <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
@@ -547,10 +547,10 @@ export default function DashboardPage() {
                 </span>
               </div>
 
-              {/* Cold */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[var(--surface-2)] transition-all hover:bg-[var(--hover-row)]">
+              {/* Cold - Soft sky blue pastel bg, medium sky dot */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#EFF6FF] transition-all hover:bg-[#DBEAFE]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-[var(--muted)]" />
+                  <div className="w-2 h-2 rounded-full bg-[#60A5FA]" />
                   <span className="text-sm font-medium text-[var(--text-2)]">Cold</span>
                 </div>
                 <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
