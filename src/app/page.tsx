@@ -517,10 +517,10 @@ export default function DashboardPage() {
         {/* Breakdown Cards */}
         <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Lead Temperature */}
-          <div className="p-5 bg-[var(--accent-soft)] rounded-xl">
+          <div className="p-5 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)]">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--surface)] shadow-[var(--shadow-subtle)] border border-[var(--border)]">
-                <Thermometer className="w-4 h-4 text-[var(--text-2)]" />
+              <div className="p-2 rounded-lg bg-[var(--accent-soft)]">
+                <Thermometer className="w-4 h-4 text-[var(--accent-solid)]" />
               </div>
               <h3 className="font-semibold text-sm text-[var(--text)]">Lead Temperature</h3>
             </div>
@@ -567,10 +567,10 @@ export default function DashboardPage() {
           </div>
 
           {/* Product Interest */}
-          <div className="p-5 bg-[var(--success-soft)] rounded-xl">
+          <div className="p-5 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)]">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--surface)] shadow-[var(--shadow-subtle)] border border-[var(--border)]">
-                <Zap className="w-4 h-4 text-[var(--text-2)]" />
+              <div className="p-2 rounded-lg bg-[var(--success-soft)]">
+                <Zap className="w-4 h-4 text-[var(--success)]" />
               </div>
               <h3 className="font-semibold text-sm text-[var(--text)]">Product Interest</h3>
             </div>
@@ -600,10 +600,10 @@ export default function DashboardPage() {
           </div>
 
           {/* Regions */}
-          <div className="p-5 bg-[var(--accent-soft-2)] rounded-xl">
+          <div className="p-5 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)]">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--surface)] shadow-[var(--shadow-subtle)] border border-[var(--border)]">
-                <Globe className="w-4 h-4 text-[var(--text-2)]" />
+              <div className="p-2 rounded-lg bg-[var(--info-soft)]">
+                <Globe className="w-4 h-4 text-[var(--info)]" />
               </div>
               <h3 className="font-semibold text-sm text-[var(--text)]">Regions</h3>
             </div>
