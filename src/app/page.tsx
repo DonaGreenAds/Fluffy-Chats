@@ -320,7 +320,7 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-[#A78BFA]">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-[#8B5CF6]">
                           {lead.prospect_name.charAt(0).toUpperCase()}
                         </div>
                         {lead.is_hot_lead && (
@@ -580,7 +580,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#A78BFA] rounded-full transition-all duration-500"
+                          className="h-full bg-[#8B5CF6] rounded-full transition-all duration-500"
                           style={{ width: `${(count / maxCount) * 100}%` }}
                         />
                       </div>
