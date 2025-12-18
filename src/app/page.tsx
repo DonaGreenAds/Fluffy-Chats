@@ -277,11 +277,11 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Content Row */}
-      <div className="grid lg:grid-cols-5 gap-5 items-start">
+      <div className="grid lg:grid-cols-5 gap-5 items-stretch">
 
         {/* Recent Leads */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-[var(--border)] flex flex-col" style={{ boxShadow: 'var(--shadow-card)' }}>
-          <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-[var(--border)] flex flex-col h-[420px]" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
               <h2 className="text-base font-semibold text-[var(--text)]">Recent Leads</h2>
               <span className="text-xs text-[var(--muted)] bg-[var(--surface-2)] px-2.5 py-1 rounded-full">{recentLeads.length}</span>
@@ -295,7 +295,7 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          <div className="divide-y divide-[var(--border)]">
+          <div className="divide-y divide-[var(--border)] overflow-y-auto flex-1 scrollbar-thin">
             {recentLeads.map((lead) => (
               <Link
                 key={lead.id}
@@ -305,7 +305,7 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-4">
                   {/* Soft pastel avatar */}
                   <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-[var(--text)] font-semibold text-base"
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-[var(--text)] font-semibold text-base flex-shrink-0"
                     style={{ backgroundColor: getAvatarColor(lead.prospect_name) }}
                   >
                     {lead.prospect_name.charAt(0).toUpperCase()}
@@ -342,8 +342,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Follow-ups Card */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-[var(--border)] flex flex-col" style={{ boxShadow: 'var(--shadow-card)' }}>
-          <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-[var(--border)] flex flex-col h-[420px]" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
               <h2 className="text-base font-semibold text-[var(--text)]">Follow-ups</h2>
               {actionableLeads.length > 0 && (
@@ -360,8 +360,8 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          <div className="p-4 space-y-3 overflow-y-auto max-h-[280px]">
-            {actionableLeads.slice(0, 4).map((lead) => (
+          <div className="p-4 space-y-3 overflow-y-auto flex-1 scrollbar-thin">
+            {actionableLeads.slice(0, 5).map((lead) => (
               <Link
                 key={lead.id}
                 href={`/leads?id=${lead.id}`}
