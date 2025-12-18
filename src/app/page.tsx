@@ -34,8 +34,8 @@ function MiniSparkline({ data, trend }: { data: number[]; trend: 'up' | 'down' |
     `${(i / (data.length - 1)) * 56},${24 - ((v - min) / range) * 20}`
   ).join(' ');
 
-  // Colors: green for up, red for down, amber for warning (action needed), violet for neutral
-  const strokeColor = trend === 'up' ? 'var(--success)' : trend === 'down' ? 'var(--danger)' : trend === 'warning' ? '#FBBF24' : 'var(--accent-1)';
+  // Colors: green for up, red for down, orange for warning (action needed), violet for neutral
+  const strokeColor = trend === 'up' ? '#10B981' : trend === 'down' ? '#EF4444' : trend === 'warning' ? '#F97316' : '#8B5CF6';
 
   return (
     <svg className="w-14 h-6" viewBox="0 0 56 24">
@@ -174,41 +174,35 @@ export default function DashboardPage() {
     <div className="p-6 lg:p-8 space-y-6 min-h-screen bg-[var(--bg)]">
 
       {/* Hero Section - Clean with Purple Accent */}
-      <div className="relative w-full overflow-hidden rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-[var(--shadow-card)]">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
         {/* Subtle purple gradient accent on right */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[var(--accent-soft)] via-[var(--accent-soft-2)] to-transparent pointer-events-none" />
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-purple-50/50 via-pink-50/30 to-transparent pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-6 py-4 lg:px-8 lg:py-5">
           {/* Left Content */}
           <div className="flex-1 space-y-3 max-w-xl">
             <div>
-              <h1 className="text-xl lg:text-2xl font-semibold text-[var(--text)] tracking-tight">
-                {greeting}, <span className="text-[var(--text)]">{displayName || 'there'}</span>
+              <h1 className="text-xl lg:text-2xl font-bold text-gray-900 tracking-tight">
+                {greeting}, {displayName || 'Owner'}
               </h1>
-              <p className="mt-1 text-sm text-[var(--text-2)] leading-relaxed">
-                You have <span className="font-medium text-[var(--text)]">{actionableLeads.length} pending follow-ups</span> and{' '}
-                <span className="font-medium text-[var(--text)]">{hotLeadsCount} hot leads</span> waiting for action.
+              <p className="mt-1 text-sm text-gray-500 leading-relaxed">
+                You have <span className="font-semibold text-[#F97316]">{actionableLeads.length} pending follow-ups</span> and{' '}
+                <span className="font-semibold text-[#10B981]">{hotLeadsCount} hot leads</span> waiting for action.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/leads"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white rounded-lg font-medium text-sm hover:opacity-90 hover:shadow-lg hover:shadow-[var(--accent-1)]/20 transition-all duration-200 focus:ring-2 focus:ring-[var(--focus)]"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-white rounded-xl font-medium text-sm hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-200"
               >
-                View Leads <ArrowUpRight className="w-4 h-4" />
+                View Leads
               </Link>
               <Link
                 href="/analytics"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--surface)] rounded-lg font-medium text-sm transition-all duration-200 relative overflow-hidden group"
-                style={{
-                  background: 'linear-gradient(var(--surface), var(--surface)) padding-box, linear-gradient(to right, var(--accent-1), var(--accent-2)) border-box',
-                  border: '2px solid transparent'
-                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl font-medium text-sm text-gray-700 hover:bg-gray-50 transition-all duration-200"
               >
-                <span className="bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] bg-clip-text text-transparent font-medium">
-                  View Reports
-                </span>
+                View Reports
               </Link>
             </div>
           </div>
@@ -216,9 +210,9 @@ export default function DashboardPage() {
           {/* Right: Mascot Stage with Purple Halo */}
           <div className="hidden md:block relative w-[200px] h-[160px]">
             {/* Purple gradient halo */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-soft)] via-[var(--accent-soft-2)] to-transparent rounded-full blur-3xl scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-100/50 via-pink-100/30 to-transparent rounded-full blur-3xl scale-110" />
             {/* Secondary subtle blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-tr from-[var(--accent-soft)] to-[var(--accent-soft-2)] rounded-full blur-2xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-tr from-purple-100/40 to-pink-100/40 rounded-full blur-2xl" />
             {/* Mascot */}
             <div className="relative z-10 w-full h-full flex items-center justify-center transition-transform duration-500 hover:scale-105 hover:rotate-1">
               <Image
@@ -239,10 +233,10 @@ export default function DashboardPage() {
         {/* Total Leads - Purple accent */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-lg bg-[var(--accent-soft)]">
-              <Users className="w-5 h-5 text-[var(--accent-solid)]" />
+            <div className="p-2.5 rounded-xl bg-purple-50">
+              <Users className="w-5 h-5 text-[#8B5CF6]" />
             </div>
-            <span className="flex items-center gap-1 text-xs font-medium text-[#15803D] bg-[var(--success-soft)] px-2 py-1 rounded-full">
+            <span className="flex items-center gap-1 text-xs font-medium text-[#10B981] px-2 py-1">
               +{leadStats.growthPercent}% <TrendingUp className="w-3 h-3" />
             </span>
           </div>
@@ -253,39 +247,39 @@ export default function DashboardPage() {
         {/* Contacted */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-lg bg-[var(--success-soft)]">
-              <CheckCircle2 className="w-5 h-5 text-[var(--success)]" />
+            <div className="p-2.5 rounded-xl bg-green-50">
+              <CheckCircle2 className="w-5 h-5 text-[#10B981]" />
             </div>
           </div>
           <h3 className="text-2xl lg:text-3xl font-bold text-[var(--text)]">{stats.contacted}</h3>
-          <p className="text-sm text-[var(--muted)] mt-1">Contacted</p>
+          <p className="text-sm text-[var(--muted)] mt-1 uppercase text-xs tracking-wide">Contacted</p>
         </div>
 
         {/* Pending */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-lg bg-[var(--warning-soft)]">
-              <Phone className="w-5 h-5 text-[var(--warning)]" />
+            <div className="p-2.5 rounded-xl bg-orange-50">
+              <Phone className="w-5 h-5 text-[#F97316]" />
             </div>
             {stats.needsFollowup > 0 && (
-              <span className="text-xs font-medium text-[#B45309] bg-[var(--warning-soft)] px-2 py-1 rounded-full">
+              <span className="text-xs font-medium text-[#F97316]">
                 Action needed
               </span>
             )}
           </div>
           <h3 className="text-2xl lg:text-3xl font-bold text-[var(--text)]">{stats.needsFollowup}</h3>
-          <p className="text-sm text-[var(--muted)] mt-1">Pending</p>
+          <p className="text-sm text-[var(--muted)] mt-1 uppercase text-xs tracking-wide">Pending</p>
         </div>
 
         {/* Avg Response */}
         <div className="bg-[var(--surface)] rounded-2xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-subtle)] transition-shadow">
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-lg bg-[var(--info-soft)]">
-              <Clock className="w-5 h-5 text-[var(--info)]" />
+            <div className="p-2.5 rounded-xl bg-blue-50">
+              <Clock className="w-5 h-5 text-[#3B82F6]" />
             </div>
           </div>
           <h3 className="text-2xl lg:text-3xl font-bold text-[var(--text)]">{avgDuration}m</h3>
-          <p className="text-sm text-[var(--muted)] mt-1">Avg Response</p>
+          <p className="text-sm text-[var(--muted)] mt-1 uppercase text-xs tracking-wide">Avg Response</p>
         </div>
       </div>
 
@@ -298,13 +292,13 @@ export default function DashboardPage() {
           <div className="px-5 py-3.5 border-b border-[var(--border)] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-[var(--text)]">Recent Leads</h2>
-              <span className="text-xs text-[var(--muted)] bg-[var(--surface-2)] px-1.5 py-0.5 rounded-md">{recentLeads.length}</span>
+              <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md">{recentLeads.length}</span>
             </div>
             <Link
               href="/leads"
-              className="text-xs font-medium text-[var(--accent-1)] hover:bg-[var(--accent-soft)] px-2 py-1 rounded-md transition-colors"
+              className="text-xs font-medium text-[#8B5CF6] hover:bg-purple-50 px-2 py-1 rounded-md transition-colors flex items-center gap-1"
             >
-              View all →
+              View all <ChevronRight className="w-3 h-3" />
             </Link>
           </div>
 
@@ -320,11 +314,11 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-[#8B5CF6]">
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-medium text-xs bg-gradient-to-br from-[#8B5CF6] to-[#D946EF]">
                           {lead.prospect_name.charAt(0).toUpperCase()}
                         </div>
                         {lead.is_hot_lead && (
-                          <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[var(--warning)] ring-2 ring-[var(--surface)] flex items-center justify-center">
+                          <div className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#F97316] ring-2 ring-[var(--surface)] flex items-center justify-center">
                             <Flame className="w-2 h-2 text-white" />
                           </div>
                         )}
@@ -338,10 +332,10 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--surface-2)] text-[var(--text-2)] hidden sm:block">
-                        {lead.lead_score || 0}
+                      <span className="text-xs font-medium text-[#10B981] hidden sm:flex items-center gap-0.5">
+                        {lead.lead_score || 0} <Zap className="w-3 h-3" />
                       </span>
-                      <ChevronRight className="w-4 h-4 text-[var(--placeholder)] group-hover:text-[var(--accent-solid)] transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#8B5CF6] transition-colors" />
                     </div>
                   </Link>
                 ))}
@@ -368,16 +362,16 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-[var(--text)]">Follow-ups</h2>
               {actionableLeads.length > 0 && (
-                <span className="text-xs font-medium text-[#B45309] bg-[var(--warning-soft)] px-1.5 py-0.5 rounded-md">
+                <span className="text-xs font-medium text-[#F97316] bg-orange-50 px-1.5 py-0.5 rounded-md">
                   {actionableLeads.length}
                 </span>
               )}
             </div>
             <Link
               href="/leads"
-              className="text-xs font-medium text-[var(--accent-1)] hover:bg-[var(--accent-soft)] px-2 py-1 rounded-md transition-colors"
+              className="text-xs font-medium text-[#8B5CF6] hover:bg-purple-50 px-2 py-1 rounded-md transition-colors"
             >
-              View all →
+              View all
             </Link>
           </div>
 
@@ -389,16 +383,16 @@ export default function DashboardPage() {
                   <Link
                     key={lead.id}
                     href={`/leads?id=${lead.id}`}
-                    className="block p-3 bg-[var(--surface-2)] rounded-xl border-l-[3px] border-l-[#FBBF24] hover:bg-[var(--hover-row)] transition-colors"
+                    className="block p-3 bg-gray-50 rounded-xl border-l-[3px] border-l-[#F97316] hover:bg-gray-100 transition-colors"
                   >
                     <div className="flex justify-between items-start mb-1.5">
                       <h4 className="font-medium text-[var(--text)] text-sm">{lead.prospect_name}</h4>
-                      <span className="text-xs text-[var(--placeholder)]">{lead.conversation_date}</span>
+                      <span className="text-xs text-gray-400">{lead.conversation_date}</span>
                     </div>
-                    <p className="text-xs text-[var(--muted)] line-clamp-1 mb-2">
+                    <p className="text-xs text-gray-500 line-clamp-1 mb-2">
                       {lead.next_action || 'Follow up regarding inquiry...'}
                     </p>
-                    <span className="text-xs font-medium text-[var(--accent-1)]">
+                    <span className="text-xs font-medium text-[#F97316]">
                       Take action →
                     </span>
                   </Link>
@@ -430,15 +424,15 @@ export default function DashboardPage() {
           <h2 className="text-base font-semibold text-[var(--text)]">Overview</h2>
 
           {/* Time Range Tabs */}
-          <div className="flex items-center gap-1 p-1 bg-[var(--accent-soft)] rounded-lg w-fit">
+          <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-lg w-fit">
             {(['today', '7d', '30d'] as const).map((range) => (
               <button
                 key={range}
                 onClick={() => setTimeRange(range)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                   timeRange === range
-                    ? 'bg-[var(--surface)] text-[var(--accent-solid)] shadow-sm'
-                    : 'text-[var(--accent-solid)] hover:text-[var(--accent-1)]'
+                    ? 'bg-white text-[#8B5CF6] shadow-sm'
+                    : 'text-gray-500 hover:text-[#8B5CF6]'
                 }`}
               >
                 {range === 'today' ? 'Today' : range === '7d' ? '7 days' : '30 days'}
@@ -448,9 +442,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Key Insight Banner - Purple accent */}
-        <div className="px-6 py-3 bg-[var(--accent-soft)] border-b border-[var(--border)]">
-          <p className="text-sm text-[var(--text-2)]">
-            <span className="font-medium text-[var(--accent-solid)]">Insight:</span>{' '}
+        <div className="px-6 py-3 bg-purple-50 border-b border-[var(--border)]">
+          <p className="text-sm text-gray-600">
+            <span className="font-medium text-[#8B5CF6]">Insight:</span>{' '}
             {keyInsight}
           </p>
         </div>
@@ -458,57 +452,57 @@ export default function DashboardPage() {
         {/* KPI Tiles */}
         <div className="p-6 grid grid-cols-2 lg:grid-cols-4 gap-4 border-b border-[var(--border)]">
           {/* Conversations */}
-          <div className="p-4 bg-[var(--accent-soft)] rounded-xl">
+          <div className="p-4 bg-purple-50 rounded-xl">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Conversations</span>
-              <span className="flex items-center gap-0.5 text-xs font-medium text-[#15803D]">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Conversations</span>
+              <span className="flex items-center gap-0.5 text-xs font-medium text-[#10B981]">
                 +12% <TrendingUp className="w-3 h-3" />
               </span>
             </div>
             <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-[var(--text)]">{stats.total}</span>
+              <span className="text-2xl font-bold text-gray-900">{stats.total}</span>
               <MiniSparkline data={sparklineData.conversations} trend="up" />
             </div>
           </div>
 
           {/* Qualified */}
-          <div className="p-4 bg-[var(--success-soft)] rounded-xl">
+          <div className="p-4 bg-green-50 rounded-xl">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Qualified</span>
-              <span className="flex items-center gap-0.5 text-xs font-medium text-[#15803D]">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Qualified</span>
+              <span className="flex items-center gap-0.5 text-xs font-medium text-[#10B981]">
                 +8% <TrendingUp className="w-3 h-3" />
               </span>
             </div>
             <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-[var(--text)]">{qualifiedLeads}</span>
+              <span className="text-2xl font-bold text-gray-900">{qualifiedLeads}</span>
               <MiniSparkline data={sparklineData.qualified} trend="up" />
             </div>
           </div>
 
           {/* Avg Time */}
-          <div className="p-4 bg-[var(--info-soft)] rounded-xl">
+          <div className="p-4 bg-blue-50 rounded-xl">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Avg Time</span>
-              <span className="flex items-center gap-0.5 text-xs font-medium text-[var(--danger)]">
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Avg Time</span>
+              <span className="flex items-center gap-0.5 text-xs font-medium text-[#EF4444]">
                 -5% <TrendingDown className="w-3 h-3" />
               </span>
             </div>
             <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-[var(--text)]">{avgDuration}m</span>
+              <span className="text-2xl font-bold text-gray-900">{avgDuration}m</span>
               <MiniSparkline data={sparklineData.avgTime} trend="down" />
             </div>
           </div>
 
           {/* Follow-ups */}
-          <div className="p-4 bg-[var(--warning-soft)] rounded-xl">
+          <div className="p-4 bg-orange-50 rounded-xl">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Follow-ups</span>
+              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Follow-ups</span>
               {stats.needsFollowup > 0 && (
-                <span className="text-xs font-medium text-[#B45309]">Action needed</span>
+                <span className="text-xs font-medium text-[#F97316]">Action needed</span>
               )}
             </div>
             <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-[var(--text)]">{stats.needsFollowup}</span>
+              <span className="text-2xl font-bold text-gray-900">{stats.needsFollowup}</span>
               <MiniSparkline data={sparklineData.followups} trend="warning" />
             </div>
           </div>
@@ -517,56 +511,74 @@ export default function DashboardPage() {
         {/* Breakdown Cards */}
         <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Lead Temperature */}
-          <div className="p-5 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)]">
+          <div className="p-5 bg-white rounded-xl border border-gray-100 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--accent-soft)]">
-                <Thermometer className="w-4 h-4 text-[var(--accent-solid)]" />
+              <div className="p-2 rounded-xl bg-purple-50">
+                <Thermometer className="w-4 h-4 text-[#8B5CF6]" />
               </div>
-              <h3 className="font-semibold text-sm text-[var(--text)]">Lead Temperature</h3>
+              <h3 className="font-semibold text-sm text-gray-900">Lead Temperature</h3>
             </div>
-            <div className="space-y-2">
-              {/* Hot - Soft rose/coral pastel bg, medium coral dot */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#FEF2F2] transition-all hover:bg-[#FEE2E2]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-[#F87171]" />
-                  <span className="text-sm font-medium text-[var(--text-2)]">Hot</span>
+            <div className="space-y-3">
+              {/* Hot */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sun className="w-4 h-4 text-[#F97316]" />
+                    <span className="text-sm text-gray-600">Hot</span>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">{leadTemperature.hot} Leads</span>
                 </div>
-                <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
-                  {leadTemperature.hot}
-                </span>
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] rounded-full transition-all duration-500"
+                    style={{ width: `${leadTemperature.total ? (leadTemperature.hot / leadTemperature.total) * 100 : 0}%` }}
+                  />
+                </div>
               </div>
 
-              {/* Warm - Soft amber pastel bg, medium amber dot */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#FFFBEB] transition-all hover:bg-[#FEF3C7]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-[#FBBF24]" />
-                  <span className="text-sm font-medium text-[var(--text-2)]">Warm</span>
+              {/* Warm */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sun className="w-4 h-4 text-[#FBBF24]" />
+                    <span className="text-sm text-gray-600">Warm</span>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">{leadTemperature.warm} Leads</span>
                 </div>
-                <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
-                  {leadTemperature.warm}
-                </span>
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#F97316] to-[#FBBF24] rounded-full transition-all duration-500"
+                    style={{ width: `${leadTemperature.total ? (leadTemperature.warm / leadTemperature.total) * 100 : 0}%` }}
+                  />
+                </div>
               </div>
 
-              {/* Cold - Soft sky blue pastel bg, medium sky dot */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-[#EFF6FF] transition-all hover:bg-[#DBEAFE]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-[#60A5FA]" />
-                  <span className="text-sm font-medium text-[var(--text-2)]">Cold</span>
+              {/* Cold */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Snowflake className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-600">Cold</span>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">{leadTemperature.cold} Leads</span>
                 </div>
-                <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
-                  {leadTemperature.cold}
-                </span>
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#D1D5DB] to-[#E5E7EB] rounded-full transition-all duration-500"
+                    style={{ width: `${leadTemperature.total ? (leadTemperature.cold / leadTemperature.total) * 100 : 0}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           {/* Product Interest */}
-          <div className="p-5 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)]">
+          <div className="p-5 bg-white rounded-xl border border-gray-100 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--success-soft)]">
-                <Zap className="w-4 h-4 text-[var(--success)]" />
+              <div className="p-2 rounded-xl bg-purple-50">
+                <Zap className="w-4 h-4 text-[#8B5CF6]" />
               </div>
-              <h3 className="font-semibold text-sm text-[var(--text)]">Product Interest</h3>
+              <h3 className="font-semibold text-sm text-gray-900">Product Interest</h3>
             </div>
             <div className="space-y-3">
               {analyticsData.products.length > 0 ? (
@@ -575,12 +587,12 @@ export default function DashboardPage() {
                   return analyticsData.products.map(([topic, count]) => (
                     <div key={topic} className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-[var(--text-2)] truncate max-w-[65%]">{topic}</span>
-                        <span className="text-sm font-semibold text-[var(--text)]">{count}</span>
+                        <span className="text-sm text-gray-600 truncate max-w-[65%]">{topic}</span>
+                        <span className="text-sm font-semibold text-gray-900">{count}</span>
                       </div>
-                      <div className="h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
+                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#9333EA] rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] rounded-full transition-all duration-500"
                           style={{ width: `${(count / maxCount) * 100}%` }}
                         />
                       </div>
@@ -588,44 +600,44 @@ export default function DashboardPage() {
                   ));
                 })()
               ) : (
-                <p className="text-sm text-[var(--placeholder)]">No data yet</p>
+                <p className="text-sm text-gray-400">No data yet</p>
               )}
             </div>
           </div>
 
           {/* Regions */}
-          <div className="p-5 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)]">
+          <div className="p-5 bg-white rounded-xl border border-gray-100 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--info-soft)]">
-                <Globe className="w-4 h-4 text-[var(--info)]" />
+              <div className="p-2 rounded-xl bg-green-50">
+                <Globe className="w-4 h-4 text-[#10B981]" />
               </div>
-              <h3 className="font-semibold text-sm text-[var(--text)]">Regions</h3>
+              <h3 className="font-semibold text-sm text-gray-900">Regions</h3>
             </div>
             <div className="space-y-2">
               {analyticsData.regions.length > 0 ? (
                 (() => {
                   const colors = [
-                    { dot: 'bg-[#8B5CF6]', bg: 'bg-[#F5F3FF]', hover: 'hover:bg-[#EDE9FE]' },
-                    { dot: 'bg-[#10B981]', bg: 'bg-[#ECFDF5]', hover: 'hover:bg-[#D1FAE5]' },
-                    { dot: 'bg-[#F59E0B]', bg: 'bg-[#FFFBEB]', hover: 'hover:bg-[#FEF3C7]' },
+                    { dot: 'bg-[#3B82F6]' },
+                    { dot: 'bg-[#10B981]' },
+                    { dot: 'bg-[#F97316]' },
                   ];
                   return analyticsData.regions.map(([region, count], index) => (
                     <div
                       key={region}
-                      className={`flex items-center justify-between p-2.5 rounded-lg ${colors[index]?.bg || 'bg-[var(--surface-2)]'} ${colors[index]?.hover || ''} transition-all`}
+                      className="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all"
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className={`w-2 h-2 rounded-full ${colors[index]?.dot || 'bg-[var(--muted)]'}`} />
-                        <span className="text-sm font-medium text-[var(--text-2)]">{region}</span>
+                        <div className={`w-2.5 h-2.5 rounded-full ${colors[index]?.dot || 'bg-gray-400'}`} />
+                        <span className="text-sm font-medium text-gray-700">{region}</span>
                       </div>
-                      <span className="text-sm font-bold text-[var(--text)] bg-[var(--surface)] px-2 py-0.5 rounded-md shadow-[var(--shadow-subtle)]">
+                      <span className="text-sm font-bold text-gray-900">
                         {count}
                       </span>
                     </div>
                   ));
                 })()
               ) : (
-                <p className="text-sm text-[var(--placeholder)]">No data yet</p>
+                <p className="text-sm text-gray-400">No data yet</p>
               )}
             </div>
           </div>

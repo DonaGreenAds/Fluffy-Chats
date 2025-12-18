@@ -3,42 +3,47 @@
 :root {
   /* ========================================
      PREMIUM PALETTE TOKENS (Light Mode)
+     Matching FluffyChats Reference Design
      ======================================== */
 
   /* Neutrals (base surfaces) */
   --bg: #F8FAFC;
   --surface: #FFFFFF;
   --surface-2: #F1F5F9;
-  --border: #E2E8F0;
-  --border-strong: #CBD5E1;
+  --border: #E5E7EB;
+  --border-strong: #D1D5DB;
 
   /* Text hierarchy */
-  --text: #0F172A;
-  --text-2: #334155;
-  --muted: #64748B;
-  --placeholder: #94A3B8;
+  --text: #1F2937;
+  --text-2: #4B5563;
+  --muted: #6B7280;
+  --placeholder: #9CA3AF;
 
-  /* Brand accent */
-  --accent-1: #7427FF;
-  --accent-2: #EE82EE;
-  --accent-solid: #6D28D9;
-  --accent-soft: rgba(116, 39, 255, 0.10);
-  --accent-soft-2: rgba(238, 130, 238, 0.12);
+  /* Brand accent - Purple/Violet gradient matching reference */
+  --accent-1: #8B5CF6;
+  --accent-2: #D946EF;
+  --accent-solid: #7C3AED;
+  --accent-soft: rgba(139, 92, 246, 0.08);
+  --accent-soft-2: rgba(217, 70, 239, 0.08);
 
   /* State colors */
-  --success: #16A34A;
-  --success-soft: rgba(22, 163, 74, 0.10);
-  --warning: #F59E0B;
-  --warning-soft: rgba(245, 158, 11, 0.12);
-  --danger: #DC2626;
-  --danger-soft: rgba(220, 38, 38, 0.10);
-  --info: #2563EB;
-  --info-soft: rgba(37, 99, 235, 0.10);
+  --success: #10B981;
+  --success-soft: rgba(16, 185, 129, 0.10);
+  --warning: #F97316;
+  --warning-soft: rgba(249, 115, 22, 0.10);
+  --danger: #EF4444;
+  --danger-soft: rgba(239, 68, 68, 0.10);
+  --info: #3B82F6;
+  --info-soft: rgba(59, 130, 246, 0.10);
 
   /* Interactive states */
-  --focus: rgba(116, 39, 255, 0.35);
-  --hover-row: rgba(116, 39, 255, 0.06);
-  --active-row: rgba(116, 39, 255, 0.10);
+  --focus: rgba(139, 92, 246, 0.35);
+  --hover-row: rgba(139, 92, 246, 0.04);
+  --active-row: rgba(139, 92, 246, 0.08);
+
+  /* Hot lead accent - Orange/Coral from reference */
+  --hot: #F97316;
+  --hot-soft: rgba(249, 115, 22, 0.08);
 
   /* Legacy mappings (for compatibility) */
   --background: var(--bg);
