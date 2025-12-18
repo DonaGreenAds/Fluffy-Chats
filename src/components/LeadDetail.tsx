@@ -414,7 +414,10 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
               >
                 <ArrowLeft className="w-5 h-5 text-[var(--muted-foreground)]" />
               </button>
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center text-[var(--text)] font-bold text-xl"
+                style={{ backgroundColor: `var(--avatar-${['pink', 'mint', 'lavender', 'peach', 'sage', 'sky', 'coral'][lead.prospect_name.charCodeAt(0) % 7]})` }}
+              >
                 {lead.prospect_name === 'unknown' || lead.prospect_name === 'Unknown Lead'
                   ? (lead.company_name && lead.company_name !== 'unknown' ? lead.company_name.charAt(0).toUpperCase() : 'L')
                   : lead.prospect_name.charAt(0).toUpperCase()}

@@ -388,7 +388,10 @@ export default function LeadTable({ leads, onSelectLead, selectedLeadId }: LeadT
                 </td>
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-medium flex-shrink-0">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center text-[var(--text)] font-semibold flex-shrink-0"
+                      style={{ backgroundColor: `var(--avatar-${['pink', 'mint', 'lavender', 'peach', 'sage', 'sky', 'coral'][lead.prospect_name.charCodeAt(0) % 7]})` }}
+                    >
                       {lead.prospect_name === 'unknown' || lead.prospect_name === 'Unknown Lead'
                         ? (lead.company_name && lead.company_name !== 'unknown' ? lead.company_name.charAt(0).toUpperCase() : 'L')
                         : lead.prospect_name.charAt(0).toUpperCase()}
