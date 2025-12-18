@@ -49,7 +49,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 p-12 flex-col justify-between">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[var(--accent-1)] via-[var(--accent-2)] to-[var(--accent-solid)] p-12 flex-col justify-between">
         <div>
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
@@ -95,8 +95,8 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <MessageCircle className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-[var(--accent-soft)] flex items-center justify-center">
+              <MessageCircle className="w-6 h-6 text-[var(--accent-solid)]" />
             </div>
             <div>
               <h1 className="font-bold text-xl text-[var(--foreground)]">FluffyChats</h1>
@@ -166,7 +166,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white rounded-xl font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -191,10 +191,10 @@ export default function LoginPage() {
           </p>
 
           {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm font-medium text-blue-800 mb-2">Demo Owner Account:</p>
-            <p className="text-xs text-blue-700">Email: owner@telinfy.com</p>
-            <p className="text-xs text-blue-700">Password: Owner@123</p>
+          <div className="mt-6 p-4 bg-[var(--insight-bg)] border border-[var(--accent-1)]/20 rounded-xl">
+            <p className="text-sm font-medium text-[var(--insight-text)] mb-2">Demo Owner Account:</p>
+            <p className="text-xs text-[var(--insight-text)]/80">Email: owner@telinfy.com</p>
+            <p className="text-xs text-[var(--insight-text)]/80">Password: Owner@123</p>
           </div>
         </div>
       </div>

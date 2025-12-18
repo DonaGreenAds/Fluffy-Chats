@@ -776,8 +776,8 @@ export default function IntegrationsPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between animate-fade-in">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
-            <Plug className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 rounded-xl bg-[var(--accent-soft)] flex items-center justify-center">
+            <Plug className="w-6 h-6 text-[var(--accent-solid)]" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-[var(--foreground)]">Integrations</h1>
@@ -1010,8 +1010,8 @@ export default function IntegrationsPage() {
       <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-6 animate-slide-up animation-delay-500">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
-              <Webhook className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-lg bg-[var(--accent-soft)] flex items-center justify-center">
+              <Webhook className="w-5 h-5 text-[var(--accent-solid)]" />
             </div>
             <div>
               <h2 className="font-semibold text-[var(--foreground)]">Webhooks</h2>
