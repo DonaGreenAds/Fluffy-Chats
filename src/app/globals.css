@@ -2,50 +2,54 @@
 
 :root {
   /* ========================================
-     PREMIUM PALETTE TOKENS (Light Mode)
-     Matching FluffyChats Reference Design
+     60/30/10 COLOR RULE IMPLEMENTATION
+     60% = Dominant (neutrals/backgrounds)
+     30% = Secondary (text/borders/subtle UI)
+     10% = Accent (CTAs/active states only)
      ======================================== */
 
-  /* Neutrals (base surfaces) */
-  --bg: #F8FAFC;
+  /* === 60% DOMINANT - Neutrals & Backgrounds === */
+  --bg: #F9FAFB;
   --surface: #FFFFFF;
-  --surface-2: #F1F5F9;
+  --surface-2: #F3F4F6;
+  --surface-3: #E5E7EB;
+
+  /* === 30% SECONDARY - Text & UI Elements === */
+  --text: #111827;
+  --text-2: #374151;
+  --muted: #6B7280;
+  --placeholder: #9CA3AF;
   --border: #E5E7EB;
   --border-strong: #D1D5DB;
 
-  /* Text hierarchy */
-  --text: #1F2937;
-  --text-2: #4B5563;
-  --muted: #6B7280;
-  --placeholder: #9CA3AF;
-
-  /* Brand accent - Purple/Violet gradient matching reference */
+  /* === 10% ACCENT - Primary Actions ONLY === */
+  /* Use sparingly: primary buttons, active nav, key highlights */
   --accent-1: #8B5CF6;
-  --accent-2: #D946EF;
+  --accent-2: #A855F7;
   --accent-solid: #7C3AED;
-  --accent-soft: rgba(139, 92, 246, 0.08);
-  --accent-soft-2: rgba(217, 70, 239, 0.08);
+  --accent-soft: rgba(139, 92, 246, 0.06);
 
-  /* State colors */
-  --success: #10B981;
-  --success-soft: rgba(16, 185, 129, 0.10);
-  --warning: #F97316;
-  --warning-soft: rgba(249, 115, 22, 0.10);
-  --danger: #EF4444;
-  --danger-soft: rgba(239, 68, 68, 0.10);
-  --info: #3B82F6;
-  --info-soft: rgba(59, 130, 246, 0.10);
+  /* === SEMANTIC COLORS (part of 10%) === */
+  --success: #059669;
+  --success-soft: rgba(5, 150, 105, 0.08);
+  --warning: #D97706;
+  --warning-soft: rgba(217, 119, 6, 0.08);
+  --danger: #DC2626;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+  --info: #2563EB;
+  --info-soft: rgba(37, 99, 235, 0.08);
 
-  /* Interactive states */
-  --focus: rgba(139, 92, 246, 0.35);
-  --hover-row: rgba(139, 92, 246, 0.04);
-  --active-row: rgba(139, 92, 246, 0.08);
+  /* === INTERACTIVE STATES === */
+  --focus: rgba(139, 92, 246, 0.25);
+  --hover-row: rgba(0, 0, 0, 0.02);
+  --active-row: rgba(0, 0, 0, 0.04);
 
-  /* Hot lead accent - Orange/Coral from reference */
-  --hot: #F97316;
-  --hot-soft: rgba(249, 115, 22, 0.08);
+  /* === SHADOWS (subtle depth) === */
+  --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 
-  /* Legacy mappings (for compatibility) */
+  /* Legacy mappings */
   --background: var(--bg);
   --foreground: var(--text);
   --card: var(--surface);
