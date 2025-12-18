@@ -67,21 +67,26 @@ const DATE_PRESETS = [
   { label: 'All time', days: -1 },
 ];
 
-// Chart colors
+// Chart colors - aligned with 60/30/10 design system
 const COLORS = {
-  primary: '#4338ca',
-  success: '#22c55e',
-  warning: '#f59e0b',
-  danger: '#ef4444',
-  neutral: '#a3a3a3',
-  light: '#e5e5e5',
+  primary: '#8B5CF6',
+  secondary: '#A78BFA',
+  success: '#10B981',
+  warning: '#F59E0B',
+  danger: '#EF4444',
+  neutral: '#64748B',
+  light: '#E2E8F0',
+  hot: '#8B5CF6',
+  warm: '#FB7185',
+  cold: '#94A3B8',
+  teal: '#0891B2',
 };
 
 const URGENCY_COLORS: Record<string, string> = {
-  critical: '#ef4444',
-  high: '#f59e0b',
-  medium: '#a3a3a3',
-  low: '#e5e5e5',
+  critical: '#EF4444',
+  high: '#F59E0B',
+  medium: '#64748B',
+  low: '#CBD5E1',
 };
 
 export default function AnalyticsPage() {
@@ -338,11 +343,11 @@ export default function AnalyticsPage() {
 
   // Status distribution chart data
   const statusData = [
-    { name: 'New', value: stats.byStatus.new, color: '#3b82f6' },
-    { name: 'Contacted', value: stats.byStatus.contacted, color: '#a855f7' },
-    { name: 'Qualified', value: stats.byStatus.qualified, color: '#f59e0b' },
-    { name: 'Converted', value: stats.byStatus.converted, color: '#22c55e' },
-    { name: 'Lost', value: stats.byStatus.lost, color: '#ef4444' },
+    { name: 'New', value: stats.byStatus.new, color: '#3B82F6' },
+    { name: 'Contacted', value: stats.byStatus.contacted, color: '#8B5CF6' },
+    { name: 'Qualified', value: stats.byStatus.qualified, color: '#F59E0B' },
+    { name: 'Converted', value: stats.byStatus.converted, color: '#10B981' },
+    { name: 'Lost', value: stats.byStatus.lost, color: '#EF4444' },
   ].filter(d => d.value > 0);
 
   // Top topics from actual data
@@ -494,10 +499,10 @@ export default function AnalyticsPage() {
       sentiments[sentiment] = (sentiments[sentiment] || 0) + 1;
     });
     return [
-      { name: 'Very Positive', value: sentiments['very_positive'] || 0, color: '#22c55e' },
-      { name: 'Positive', value: sentiments['positive'] || 0, color: '#86efac' },
-      { name: 'Neutral', value: sentiments['neutral'] || 0, color: '#a3a3a3' },
-      { name: 'Negative', value: sentiments['negative'] || 0, color: '#ef4444' },
+      { name: 'Very Positive', value: sentiments['very_positive'] || 0, color: '#10B981' },
+      { name: 'Positive', value: sentiments['positive'] || 0, color: '#34D399' },
+      { name: 'Neutral', value: sentiments['neutral'] || 0, color: '#94A3B8' },
+      { name: 'Negative', value: sentiments['negative'] || 0, color: '#EF4444' },
     ].filter(d => d.value > 0);
   }, [filteredLeads]);
 
@@ -507,9 +512,9 @@ export default function AnalyticsPage() {
     const partner = filteredLeads.filter(l => l.is_partner === true).length;
     const smb = filteredLeads.filter(l => l.is_enterprise !== true && l.is_partner !== true).length;
     const result = [
-      { name: 'Enterprise', value: enterprise, color: '#4338ca' },
-      { name: 'Partner', value: partner, color: '#7c3aed' },
-      { name: 'SMB', value: smb, color: '#a3a3a3' },
+      { name: 'Enterprise', value: enterprise, color: '#8B5CF6' },
+      { name: 'Partner', value: partner, color: '#A78BFA' },
+      { name: 'SMB', value: smb, color: '#94A3B8' },
     ];
     // If all values are 0, show SMB with total count
     if (enterprise === 0 && partner === 0 && smb === 0 && filteredLeads.length > 0) {
@@ -530,9 +535,9 @@ export default function AnalyticsPage() {
       }
     });
     const result = [
-      { name: 'High', value: trusts['high'], color: '#22c55e' },
-      { name: 'Medium', value: trusts['medium'], color: '#f59e0b' },
-      { name: 'Low', value: trusts['low'], color: '#ef4444' },
+      { name: 'High', value: trusts['high'], color: '#10B981' },
+      { name: 'Medium', value: trusts['medium'], color: '#F59E0B' },
+      { name: 'Low', value: trusts['low'], color: '#EF4444' },
     ];
     // If all are 0 but we have leads, default to medium
     if (trusts['high'] === 0 && trusts['medium'] === 0 && trusts['low'] === 0 && filteredLeads.length > 0) {
@@ -573,26 +578,19 @@ export default function AnalyticsPage() {
   }, [filteredLeads]);
 
   return (
-    <div className="p-8 space-y-8 bg-[#fafafa] min-h-screen">
-      {/* Animated Background Orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-[500px] h-[500px] bg-gradient-to-br from-neutral-200/40 to-transparent rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-20 right-20 w-[400px] h-[400px] bg-gradient-to-br from-neutral-300/30 to-transparent rounded-full blur-3xl animate-float-delayed" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-neutral-100/50 to-transparent rounded-full blur-3xl animate-pulse-slow" />
-      </div>
-
+    <div className="p-6 lg:p-8 space-y-6 bg-[var(--bg-secondary)] min-h-screen">
       {/* Page Header */}
       <div className="relative animate-fade-in z-[100]">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-5">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-purple-500/30">
-              <BarChart3 className="w-7 h-7 text-white" />
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-[var(--accent-soft)] flex items-center justify-center">
+              <BarChart3 className="w-6 h-6 text-[var(--accent-solid)]" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-neutral-900 tracking-tight">
+              <h1 className="text-2xl font-bold text-[var(--text)] tracking-tight">
                 Lead Analytics
               </h1>
-              <p className="text-neutral-500 mt-1">
+              <p className="text-[var(--muted)] text-sm mt-0.5">
                 {filteredLeads.length === leads.length
                   ? `Complete analysis of ${leads.length} leads`
                   : `Analyzing ${filteredLeads.length} of ${leads.length} total leads`
