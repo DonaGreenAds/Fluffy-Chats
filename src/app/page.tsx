@@ -341,66 +341,54 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Lead Temperature Card - Like reference */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-[var(--border)] p-6" style={{ boxShadow: 'var(--shadow-card)' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 rounded-xl bg-[var(--accent-soft)]">
-              <Thermometer className="w-5 h-5 text-[var(--accent-solid)]" />
+        {/* Follow-ups Card */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-[var(--border)] flex flex-col" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <h2 className="text-base font-semibold text-[var(--text)]">Follow-ups</h2>
+              {actionableLeads.length > 0 && (
+                <span className="text-xs font-medium text-[var(--warning-text)] bg-[var(--warning-soft)] px-2.5 py-1 rounded-full">
+                  {actionableLeads.length}
+                </span>
+              )}
             </div>
-            <h2 className="text-base font-semibold text-[var(--text)]">Lead Temperature</h2>
+            <Link
+              href="/leads"
+              className="text-sm font-medium text-[var(--accent-teal)] hover:text-[var(--accent-teal-hover)] transition-colors"
+            >
+              View all
+            </Link>
           </div>
 
-          <div className="space-y-6">
-            {/* Hot - Purple gradient like reference */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Flame className="w-4 h-4 text-[var(--hot-primary)]" />
-                  <span className="text-sm font-medium text-[var(--text)]">Hot</span>
+          <div className="p-4 space-y-3 overflow-y-auto max-h-[280px]">
+            {actionableLeads.slice(0, 4).map((lead) => (
+              <Link
+                key={lead.id}
+                href={`/leads?id=${lead.id}`}
+                className="block p-3 bg-[var(--surface-2)] rounded-xl border-l-4 border-l-[var(--warning)] hover:bg-[var(--surface-3)] transition-colors"
+              >
+                <div className="flex justify-between items-start mb-1.5">
+                  <h4 className="font-medium text-[var(--text)] text-sm">{lead.prospect_name}</h4>
+                  <span className="text-xs text-[var(--muted)]">{lead.conversation_date}</span>
                 </div>
-                <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.hot} Leads</span>
-              </div>
-              <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-500 progress-hot"
-                  style={{ width: `${leadTemperature.total ? (leadTemperature.hot / leadTemperature.total) * 100 : 0}%` }}
-                />
-              </div>
-            </div>
+                <p className="text-xs text-[var(--muted)] line-clamp-1 mb-2">
+                  {lead.next_action || 'Follow up regarding inquiry...'}
+                </p>
+                <span className="text-xs font-medium text-[var(--accent-teal)]">
+                  Take action →
+                </span>
+              </Link>
+            ))}
 
-            {/* Warm - Pink gradient like reference */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Sun className="w-4 h-4 text-[var(--warm-primary)]" />
-                  <span className="text-sm font-medium text-[var(--text)]">Warm</span>
+            {actionableLeads.length === 0 && (
+              <div className="py-8 text-center">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-full bg-[var(--success-soft)] flex items-center justify-center">
+                  <CheckCircle2 className="w-5 h-5 text-[var(--success)]" />
                 </div>
-                <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.warm} Leads</span>
+                <p className="text-sm font-medium text-[var(--text)]">All caught up!</p>
+                <p className="text-xs text-[var(--muted)] mt-0.5">No pending follow-ups</p>
               </div>
-              <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-500 progress-warm"
-                  style={{ width: `${leadTemperature.total ? (leadTemperature.warm / leadTemperature.total) * 100 : 0}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Cold - Gray like reference */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Snowflake className="w-4 h-4 text-[var(--cold-primary)]" />
-                  <span className="text-sm font-medium text-[var(--text)]">Cold</span>
-                </div>
-                <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.cold} Leads</span>
-              </div>
-              <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-500 progress-cold"
-                  style={{ width: `${leadTemperature.total ? (leadTemperature.cold / leadTemperature.total) * 100 : 0}%` }}
-                />
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -551,56 +539,68 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Follow-ups Section */}
-      {actionableLeads.length > 0 && (
-        <div className="bg-white rounded-2xl border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
-          <div className="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <h2 className="text-base font-semibold text-[var(--text)]">Pending Follow-ups</h2>
-              <span className="text-xs font-medium text-[var(--warning-text)] bg-[var(--warning-soft)] px-2.5 py-1 rounded-full">
-                {actionableLeads.length}
-              </span>
+      {/* Lead Temperature Card */}
+      <div className="bg-white rounded-2xl border border-[var(--border)] p-6" style={{ boxShadow: 'var(--shadow-card)' }}>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2.5 rounded-xl bg-[var(--accent-soft)]">
+            <Thermometer className="w-5 h-5 text-[var(--accent-solid)]" />
+          </div>
+          <h2 className="text-base font-semibold text-[var(--text)]">Lead Temperature</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Hot - Purple gradient like reference */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Flame className="w-4 h-4 text-[var(--hot-primary)]" />
+                <span className="text-sm font-medium text-[var(--text)]">Hot</span>
+              </div>
+              <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.hot} Leads</span>
             </div>
-            <Link
-              href="/leads"
-              className="text-sm font-medium text-[var(--accent-teal)] hover:text-[var(--accent-teal-hover)] transition-colors"
-            >
-              View all
-            </Link>
+            <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500 progress-hot"
+                style={{ width: `${leadTemperature.total ? (leadTemperature.hot / leadTemperature.total) * 100 : 0}%` }}
+              />
+            </div>
           </div>
 
-          <div className="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {actionableLeads.slice(0, 3).map((lead) => (
-              <Link
-                key={lead.id}
-                href={`/leads?id=${lead.id}`}
-                className="block p-4 bg-[var(--surface-2)] rounded-xl border-l-4 border-l-[var(--warning)] hover:bg-[var(--surface-3)] transition-colors"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-[var(--text)] font-semibold text-sm"
-                      style={{ backgroundColor: getAvatarColor(lead.prospect_name) }}
-                    >
-                      {lead.prospect_name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-[var(--text)] text-sm">{lead.prospect_name}</h4>
-                      <p className="text-xs text-[var(--muted)]">{lead.conversation_date}</p>
-                    </div>
-                  </div>
-                </div>
-                <p className="text-xs text-[var(--muted)] line-clamp-2 mb-3">
-                  {lead.next_action || 'Follow up regarding inquiry...'}
-                </p>
-                <span className="text-xs font-medium text-[var(--accent-teal)]">
-                  Take action →
-                </span>
-              </Link>
-            ))}
+          {/* Warm - Pink gradient like reference */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Sun className="w-4 h-4 text-[var(--warm-primary)]" />
+                <span className="text-sm font-medium text-[var(--text)]">Warm</span>
+              </div>
+              <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.warm} Leads</span>
+            </div>
+            <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500 progress-warm"
+                style={{ width: `${leadTemperature.total ? (leadTemperature.warm / leadTemperature.total) * 100 : 0}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Cold - Gray like reference */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Snowflake className="w-4 h-4 text-[var(--cold-primary)]" />
+                <span className="text-sm font-medium text-[var(--text)]">Cold</span>
+              </div>
+              <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.cold} Leads</span>
+            </div>
+            <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500 progress-cold"
+                style={{ width: `${leadTemperature.total ? (leadTemperature.cold / leadTemperature.total) * 100 : 0}%` }}
+              />
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
