@@ -69,17 +69,17 @@ const DATE_PRESETS = [
 
 // Chart colors - aligned with 60/30/10 design system
 const COLORS = {
-  primary: '#8B5CF6',
-  secondary: '#A78BFA',
-  success: '#10B981',
-  warning: '#F59E0B',
-  danger: '#EF4444',
-  neutral: '#64748B',
-  light: '#E2E8F0',
-  hot: '#8B5CF6',
-  warm: '#FB7185',
-  cold: '#94A3B8',
-  teal: '#0891B2',
+  primary: '#8B5CF6',    // accent-1 (purple)
+  secondary: '#A78BFA',  // accent-2 (light purple)
+  success: '#10B981',    // green
+  warning: '#FB7185',    // warm-primary (pink)
+  danger: '#EF4444',     // red
+  neutral: '#64748B',    // gray
+  light: '#E2E8F0',      // light gray
+  hot: '#8B5CF6',        // purple for hot leads
+  warm: '#FB7185',       // pink for warm leads
+  cold: '#94A3B8',       // gray for cold leads
+  teal: '#0891B2',       // teal for links
 };
 
 const URGENCY_COLORS: Record<string, string> = {
@@ -341,13 +341,13 @@ export default function AnalyticsPage() {
     { name: 'Low', value: stats.byUrgency.low, color: URGENCY_COLORS.low },
   ].filter(d => d.value > 0);
 
-  // Status distribution chart data
+  // Status distribution chart data - using design system colors
   const statusData = [
-    { name: 'New', value: stats.byStatus.new, color: '#3B82F6' },
-    { name: 'Contacted', value: stats.byStatus.contacted, color: '#8B5CF6' },
-    { name: 'Qualified', value: stats.byStatus.qualified, color: '#F59E0B' },
-    { name: 'Converted', value: stats.byStatus.converted, color: '#10B981' },
-    { name: 'Lost', value: stats.byStatus.lost, color: '#EF4444' },
+    { name: 'New', value: stats.byStatus.new, color: '#A78BFA' },      // Light purple
+    { name: 'Contacted', value: stats.byStatus.contacted, color: '#8B5CF6' }, // Purple
+    { name: 'Qualified', value: stats.byStatus.qualified, color: '#FB7185' }, // Pink
+    { name: 'Converted', value: stats.byStatus.converted, color: '#10B981' }, // Green
+    { name: 'Lost', value: stats.byStatus.lost, color: '#94A3B8' },    // Gray
   ].filter(d => d.value > 0);
 
   // Top topics from actual data
@@ -603,7 +603,7 @@ export default function AnalyticsPage() {
             {/* Export Button */}
             <button
               onClick={exportToSpreadsheet}
-              className="flex items-center gap-2 px-5 py-3 bg-neutral-100 text-neutral-500 rounded-xl shadow-sm hover:bg-gradient-to-br hover:from-indigo-600 hover:to-purple-600 hover:text-white hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 transition-all duration-300"
+              className="flex items-center gap-2 px-5 py-3 bg-[var(--surface-2)] text-[var(--text-2)] rounded-xl shadow-sm hover:bg-gradient-to-br hover:from-[var(--accent-1)] hover:to-[var(--accent-2)] hover:text-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
               title="Export to CSV"
             >
               <Download className="w-5 h-5" />
@@ -614,14 +614,14 @@ export default function AnalyticsPage() {
             <div className="relative z-[100]" ref={datePickerRef}>
               <button
                 onClick={() => setShowDatePicker(!showDatePicker)}
-                className="flex items-center gap-3 px-6 py-3 bg-white rounded-xl border border-neutral-200 shadow-sm hover:shadow-lg hover:border-indigo-300 transition-all duration-300 group"
+                className="flex items-center gap-3 px-6 py-3 bg-white rounded-xl border border-[var(--border)] shadow-sm hover:shadow-lg hover:border-[var(--accent-1)] transition-all duration-300 group"
               >
-                <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
-                  <Calendar className="w-5 h-5 text-indigo-600" />
+                <div className="w-10 h-10 rounded-lg bg-[var(--accent-soft)] flex items-center justify-center group-hover:bg-[var(--accent-1)]/20 transition-colors">
+                  <Calendar className="w-5 h-5 text-[var(--accent-solid)]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-xs text-neutral-500 font-medium">Date Range</p>
-                  <p className="text-sm font-semibold text-neutral-900">
+                  <p className="text-xs text-[var(--muted)] font-medium">Date Range</p>
+                  <p className="text-sm font-semibold text-[var(--text)]">
                     {selectedPreset === 'Custom'
                       ? `${formatDisplayDate(dateRange.start)} - ${formatDisplayDate(dateRange.end)}`
                       : selectedPreset
@@ -629,7 +629,7 @@ export default function AnalyticsPage() {
                   </p>
                 </div>
                 <ChevronDown className={clsx(
-                  "w-5 h-5 text-neutral-400 transition-transform duration-300",
+                  "w-5 h-5 text-[var(--muted)] transition-transform duration-300",
                   showDatePicker && "rotate-180"
                 )} />
               </button>
@@ -655,7 +655,7 @@ export default function AnalyticsPage() {
                         className={clsx(
                           "px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
                           selectedPreset === preset.label
-                            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
+                            ? "bg-[var(--accent-1)] text-white shadow-lg shadow-[var(--accent-1)]/30"
                             : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 hover:scale-[1.02]"
                         )}
                       >
@@ -673,7 +673,7 @@ export default function AnalyticsPage() {
                         type="date"
                         value={dateRange.start}
                         onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
-                        className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                        className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)] focus:border-transparent bg-white"
                       />
                     </div>
                     <div className="flex-1">
@@ -682,13 +682,13 @@ export default function AnalyticsPage() {
                         type="date"
                         value={dateRange.end}
                         onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
-                        className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                        className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)] focus:border-transparent bg-white"
                       />
                     </div>
                   </div>
                   <button
                     onClick={() => applyCustomRange(dateRange.start, dateRange.end)}
-                    className="w-full mt-4 px-4 py-3 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/30"
+                    className="w-full mt-4 px-4 py-3 bg-[var(--accent-1)] text-white rounded-xl text-sm font-semibold hover:bg-[var(--accent-2)] transition-colors shadow-lg shadow-[var(--accent-1)]/30"
                   >
                     Apply Custom Range
                   </button>
@@ -721,14 +721,14 @@ export default function AnalyticsPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-neutral-50 to-white rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#4338ca] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Users className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 rounded-xl bg-[var(--accent-soft)] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Users className="w-5 h-5 text-[var(--accent-solid)]" />
                   </div>
-                  {stats.total > 0 && <TrendingUp className="w-4 h-4 text-emerald-500" />}
+                  {stats.total > 0 && <TrendingUp className="w-4 h-4 text-[var(--success)]" />}
                 </div>
-                <p className="text-xs text-neutral-500 mb-1 font-medium">Total Leads</p>
-                <p className="text-3xl font-bold text-neutral-900 tracking-tight">{stats.total}</p>
-                <p className="text-xs text-neutral-500 mt-1">
+                <p className="text-xs text-[var(--muted)] mb-1 font-medium">Total Leads</p>
+                <p className="text-3xl font-bold text-[var(--text)] tracking-tight">{stats.total}</p>
+                <p className="text-xs text-[var(--muted)] mt-1">
                   {stats.newLeads} new, {stats.contacted} contacted
                 </p>
               </div>
@@ -739,14 +739,14 @@ export default function AnalyticsPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-neutral-50 to-white rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Zap className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 rounded-xl bg-[var(--hot-soft)] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Zap className="w-5 h-5 text-[var(--hot-primary)]" />
                   </div>
-                  {stats.hotLeads > 0 && <ArrowUpRight className="w-4 h-4 text-amber-500" />}
+                  {stats.hotLeads > 0 && <ArrowUpRight className="w-4 h-4 text-[var(--hot-primary)]" />}
                 </div>
-                <p className="text-xs text-neutral-500 mb-1 font-medium">Hot Leads</p>
-                <p className="text-3xl font-bold text-neutral-900 tracking-tight">{stats.hotLeads}</p>
-                <p className="text-xs text-amber-600 mt-1 font-medium">
+                <p className="text-xs text-[var(--muted)] mb-1 font-medium">Hot Leads</p>
+                <p className="text-3xl font-bold text-[var(--text)] tracking-tight">{stats.hotLeads}</p>
+                <p className="text-xs text-[var(--hot-primary)] mt-1 font-medium">
                   {conversionMetrics.hotRate}% of total
                 </p>
               </div>
@@ -757,13 +757,13 @@ export default function AnalyticsPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-neutral-50 to-white rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Target className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 rounded-xl bg-[var(--success-soft)] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Target className="w-5 h-5 text-[var(--success)]" />
                   </div>
                 </div>
-                <p className="text-xs text-neutral-500 mb-1 font-medium">High Intent</p>
-                <p className="text-3xl font-bold text-neutral-900 tracking-tight">{stats.highIntent}</p>
-                <p className="text-xs text-emerald-600 mt-1 font-medium">
+                <p className="text-xs text-[var(--muted)] mb-1 font-medium">High Intent</p>
+                <p className="text-3xl font-bold text-[var(--text)] tracking-tight">{stats.highIntent}</p>
+                <p className="text-xs text-[var(--success)] mt-1 font-medium">
                   {conversionMetrics.intentRate}% of total
                 </p>
               </div>
@@ -774,18 +774,18 @@ export default function AnalyticsPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-neutral-50 to-white rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Activity className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 rounded-xl bg-[var(--warm-soft)] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Activity className="w-5 h-5 text-[var(--warm-primary)]" />
                   </div>
                 </div>
-                <p className="text-xs text-neutral-500 mb-1 font-medium">Avg Lead Score</p>
-                <p className="text-3xl font-bold text-neutral-900 tracking-tight">{stats.avgScore}</p>
-                <p className="text-xs text-neutral-500 mt-1">out of 100</p>
+                <p className="text-xs text-[var(--muted)] mb-1 font-medium">Avg Lead Score</p>
+                <p className="text-3xl font-bold text-[var(--text)] tracking-tight">{stats.avgScore}</p>
+                <p className="text-xs text-[var(--muted)] mt-1">out of 100</p>
               </div>
             </div>
 
             {/* Needs Action */}
-            <div className="group relative bg-gradient-to-br from-[#4338ca] to-purple-600 rounded-3xl p-5 shadow-xl shadow-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/40 transition-all duration-500 hover:-translate-y-1 animate-slide-up animation-delay-400 overflow-hidden">
+            <div className="group relative bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] rounded-3xl p-5 shadow-xl shadow-[var(--accent-1)]/30 hover:shadow-2xl hover:shadow-[var(--accent-1)]/40 transition-all duration-500 hover:-translate-y-1 animate-slide-up animation-delay-400 overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-2xl transform translate-x-8 -translate-y-8 group-hover:scale-150 transition-transform duration-700" />
               <div className="relative">
                 <div className="flex items-center justify-between mb-3">
@@ -806,7 +806,7 @@ export default function AnalyticsPage() {
             {/* Intent Distribution */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-500">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <Target className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Intent Level</h3>
@@ -859,7 +859,7 @@ export default function AnalyticsPage() {
             {/* Urgency Distribution */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-600">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-amber-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--warm-primary)] transition-colors duration-300">
                   <AlertTriangle className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Urgency Level</h3>
@@ -912,7 +912,7 @@ export default function AnalyticsPage() {
             {/* Status Distribution */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-700">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-2)] transition-colors duration-300">
                   <CheckCircle2 className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Lead Status</h3>
@@ -965,7 +965,7 @@ export default function AnalyticsPage() {
             {/* Sentiment Distribution */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-800">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-emerald-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--success)] transition-colors duration-300">
                   <MessageCircle className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Sentiment</h3>
@@ -1021,7 +1021,7 @@ export default function AnalyticsPage() {
             {/* Buyer Stage */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-900">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <TrendingUp className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Buyer Stage Funnel</h3>
@@ -1039,7 +1039,7 @@ export default function AnalyticsPage() {
                       boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
                     }}
                   />
-                  <Bar dataKey="value" fill="#4338ca" radius={[8, 8, 0, 0]} maxBarSize={50} className="hover:opacity-80 transition-opacity" />
+                  <Bar dataKey="value" fill="#8B5CF6" radius={[8, 8, 0, 0]} maxBarSize={50} className="hover:opacity-80 transition-opacity" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -1047,7 +1047,7 @@ export default function AnalyticsPage() {
             {/* Conversion Metrics */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1000">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <Zap className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Conversion Metrics</h3>
@@ -1055,60 +1055,60 @@ export default function AnalyticsPage() {
               <div className="space-y-4">
                 <div className="group/bar">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-neutral-600">High Intent Rate</span>
-                    <span className="text-sm font-bold text-neutral-900">{conversionMetrics.intentRate}%</span>
+                    <span className="text-xs font-medium text-[var(--text-secondary)]">High Intent Rate</span>
+                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.intentRate}%</span>
                   </div>
                   <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out"
+                      className="h-full bg-[var(--success)] rounded-full transition-all duration-1000 ease-out"
                       style={{ width: `${conversionMetrics.intentRate}%` }}
                     />
                   </div>
                 </div>
                 <div className="group/bar">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-neutral-600">Hot Lead Rate</span>
-                    <span className="text-sm font-bold text-neutral-900">{conversionMetrics.hotRate}%</span>
+                    <span className="text-xs font-medium text-[var(--text-secondary)]">Hot Lead Rate</span>
+                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.hotRate}%</span>
                   </div>
                   <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-amber-500 rounded-full transition-all duration-1000 ease-out"
+                      className="h-full bg-[var(--hot-primary)] rounded-full transition-all duration-1000 ease-out"
                       style={{ width: `${conversionMetrics.hotRate}%` }}
                     />
                   </div>
                 </div>
                 <div className="group/bar">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-neutral-600">Decision Stage Rate</span>
-                    <span className="text-sm font-bold text-neutral-900">{conversionMetrics.decisionRate}%</span>
+                    <span className="text-xs font-medium text-[var(--text-secondary)]">Decision Stage Rate</span>
+                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.decisionRate}%</span>
                   </div>
                   <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-purple-500 rounded-full transition-all duration-1000 ease-out"
+                      className="h-full bg-[var(--warm-primary)] rounded-full transition-all duration-1000 ease-out"
                       style={{ width: `${conversionMetrics.decisionRate}%` }}
                     />
                   </div>
                 </div>
                 <div className="group/bar">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-neutral-600">Contacted Rate</span>
-                    <span className="text-sm font-bold text-neutral-900">{conversionMetrics.contactedRate}%</span>
+                    <span className="text-xs font-medium text-[var(--text-secondary)]">Contacted Rate</span>
+                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.contactedRate}%</span>
                   </div>
                   <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-blue-500 rounded-full transition-all duration-1000 ease-out"
+                      className="h-full bg-[var(--accent-2)] rounded-full transition-all duration-1000 ease-out"
                       style={{ width: `${conversionMetrics.contactedRate}%` }}
                     />
                   </div>
                 </div>
                 <div className="group/bar">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-neutral-600">Conversion Rate</span>
-                    <span className="text-sm font-bold text-neutral-900">{conversionMetrics.conversionRate}%</span>
+                    <span className="text-xs font-medium text-[var(--text-secondary)]">Conversion Rate</span>
+                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.conversionRate}%</span>
                   </div>
                   <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-[#4338ca] rounded-full transition-all duration-1000 ease-out"
+                      className="h-full bg-[var(--accent-1)] rounded-full transition-all duration-1000 ease-out"
                       style={{ width: `${conversionMetrics.conversionRate}%` }}
                     />
                   </div>
@@ -1119,7 +1119,7 @@ export default function AnalyticsPage() {
             {/* Business Type & Trust */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1100">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <Briefcase className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Business Analysis</h3>
@@ -1159,7 +1159,7 @@ export default function AnalyticsPage() {
             {/* Leads Over Time */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1200">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <Activity className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Leads Over Time</h3>
@@ -1169,8 +1169,8 @@ export default function AnalyticsPage() {
                   <AreaChart data={dailyLeads} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#4338ca" stopOpacity={0.15}/>
-                        <stop offset="95%" stopColor="#4338ca" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.15}/>
+                        <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" vertical={false} />
@@ -1187,7 +1187,7 @@ export default function AnalyticsPage() {
                     <Area
                       type="monotone"
                       dataKey="count"
-                      stroke="#4338ca"
+                      stroke="#8B5CF6"
                       strokeWidth={2}
                       fill="url(#colorLeads)"
                     />
@@ -1203,7 +1203,7 @@ export default function AnalyticsPage() {
             {/* Top Topics */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1300">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <Target className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Top Topics Discussed</h3>
@@ -1231,7 +1231,7 @@ export default function AnalyticsPage() {
                       }}
                       formatter={(value, name, props) => [value, props.payload.fullName || name]}
                     />
-                    <Bar dataKey="value" fill="#4338ca" radius={[8, 8, 0, 0]} maxBarSize={40} className="hover:opacity-80 transition-opacity" />
+                    <Bar dataKey="value" fill="#8B5CF6" radius={[8, 8, 0, 0]} maxBarSize={40} className="hover:opacity-80 transition-opacity" />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -1247,7 +1247,7 @@ export default function AnalyticsPage() {
             {/* Source Breakdown */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1400">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <Globe className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Lead Sources</h3>
@@ -1256,7 +1256,7 @@ export default function AnalyticsPage() {
                 {sourceData.length > 0 ? sourceData.map((item, idx) => (
                   <div key={item.name} className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                     <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-[#4338ca] text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
+                      <span className="w-5 h-5 rounded-full bg-[var(--accent-1)] text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
                       <span className="text-xs text-neutral-700 font-medium">{item.name}</span>
                     </div>
                     <span className="text-sm font-bold text-neutral-900">{item.value}</span>
@@ -1270,7 +1270,7 @@ export default function AnalyticsPage() {
             {/* Channel Breakdown */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1500">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-emerald-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--success)] transition-colors duration-300">
                   <MessageCircle className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Channels</h3>
@@ -1279,7 +1279,7 @@ export default function AnalyticsPage() {
                 {channelData.length > 0 ? channelData.map((item, idx) => (
                   <div key={item.name} className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                     <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-emerald-500 text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
+                      <span className="w-5 h-5 rounded-full bg-[var(--success)] text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
                       <span className="text-xs text-neutral-700 font-medium">{item.name}</span>
                     </div>
                     <span className="text-sm font-bold text-neutral-900">{item.value}</span>
@@ -1293,7 +1293,7 @@ export default function AnalyticsPage() {
             {/* Region Breakdown */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1600">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-purple-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--hot-primary)] transition-colors duration-300">
                   <Globe className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Regions</h3>
@@ -1302,7 +1302,7 @@ export default function AnalyticsPage() {
                 {regionData.length > 0 ? regionData.slice(0, 5).map((item, idx) => (
                   <div key={item.name} className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                     <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-purple-500 text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
+                      <span className="w-5 h-5 rounded-full bg-[var(--hot-primary)] text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
                       <span className="text-xs text-neutral-700 font-medium truncate max-w-[100px]">{item.name}</span>
                     </div>
                     <span className="text-sm font-bold text-neutral-900">{item.value}</span>
@@ -1316,7 +1316,7 @@ export default function AnalyticsPage() {
             {/* Budget Distribution */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1700">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-amber-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--warm-primary)] transition-colors duration-300">
                   <DollarSign className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Budget Ranges</h3>
@@ -1325,7 +1325,7 @@ export default function AnalyticsPage() {
                 {budgetData.length > 0 ? budgetData.slice(0, 5).map((item, idx) => (
                   <div key={item.name} className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
                     <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
+                      <span className="w-5 h-5 rounded-full bg-[var(--warm-primary)] text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
                       <span className="text-xs text-neutral-700 font-medium truncate max-w-[100px]">{item.name}</span>
                     </div>
                     <span className="text-sm font-bold text-neutral-900">{item.value}</span>
@@ -1342,7 +1342,7 @@ export default function AnalyticsPage() {
             {/* Data Quality */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1800">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <CheckCircle2 className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Data Quality</h3>
@@ -1384,7 +1384,7 @@ export default function AnalyticsPage() {
             {/* Avg Completeness - Circular Progress */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1900">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#4338ca] transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
                   <PieChartIcon className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Data Completeness</h3>
@@ -1404,7 +1404,7 @@ export default function AnalyticsPage() {
                       cx="56"
                       cy="56"
                       r="48"
-                      stroke="#4338ca"
+                      stroke="#8B5CF6"
                       strokeWidth="8"
                       fill="none"
                       strokeDasharray={`${(dataQuality.avgCompleteness / 100) * 301.6} 301.6`}
@@ -1423,7 +1423,7 @@ export default function AnalyticsPage() {
             {/* Conversation Stats */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-2000">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-emerald-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--success)] transition-colors duration-300">
                   <MessageCircle className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Conversation Stats</h3>
@@ -1455,7 +1455,7 @@ export default function AnalyticsPage() {
             {/* Use Cases & Competitors */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-2100">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-purple-500 transition-colors duration-300">
+                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--hot-primary)] transition-colors duration-300">
                   <Briefcase className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <h3 className="text-sm font-semibold text-neutral-900">Use Cases</h3>
@@ -1486,7 +1486,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Summary Footer */}
-          <div className="bg-gradient-to-r from-[#4338ca] to-purple-600 rounded-3xl p-6 shadow-xl shadow-indigo-500/30 animate-slide-up animation-delay-2200">
+          <div className="bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] rounded-3xl p-6 shadow-xl shadow-[var(--accent-1)]/30 animate-slide-up animation-delay-2200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center">

@@ -16,6 +16,7 @@
   /* === 30% SECONDARY - Text & UI Elements === */
   --text: #1E293B;
   --text-2: #475569;
+  --text-secondary: #475569;
   --muted: #64748B;
   --placeholder: #94A3B8;
   --border: #E2E8F0;
@@ -47,6 +48,7 @@
   --hot-light: #A78BFA;
   --hot-lighter: #C4B5FD;
   --hot-bg: #F5F3FF;
+  --hot-soft: #F5F3FF;
   --hot-text: #7C3AED;
 
   /* Warm (Pink/Rose) */
@@ -54,6 +56,7 @@
   --warm-light: #FDA4AF;
   --warm-lighter: #FECDD3;
   --warm-bg: #FFF1F2;
+  --warm-soft: #FFF1F2;
   --warm-text: #E11D48;
 
   /* Cold (Gray) */
