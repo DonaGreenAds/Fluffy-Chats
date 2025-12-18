@@ -78,29 +78,25 @@ export default function Sidebar() {
   const canSeeSettings = user ? canSeeNavItem(user.role, 'Settings') : false;
 
   return (
-    // 60% - White background (dominant neutral)
     <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-[var(--border)] flex flex-col z-50">
-      {/* Logo - 10% accent only on brand icon */}
+      {/* Logo */}
       <div className="p-6">
         <div className="flex items-center gap-3">
-          {/* Only the logo icon uses accent color (10% rule) */}
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] flex items-center justify-center shadow-md">
-            <MessageCircle className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded-xl bg-[var(--accent-soft)] flex items-center justify-center">
+            <MessageCircle className="w-5 h-5 text-[var(--accent-solid)]" />
           </div>
           <div>
-            {/* 30% - Dark text for headings */}
             <h1 className="font-bold text-lg text-[var(--text)]">FluffyChats</h1>
             <p className="text-xs text-[var(--muted)]">by Twistify</p>
           </div>
         </div>
       </div>
 
-      {/* User Info - 60% neutral background, 30% text */}
+      {/* User Info */}
       {user && (
         <div className="px-4 pb-4">
           <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--surface-2)] hover:bg-[var(--surface-3)] transition-colors cursor-pointer">
-            {/* Avatar uses subtle gray, not accent */}
-            <div className="w-10 h-10 rounded-full bg-[var(--surface-3)] flex items-center justify-center text-[var(--text-2)] font-semibold text-sm">
+            <div className="w-10 h-10 rounded-full bg-[var(--avatar-lavender)] flex items-center justify-center text-[var(--text)] font-semibold text-sm">
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
@@ -112,7 +108,7 @@ export default function Sidebar() {
         </div>
       )}
 
-      {/* Navigation - 10% accent ONLY on active state */}
+      {/* Navigation */}
       <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
         {filteredNavigation.map((item) => {
           const isActive = pathname === item.href ||
@@ -123,17 +119,15 @@ export default function Sidebar() {
               key={item.name}
               href={item.href}
               className={clsx(
-                'group flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+                'group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                 isActive
-                  // 10% - Accent ONLY for active state
-                  ? 'bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white shadow-sm'
-                  // 30% - Gray text for inactive, 60% - hover uses subtle gray
+                  ? 'bg-[var(--accent-soft)] text-[var(--accent-solid)]'
                   : 'text-[var(--text-2)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]'
               )}
             >
               <item.icon className={clsx(
                 "w-5 h-5 transition-colors",
-                isActive ? "text-white" : "text-[var(--muted)] group-hover:text-[var(--text-2)]"
+                isActive ? "text-[var(--accent-solid)]" : "text-[var(--muted)] group-hover:text-[var(--text-2)]"
               )} />
               {item.name}
             </Link>
@@ -141,36 +135,35 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Hot Leads Card - Uses semantic warning color (part of 10%) */}
+      {/* Hot Leads Card */}
       <div className="p-4 mt-auto">
-        <div className="bg-[var(--surface-2)] rounded-xl p-4 border border-[var(--border)]">
+        <div className="bg-[var(--hot-bg)] rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              {/* Semantic color for status indicator */}
-              <div className="p-1.5 bg-[var(--warning-soft)] rounded-lg">
-                <Flame className="w-4 h-4 text-[var(--warning)]" />
+              <div className="p-1.5 bg-white/60 rounded-lg">
+                <Flame className="w-4 h-4 text-[var(--hot-primary)]" />
               </div>
-              <span className="font-medium text-sm text-[var(--text)]">Hot Leads</span>
+              <span className="font-medium text-sm text-[var(--hot-text)]">Hot Leads</span>
             </div>
-            <span className="text-xs text-[var(--muted)]">3 days</span>
+            <span className="text-xs text-[var(--hot-text)] opacity-70">3 days</span>
           </div>
 
           <div>
-            <span className="text-3xl font-bold text-[var(--text)] tracking-tight">{hotLeadsCount}</span>
-            <p className="text-xs text-[var(--muted)] mt-1">High Intent</p>
+            <span className="text-3xl font-bold text-[var(--hot-text)] tracking-tight">{hotLeadsCount}</span>
+            <p className="text-xs text-[var(--hot-text)] opacity-70 mt-1">High Intent</p>
           </div>
         </div>
       </div>
 
-      {/* Settings & Logout - 30% secondary colors */}
+      {/* Settings & Logout */}
       <div className="p-4 space-y-1 pb-6 border-t border-[var(--border)]">
         {canSeeSettings && (
           <Link
             href="/settings"
             className={clsx(
-              'flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+              'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
               pathname === '/settings'
-                ? 'bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white shadow-sm'
+                ? 'bg-[var(--accent-soft)] text-[var(--accent-solid)]'
                 : 'text-[var(--text-2)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]'
             )}
           >
@@ -180,7 +173,7 @@ export default function Sidebar() {
         )}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-[var(--muted)] hover:bg-[var(--danger-soft)] hover:text-[var(--danger)] transition-all"
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-[var(--muted)] hover:bg-[var(--danger-soft)] hover:text-[var(--danger)] transition-all"
         >
           <LogOut className="w-5 h-5" />
           Sign Out

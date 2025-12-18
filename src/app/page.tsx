@@ -21,7 +21,23 @@ import {
 import { useLeads } from '@/context/LeadContext';
 import { useAuth } from '@/context/AuthContext';
 
-// Mini Sparkline Component - Uses semantic colors only
+// Avatar color palette (pastel colors for diversity)
+const avatarColors = [
+  'var(--avatar-pink)',
+  'var(--avatar-mint)',
+  'var(--avatar-lavender)',
+  'var(--avatar-peach)',
+  'var(--avatar-sage)',
+  'var(--avatar-sky)',
+  'var(--avatar-coral)',
+];
+
+function getAvatarColor(name: string): string {
+  const index = name.charCodeAt(0) % avatarColors.length;
+  return avatarColors[index];
+}
+
+// Mini Sparkline Component
 function MiniSparkline({ data, trend }: { data: number[]; trend: 'up' | 'down' | 'warning' | 'neutral' }) {
   if (data.length < 2) return null;
 
@@ -33,7 +49,6 @@ function MiniSparkline({ data, trend }: { data: number[]; trend: 'up' | 'down' |
     `${(i / (data.length - 1)) * 56},${24 - ((v - min) / range) * 20}`
   ).join(' ');
 
-  // Semantic colors only - part of 10%
   const strokeColor = trend === 'up' ? 'var(--success)' : trend === 'down' ? 'var(--danger)' : trend === 'warning' ? 'var(--warning)' : 'var(--muted)';
 
   return (
@@ -57,7 +72,6 @@ export default function DashboardPage() {
   const [displayName, setDisplayName] = useState('');
   const [greeting, setGreeting] = useState('Welcome back');
 
-  // Time-aware greeting
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Good morning');
@@ -164,44 +178,38 @@ export default function DashboardPage() {
   }, [leadTemperature]);
 
   return (
-    // 60% - Neutral background
-    <div className="p-6 lg:p-8 space-y-6 min-h-screen bg-[var(--bg)]">
+    <div className="p-6 lg:p-8 space-y-6 min-h-screen bg-[var(--bg-secondary)]">
 
-      {/* Hero Section - 60% white, minimal accent */}
-      <div className="relative w-full overflow-hidden rounded-xl bg-[var(--surface)] border border-[var(--border)] shadow-[var(--shadow-card)]">
+      {/* Hero Section */}
+      <div className="relative w-full overflow-hidden rounded-2xl bg-white border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
         <div className="flex flex-col md:flex-row items-center justify-between px-6 py-5 lg:px-8 lg:py-6">
-          {/* Left Content - 30% text colors */}
           <div className="flex-1 space-y-4 max-w-xl">
             <div>
               <h1 className="text-xl lg:text-2xl font-semibold text-[var(--text)]">
                 {greeting}, {displayName || 'there'}
               </h1>
-              {/* Semantic colors for key numbers (part of 10%) */}
               <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
-                You have <span className="font-medium text-[var(--warning)]">{actionableLeads.length} pending follow-ups</span> and{' '}
-                <span className="font-medium text-[var(--success)]">{hotLeadsCount} hot leads</span> waiting for action.
+                You have <span className="font-medium text-[var(--warning-text)]">{actionableLeads.length} pending follow-ups</span> and{' '}
+                <span className="font-medium text-[var(--success-text)]">{hotLeadsCount} hot leads</span> waiting for action.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
-              {/* 10% - Primary CTA uses accent */}
               <Link
                 href="/leads"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white rounded-lg font-medium text-sm shadow-sm hover:shadow-md transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] text-white rounded-xl font-medium text-sm shadow-sm hover:shadow-md transition-all"
               >
                 View Leads
               </Link>
-              {/* Secondary button - 30% neutral */}
               <Link
                 href="/analytics"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-lg font-medium text-sm text-[var(--text-2)] hover:bg-[var(--surface-2)] transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-[var(--border)] rounded-xl font-medium text-sm text-[var(--text-2)] hover:bg-[var(--surface-2)] transition-all"
               >
                 View Reports
               </Link>
             </div>
           </div>
 
-          {/* Right: Mascot */}
           <div className="hidden md:block relative w-[180px] h-[140px]">
             <div className="relative z-10 w-full h-full flex items-center justify-center">
               <Image
@@ -217,16 +225,13 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Stats Cards - 60% white cards, 30% text, semantic 10% for icons */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Leads */}
-        <div className="bg-[var(--surface)] rounded-xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)]">
+        <div className="bg-white rounded-2xl p-5 border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
           <div className="flex items-start justify-between mb-3">
-            {/* Icon uses muted gray, not accent */}
-            <div className="p-2.5 rounded-lg bg-[var(--surface-2)]">
+            <div className="p-2.5 rounded-xl bg-[var(--surface-2)]">
               <Users className="w-5 h-5 text-[var(--muted)]" />
             </div>
-            {/* Semantic success color for positive trend */}
             <span className="flex items-center gap-1 text-xs font-medium text-[var(--success)]">
               +{leadStats.growthPercent}% <TrendingUp className="w-3 h-3" />
             </span>
@@ -235,10 +240,9 @@ export default function DashboardPage() {
           <p className="text-xs text-[var(--muted)] mt-1 uppercase tracking-wide">Total Leads</p>
         </div>
 
-        {/* Contacted */}
-        <div className="bg-[var(--surface)] rounded-xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)]">
+        <div className="bg-white rounded-2xl p-5 border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-lg bg-[var(--success-soft)]">
+            <div className="p-2.5 rounded-xl bg-[var(--success-soft)]">
               <CheckCircle2 className="w-5 h-5 text-[var(--success)]" />
             </div>
           </div>
@@ -246,14 +250,13 @@ export default function DashboardPage() {
           <p className="text-xs text-[var(--muted)] mt-1 uppercase tracking-wide">Contacted</p>
         </div>
 
-        {/* Pending */}
-        <div className="bg-[var(--surface)] rounded-xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)]">
+        <div className="bg-white rounded-2xl p-5 border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-lg bg-[var(--warning-soft)]">
+            <div className="p-2.5 rounded-xl bg-[var(--warning-soft)]">
               <Phone className="w-5 h-5 text-[var(--warning)]" />
             </div>
             {stats.needsFollowup > 0 && (
-              <span className="text-xs font-medium text-[var(--warning)]">
+              <span className="text-xs font-medium text-[var(--warning-text)]">
                 Action needed
               </span>
             )}
@@ -262,10 +265,9 @@ export default function DashboardPage() {
           <p className="text-xs text-[var(--muted)] mt-1 uppercase tracking-wide">Pending</p>
         </div>
 
-        {/* Avg Response */}
-        <div className="bg-[var(--surface)] rounded-xl p-5 border border-[var(--border)] shadow-[var(--shadow-card)]">
+        <div className="bg-white rounded-2xl p-5 border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2.5 rounded-lg bg-[var(--info-soft)]">
+            <div className="p-2.5 rounded-xl bg-[var(--info-soft)]">
               <Clock className="w-5 h-5 text-[var(--info)]" />
             </div>
           </div>
@@ -277,144 +279,145 @@ export default function DashboardPage() {
       {/* Main Content Row */}
       <div className="grid lg:grid-cols-5 gap-5 items-start">
 
-        {/* Recent Leads - 60% white surface */}
-        <div className="lg:col-span-3 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)] flex flex-col">
+        {/* Recent Leads */}
+        <div className="lg:col-span-3 bg-white rounded-2xl border border-[var(--border)] flex flex-col" style={{ boxShadow: 'var(--shadow-card)' }}>
           <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-[var(--text)]">Recent Leads</h2>
-              <span className="text-xs text-[var(--muted)] bg-[var(--surface-2)] px-2 py-0.5 rounded">{recentLeads.length}</span>
+            <div className="flex items-center gap-3">
+              <h2 className="text-base font-semibold text-[var(--text)]">Recent Leads</h2>
+              <span className="text-xs text-[var(--muted)] bg-[var(--surface-2)] px-2.5 py-1 rounded-full">{recentLeads.length}</span>
             </div>
-            {/* 10% - Links use accent */}
+            {/* Teal link color like reference */}
             <Link
               href="/leads"
-              className="text-xs font-medium text-[var(--accent-solid)] hover:underline flex items-center gap-1"
+              className="text-sm font-medium text-[var(--accent-teal)] hover:text-[var(--accent-teal-hover)] flex items-center gap-1 transition-colors"
             >
-              View all <ChevronRight className="w-3 h-3" />
+              View all <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
-          <div className="relative">
-            <div className="overflow-y-auto max-h-[280px]">
-              <div className="divide-y divide-[var(--border)]">
-                {recentLeads.map((lead) => (
-                  <Link
-                    key={lead.id}
-                    href={`/leads?id=${lead.id}`}
-                    className="px-5 py-3.5 flex items-center justify-between hover:bg-[var(--hover-row)] transition-colors group"
+          <div className="divide-y divide-[var(--border)]">
+            {recentLeads.map((lead) => (
+              <Link
+                key={lead.id}
+                href={`/leads?id=${lead.id}`}
+                className="px-5 py-4 flex items-center justify-between hover:bg-[var(--surface-2)] transition-colors group"
+              >
+                <div className="flex items-center gap-4">
+                  {/* Soft pastel avatar */}
+                  <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center text-[var(--text)] font-semibold text-base"
+                    style={{ backgroundColor: getAvatarColor(lead.prospect_name) }}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        {/* Avatar uses neutral gray, not accent */}
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--surface-2)] text-[var(--text-2)] font-medium text-sm">
-                          {lead.prospect_name.charAt(0).toUpperCase()}
-                        </div>
-                        {/* Hot indicator uses semantic warning color */}
-                        {lead.is_hot_lead && (
-                          <div className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[var(--warning)] ring-2 ring-[var(--surface)] flex items-center justify-center">
-                            <Flame className="w-2.5 h-2.5 text-white" />
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-[var(--text)] text-sm">{lead.prospect_name}</h4>
-                        <p className="text-xs text-[var(--muted)] truncate max-w-[200px]">
-                          {lead.company_name || lead.primary_topic}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      {/* Score uses muted text, not bright color */}
-                      <span className="text-xs font-medium text-[var(--muted)] hidden sm:block">
-                        {lead.lead_score || 0}
-                      </span>
-                      <ChevronRight className="w-4 h-4 text-[var(--placeholder)] group-hover:text-[var(--text-2)] transition-colors" />
-                    </div>
-                  </Link>
-                ))}
-
-                {recentLeads.length === 0 && (
-                  <div className="p-8 text-center">
-                    <Users className="w-10 h-10 mx-auto mb-3 text-[var(--placeholder)]" />
-                    <p className="text-sm text-[var(--muted)]">No leads yet</p>
+                    {lead.prospect_name.charAt(0).toUpperCase()}
                   </div>
-                )}
+                  <div>
+                    <h4 className="font-semibold text-[var(--text)] text-sm">{lead.prospect_name}</h4>
+                    <p className="text-xs text-[var(--muted)]">
+                      {lead.company_name || lead.primary_topic}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  {/* Green score badge like reference */}
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--success-soft)] rounded-full">
+                    <Zap className="w-3.5 h-3.5 text-[var(--success)]" />
+                    <span className="text-sm font-semibold text-[var(--success)]">{lead.lead_score || 0}</span>
+                  </div>
+                  <span className="text-xs text-[var(--muted)]">Score</span>
+                  <div className="w-8 h-8 rounded-full border border-[var(--border)] flex items-center justify-center group-hover:bg-[var(--surface-3)] transition-colors">
+                    <ChevronRight className="w-4 h-4 text-[var(--muted)]" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+
+            {recentLeads.length === 0 && (
+              <div className="p-8 text-center">
+                <Users className="w-10 h-10 mx-auto mb-3 text-[var(--placeholder)]" />
+                <p className="text-sm text-[var(--muted)]">No leads yet</p>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Follow-ups */}
-        <div className="lg:col-span-2 bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)] flex flex-col">
-          <div className="px-5 py-4 border-b border-[var(--border)] flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-[var(--text)]">Follow-ups</h2>
-              {actionableLeads.length > 0 && (
-                <span className="text-xs font-medium text-[var(--warning)] bg-[var(--warning-soft)] px-2 py-0.5 rounded">
-                  {actionableLeads.length}
-                </span>
-              )}
+        {/* Lead Temperature Card - Like reference */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-[var(--border)] p-6" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2.5 rounded-xl bg-[var(--accent-soft)]">
+              <Thermometer className="w-5 h-5 text-[var(--accent-solid)]" />
             </div>
-            <Link
-              href="/leads"
-              className="text-xs font-medium text-[var(--accent-solid)] hover:underline"
-            >
-              View all
-            </Link>
+            <h2 className="text-base font-semibold text-[var(--text)]">Lead Temperature</h2>
           </div>
 
-          <div className="relative">
-            <div className="overflow-y-auto max-h-[280px] p-4">
-              <div className="space-y-3">
-                {actionableLeads.map((lead) => (
-                  <Link
-                    key={lead.id}
-                    href={`/leads?id=${lead.id}`}
-                    className="block p-4 bg-[var(--surface-2)] rounded-lg border-l-3 border-l-[var(--warning)] hover:bg-[var(--surface-3)] transition-colors"
-                    style={{ borderLeftWidth: '3px', borderLeftColor: 'var(--warning)' }}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-medium text-[var(--text)] text-sm">{lead.prospect_name}</h4>
-                      <span className="text-xs text-[var(--placeholder)]">{lead.conversation_date}</span>
-                    </div>
-                    <p className="text-xs text-[var(--muted)] line-clamp-1 mb-2">
-                      {lead.next_action || 'Follow up regarding inquiry...'}
-                    </p>
-                    <span className="text-xs font-medium text-[var(--accent-solid)]">
-                      Take action →
-                    </span>
-                  </Link>
-                ))}
+          <div className="space-y-6">
+            {/* Hot - Purple gradient like reference */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-[var(--hot-primary)]" />
+                  <span className="text-sm font-medium text-[var(--text)]">Hot</span>
+                </div>
+                <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.hot} Leads</span>
+              </div>
+              <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500 progress-hot"
+                  style={{ width: `${leadTemperature.total ? (leadTemperature.hot / leadTemperature.total) * 100 : 0}%` }}
+                />
+              </div>
+            </div>
 
-                {actionableLeads.length === 0 && (
-                  <div className="py-10 text-center">
-                    <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[var(--success-soft)] flex items-center justify-center">
-                      <CheckCircle2 className="w-6 h-6 text-[var(--success)]" />
-                    </div>
-                    <p className="text-sm font-medium text-[var(--text)]">All caught up!</p>
-                    <p className="text-xs text-[var(--muted)] mt-1">No pending follow-ups</p>
-                  </div>
-                )}
+            {/* Warm - Pink gradient like reference */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sun className="w-4 h-4 text-[var(--warm-primary)]" />
+                  <span className="text-sm font-medium text-[var(--text)]">Warm</span>
+                </div>
+                <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.warm} Leads</span>
+              </div>
+              <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500 progress-warm"
+                  style={{ width: `${leadTemperature.total ? (leadTemperature.warm / leadTemperature.total) * 100 : 0}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Cold - Gray like reference */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Snowflake className="w-4 h-4 text-[var(--cold-primary)]" />
+                  <span className="text-sm font-medium text-[var(--text)]">Cold</span>
+                </div>
+                <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.cold} Leads</span>
+              </div>
+              <div className="h-2.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500 progress-cold"
+                  style={{ width: `${leadTemperature.total ? (leadTemperature.cold / leadTemperature.total) * 100 : 0}%` }}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Analytics Overview - 60% white base */}
-      <div className="bg-[var(--surface)] rounded-xl border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
+      {/* Analytics Overview */}
+      <div className="bg-white rounded-2xl border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
         <div className="px-6 py-4 border-b border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-base font-semibold text-[var(--text)]">Overview</h2>
 
-          {/* Time Range Tabs - 30% neutral colors */}
-          <div className="flex items-center gap-1 p-1 bg-[var(--surface-2)] rounded-lg w-fit">
+          <div className="flex items-center gap-1 p-1 bg-[var(--surface-2)] rounded-xl w-fit">
             {(['today', '7d', '30d'] as const).map((range) => (
               <button
                 key={range}
                 onClick={() => setTimeRange(range)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
                   timeRange === range
-                    ? 'bg-[var(--surface)] text-[var(--text)] shadow-sm'
+                    ? 'bg-white text-[var(--text)] shadow-sm'
                     : 'text-[var(--muted)] hover:text-[var(--text)]'
                 }`}
               >
@@ -424,16 +427,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Insight Banner - Subtle, not accent colored */}
-        <div className="px-6 py-3 bg-[var(--surface-2)] border-b border-[var(--border)]">
-          <p className="text-sm text-[var(--text-2)]">
+        {/* Insight Banner - Light purple tint like reference */}
+        <div className="px-6 py-3 bg-[var(--insight-bg)] border-b border-[var(--border)]">
+          <p className="text-sm text-[var(--insight-text)]">
             <span className="font-medium">Insight:</span> {keyInsight}
           </p>
         </div>
 
-        {/* KPI Tiles - 60% neutral backgrounds */}
+        {/* KPI Tiles */}
         <div className="p-6 grid grid-cols-2 lg:grid-cols-4 gap-4 border-b border-[var(--border)]">
-          <div className="p-4 bg-[var(--surface-2)] rounded-lg">
+          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Conversations</span>
               <span className="flex items-center gap-0.5 text-xs font-medium text-[var(--success)]">
@@ -446,7 +449,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="p-4 bg-[var(--surface-2)] rounded-lg">
+          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Qualified</span>
               <span className="flex items-center gap-0.5 text-xs font-medium text-[var(--success)]">
@@ -459,7 +462,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="p-4 bg-[var(--surface-2)] rounded-lg">
+          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Avg Time</span>
               <span className="flex items-center gap-0.5 text-xs font-medium text-[var(--danger)]">
@@ -472,7 +475,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="p-4 bg-[var(--surface-2)] rounded-lg">
+          <div className="p-4 bg-[var(--surface-2)] rounded-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">Follow-ups</span>
               {stats.needsFollowup > 0 && (
@@ -486,72 +489,12 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Breakdown Cards - 60% white, 30% grays */}
-        <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Lead Temperature */}
-          <div className="p-5 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--surface-2)]">
-                <Thermometer className="w-4 h-4 text-[var(--muted)]" />
-              </div>
-              <h3 className="font-semibold text-sm text-[var(--text)]">Lead Temperature</h3>
-            </div>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Sun className="w-4 h-4 text-[var(--warning)]" />
-                    <span className="text-sm text-[var(--text-2)]">Hot</span>
-                  </div>
-                  <span className="text-sm font-medium text-[var(--text)]">{leadTemperature.hot}</span>
-                </div>
-                {/* Progress bar uses muted colors, not accent */}
-                <div className="h-1.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[var(--warning)] rounded-full transition-all duration-500"
-                    style={{ width: `${leadTemperature.total ? (leadTemperature.hot / leadTemperature.total) * 100 : 0}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Sun className="w-4 h-4 text-[var(--placeholder)]" />
-                    <span className="text-sm text-[var(--text-2)]">Warm</span>
-                  </div>
-                  <span className="text-sm font-medium text-[var(--text)]">{leadTemperature.warm}</span>
-                </div>
-                <div className="h-1.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[var(--placeholder)] rounded-full transition-all duration-500"
-                    style={{ width: `${leadTemperature.total ? (leadTemperature.warm / leadTemperature.total) * 100 : 0}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Snowflake className="w-4 h-4 text-[var(--border-strong)]" />
-                    <span className="text-sm text-[var(--text-2)]">Cold</span>
-                  </div>
-                  <span className="text-sm font-medium text-[var(--text)]">{leadTemperature.cold}</span>
-                </div>
-                <div className="h-1.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-[var(--border-strong)] rounded-full transition-all duration-500"
-                    style={{ width: `${leadTemperature.total ? (leadTemperature.cold / leadTemperature.total) * 100 : 0}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
+        {/* Breakdown Cards */}
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Product Interest */}
-          <div className="p-5 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--surface-2)]">
+          <div className="p-5 bg-[var(--surface-2)] rounded-xl">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="p-2 rounded-lg bg-white">
                 <Zap className="w-4 h-4 text-[var(--muted)]" />
               </div>
               <h3 className="font-semibold text-sm text-[var(--text)]">Product Interest</h3>
@@ -566,10 +509,9 @@ export default function DashboardPage() {
                         <span className="text-sm text-[var(--text-2)] truncate max-w-[60%]">{topic}</span>
                         <span className="text-sm font-medium text-[var(--text)]">{count}</span>
                       </div>
-                      {/* Progress bar uses accent ONLY here as visual emphasis */}
-                      <div className="h-1.5 bg-[var(--surface-3)] rounded-full overflow-hidden">
+                      <div className="h-2 bg-white rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[var(--accent-solid)] rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] rounded-full transition-all duration-500"
                           style={{ width: `${(count / maxCount) * 100}%` }}
                         />
                       </div>
@@ -583,22 +525,22 @@ export default function DashboardPage() {
           </div>
 
           {/* Regions */}
-          <div className="p-5 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-[var(--surface-2)]">
+          <div className="p-5 bg-[var(--surface-2)] rounded-xl">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="p-2 rounded-lg bg-white">
                 <Globe className="w-4 h-4 text-[var(--muted)]" />
               </div>
               <h3 className="font-semibold text-sm text-[var(--text)]">Regions</h3>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {analyticsData.regions.length > 0 ? (
                 analyticsData.regions.map(([region, count]) => (
                   <div
                     key={region}
-                    className="flex items-center justify-between p-3 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--surface-3)] transition-colors"
+                    className="flex items-center justify-between p-3 rounded-lg bg-white"
                   >
                     <span className="text-sm text-[var(--text-2)]">{region}</span>
-                    <span className="text-sm font-medium text-[var(--text)]">{count}</span>
+                    <span className="text-sm font-semibold text-[var(--text)]">{count}</span>
                   </div>
                 ))
               ) : (
@@ -608,6 +550,57 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Follow-ups Section */}
+      {actionableLeads.length > 0 && (
+        <div className="bg-white rounded-2xl border border-[var(--border)]" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <h2 className="text-base font-semibold text-[var(--text)]">Pending Follow-ups</h2>
+              <span className="text-xs font-medium text-[var(--warning-text)] bg-[var(--warning-soft)] px-2.5 py-1 rounded-full">
+                {actionableLeads.length}
+              </span>
+            </div>
+            <Link
+              href="/leads"
+              className="text-sm font-medium text-[var(--accent-teal)] hover:text-[var(--accent-teal-hover)] transition-colors"
+            >
+              View all
+            </Link>
+          </div>
+
+          <div className="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {actionableLeads.slice(0, 3).map((lead) => (
+              <Link
+                key={lead.id}
+                href={`/leads?id=${lead.id}`}
+                className="block p-4 bg-[var(--surface-2)] rounded-xl border-l-4 border-l-[var(--warning)] hover:bg-[var(--surface-3)] transition-colors"
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center text-[var(--text)] font-semibold text-sm"
+                      style={{ backgroundColor: getAvatarColor(lead.prospect_name) }}
+                    >
+                      {lead.prospect_name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-[var(--text)] text-sm">{lead.prospect_name}</h4>
+                      <p className="text-xs text-[var(--muted)]">{lead.conversation_date}</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-[var(--muted)] line-clamp-2 mb-3">
+                  {lead.next_action || 'Follow up regarding inquiry...'}
+                </p>
+                <span className="text-xs font-medium text-[var(--accent-teal)]">
+                  Take action →
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
