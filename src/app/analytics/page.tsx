@@ -420,76 +420,69 @@ export default function AnalyticsPage() {
         </div>
       ) : (
         <>
-          {/* Hero Stats - Highlighted First Row with Pastel Backgrounds */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-            {/* Total Leads - Soft Blue */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100/50 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-16 h-16 bg-blue-100/30 rounded-full -mr-4 -mt-4" />
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-blue-100/80">
-                  <Users className="w-4 h-4 text-blue-600" />
+          {/* Hero Stats - Compact First Row with Pastel Backgrounds */}
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5">
+            {/* Total Leads - Soft Blue/Indigo */}
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-lg px-3 py-2.5 border border-slate-200/60">
+              <div className="flex items-center justify-between mb-1">
+                <div className="p-1.5 rounded-md bg-slate-100">
+                  <Users className="w-3.5 h-3.5 text-slate-600" />
                 </div>
-                <span className="flex items-center gap-0.5 text-[10px] font-semibold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">
-                  <TrendingUp className="w-2.5 h-2.5" />
-                </span>
+                <TrendingUp className="w-3 h-3 text-slate-400" />
               </div>
-              <h3 className="text-2xl font-bold text-blue-900">{stats.total}</h3>
-              <p className="text-[10px] text-blue-600 font-medium uppercase tracking-wider">Total Leads</p>
-              <p className="text-[10px] text-blue-500 mt-0.5">{stats.newLeads} new, {stats.contacted} contacted</p>
+              <h3 className="text-xl font-bold text-slate-800">{stats.total}</h3>
+              <p className="text-[9px] text-slate-500 font-medium uppercase tracking-wide">Total Leads</p>
+              <p className="text-[9px] text-slate-400">{stats.newLeads} new, {stats.contacted} contacted</p>
             </div>
 
-            {/* Hot Leads - Soft Purple */}
-            <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-4 border border-purple-100/50 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-16 h-16 bg-purple-100/30 rounded-full -mr-4 -mt-4" />
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-purple-100/80">
-                  <Flame className="w-4 h-4 text-purple-600" />
+            {/* Hot Leads - Soft Rose/Pink */}
+            <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-lg px-3 py-2.5 border border-rose-200/60">
+              <div className="flex items-center justify-between mb-1">
+                <div className="p-1.5 rounded-md bg-rose-100">
+                  <Flame className="w-3.5 h-3.5 text-rose-500" />
                 </div>
-                {stats.hotLeads > 0 && <ArrowUpRight className="w-3.5 h-3.5 text-purple-500" />}
+                {stats.hotLeads > 0 && <ArrowUpRight className="w-3 h-3 text-rose-400" />}
               </div>
-              <h3 className="text-2xl font-bold text-purple-900">{stats.hotLeads}</h3>
-              <p className="text-[10px] text-purple-600 font-medium uppercase tracking-wider">Hot Leads</p>
-              <p className="text-[10px] text-purple-500 mt-0.5">{hotLeadPercent}% of total</p>
+              <h3 className="text-xl font-bold text-rose-700">{stats.hotLeads}</h3>
+              <p className="text-[9px] text-rose-500 font-medium uppercase tracking-wide">Hot Leads</p>
+              <p className="text-[9px] text-rose-400">{hotLeadPercent}% of total</p>
             </div>
 
-            {/* High Intent - Soft Green */}
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-4 border border-emerald-100/50 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-100/30 rounded-full -mr-4 -mt-4" />
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-emerald-100/80">
-                  <Target className="w-4 h-4 text-emerald-600" />
+            {/* High Intent - Soft Emerald/Green */}
+            <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-lg px-3 py-2.5 border border-emerald-200/60">
+              <div className="flex items-center justify-between mb-1">
+                <div className="p-1.5 rounded-md bg-emerald-100">
+                  <Target className="w-3.5 h-3.5 text-emerald-500" />
                 </div>
               </div>
-              <h3 className="text-2xl font-bold text-emerald-900">{stats.highIntent}</h3>
-              <p className="text-[10px] text-emerald-600 font-medium uppercase tracking-wider">High Intent</p>
-              <p className="text-[10px] text-emerald-500 mt-0.5">{highIntentPercent}% of total</p>
+              <h3 className="text-xl font-bold text-emerald-700">{stats.highIntent}</h3>
+              <p className="text-[9px] text-emerald-500 font-medium uppercase tracking-wide">High Intent</p>
+              <p className="text-[9px] text-emerald-400">{highIntentPercent}% of total</p>
             </div>
 
-            {/* Avg Score - Soft Amber */}
-            <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-100/50 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-16 h-16 bg-amber-100/30 rounded-full -mr-4 -mt-4" />
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-amber-100/80">
-                  <Activity className="w-4 h-4 text-amber-600" />
+            {/* Avg Score - Soft Amber/Yellow */}
+            <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-lg px-3 py-2.5 border border-amber-200/60">
+              <div className="flex items-center justify-between mb-1">
+                <div className="p-1.5 rounded-md bg-amber-100">
+                  <Activity className="w-3.5 h-3.5 text-amber-500" />
                 </div>
               </div>
-              <h3 className="text-2xl font-bold text-amber-900">{stats.avgScore}</h3>
-              <p className="text-[10px] text-amber-600 font-medium uppercase tracking-wider">Avg Score</p>
-              <p className="text-[10px] text-amber-500 mt-0.5">out of 100</p>
+              <h3 className="text-xl font-bold text-amber-700">{stats.avgScore}</h3>
+              <p className="text-[9px] text-amber-500 font-medium uppercase tracking-wide">Avg Score</p>
+              <p className="text-[9px] text-amber-400">out of 100</p>
             </div>
 
-            {/* Needs Action - Gradient Purple (CTA) */}
-            <div className="bg-gradient-to-br from-[var(--accent-1)] to-[var(--accent-2)] rounded-xl p-4 text-white relative overflow-hidden" style={{ boxShadow: '0 4px 14px rgba(139, 92, 246, 0.25)' }}>
-              <div className="absolute top-0 right-0 w-16 h-16 bg-white/10 rounded-full -mr-4 -mt-4" />
-              <div className="flex items-center justify-between mb-2">
-                <div className="p-2 rounded-lg bg-white/20">
-                  <AlertTriangle className="w-4 h-4 text-white" />
+            {/* Needs Action - Soft Red/Orange (Urgent) */}
+            <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg px-3 py-2.5 border border-red-200/60">
+              <div className="flex items-center justify-between mb-1">
+                <div className="p-1.5 rounded-md bg-red-100">
+                  <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
                 </div>
-                <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse" />
               </div>
-              <h3 className="text-2xl font-bold">{stats.needsFollowup}</h3>
-              <p className="text-[10px] text-white/90 font-medium uppercase tracking-wider">Needs Action</p>
-              <p className="text-[10px] text-white/70 mt-0.5">require follow-up</p>
+              <h3 className="text-xl font-bold text-red-700">{stats.needsFollowup}</h3>
+              <p className="text-[9px] text-red-500 font-medium uppercase tracking-wide">Needs Action</p>
+              <p className="text-[9px] text-red-400">require follow-up</p>
             </div>
           </div>
 
