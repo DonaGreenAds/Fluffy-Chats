@@ -192,20 +192,19 @@ function DonutChart({
       <svg width={size} height={size} className="transform -rotate-90">
         {/* Define gradients with userSpaceOnUse for proper circular rendering */}
         <defs>
-          {segmentData.map((segment, idx) => (
+          {segmentData.map((segment) => (
             segment.gradient && (
               <linearGradient
                 key={segment.id}
                 id={segment.id}
                 gradientUnits="userSpaceOnUse"
-                x1={center - radius}
-                y1={center}
-                x2={center + radius}
-                y2={center}
+                x1="0"
+                y1={center - radius}
+                x2="0"
+                y2={center + radius}
               >
                 <stop offset="0%" stopColor={segment.gradient.start} />
-                <stop offset="50%" stopColor={segment.gradient.end} stopOpacity="0.9" />
-                <stop offset="100%" stopColor={segment.gradient.start} />
+                <stop offset="100%" stopColor={segment.gradient.end} />
               </linearGradient>
             )
           ))}
@@ -401,14 +400,13 @@ function RadialProgress({
             <linearGradient
               id={gradientId}
               gradientUnits="userSpaceOnUse"
-              x1={center - radius}
-              y1={center}
-              x2={center + radius}
-              y2={center}
+              x1="0"
+              y1={center - radius}
+              x2="0"
+              y2={center + radius}
             >
               <stop offset="0%" stopColor={gradient.start} />
-              <stop offset="50%" stopColor={gradient.end} />
-              <stop offset="100%" stopColor={gradient.start} />
+              <stop offset="100%" stopColor={gradient.end} />
             </linearGradient>
           </defs>
         )}
@@ -495,14 +493,13 @@ function MiniRadialProgress({
               <linearGradient
                 id={gradientId}
                 gradientUnits="userSpaceOnUse"
-                x1={center - radius}
-                y1={center}
-                x2={center + radius}
-                y2={center}
+                x1="0"
+                y1={center - radius}
+                x2="0"
+                y2={center + radius}
               >
                 <stop offset="0%" stopColor={gradient.start} />
-                <stop offset="50%" stopColor={gradient.end} />
-                <stop offset="100%" stopColor={gradient.start} />
+                <stop offset="100%" stopColor={gradient.end} />
               </linearGradient>
             </defs>
           )}
