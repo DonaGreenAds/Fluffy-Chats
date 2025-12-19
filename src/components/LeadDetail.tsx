@@ -441,25 +441,25 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                 </div>
                 <p className="text-[var(--muted-foreground)]">{lead.company_name && lead.company_name !== 'unknown' ? lead.company_name : 'Company not provided'}</p>
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2 mt-2">
+                <div className="flex items-center gap-2 mt-3">
                   <button
                     onClick={markAsContacted}
                     disabled={isContacted}
                     className={clsx(
-                      'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+                      'flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 min-w-[140px] shadow-sm',
                       isContacted
-                        ? 'bg-green-100 text-green-700 cursor-not-allowed'
-                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 cursor-not-allowed'
+                        : 'bg-sky-50 text-sky-600 border border-sky-200 hover:bg-sky-100 hover:border-sky-300 hover:shadow-md'
                     )}
                   >
-                    <UserCheck className="w-3.5 h-3.5" />
+                    <UserCheck className="w-4 h-4" />
                     {isContacted ? 'Contacted' : 'Mark as Contacted'}
                   </button>
                   <button
                     onClick={handleSendClick}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors bg-indigo-500 text-white hover:bg-indigo-600"
+                    className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 min-w-[140px] shadow-sm bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300 hover:shadow-md"
                   >
-                    <Send className="w-3.5 h-3.5" />
+                    <Send className="w-4 h-4" />
                     Send to CRM
                   </button>
                   <button
@@ -467,9 +467,9 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                       setWebhookResult(null);
                       setShowWebhookModal(true);
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors bg-purple-500 text-white hover:bg-purple-600"
+                    className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 min-w-[140px] shadow-sm bg-violet-50 text-violet-600 border border-violet-200 hover:bg-violet-100 hover:border-violet-300 hover:shadow-md"
                   >
-                    <Webhook className="w-3.5 h-3.5" />
+                    <Webhook className="w-4 h-4" />
                     Send to Webhook
                   </button>
                 </div>
