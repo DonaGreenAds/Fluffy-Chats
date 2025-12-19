@@ -1571,7 +1571,6 @@ export default function AnalyticsPage() {
                   displayValue={conversationMetrics.avgMessages}
                   label="Avg Messages"
                   delay={0}
-                  gradient={{ start: CHART_GRADIENTS.purple.start, end: CHART_GRADIENTS.purple.end }}
                 />
                 <MiniRadialProgress
                   value={conversationMetrics.avgDuration}
@@ -1580,7 +1579,6 @@ export default function AnalyticsPage() {
                   displayValue={conversationMetrics.avgDuration}
                   label="Avg Minutes"
                   delay={150}
-                  gradient={{ start: CHART_GRADIENTS.green.start, end: CHART_GRADIENTS.green.end }}
                 />
                 <MiniRadialProgress
                   value={dataQuality.avgCompleteness}
@@ -1589,7 +1587,6 @@ export default function AnalyticsPage() {
                   displayValue={`${dataQuality.avgCompleteness}%`}
                   label="Completion"
                   delay={300}
-                  gradient={{ start: CHART_GRADIENTS.amber.start, end: CHART_GRADIENTS.amber.end }}
                 />
               </div>
               <p className="text-[11px] text-gray-400 text-center mt-2">
@@ -1655,7 +1652,6 @@ export default function AnalyticsPage() {
                 <RadialProgress
                   value={dataQuality.avgCompleteness}
                   color="#8B5CF6"
-                  gradient={{ start: CHART_GRADIENTS.purple.start, end: CHART_GRADIENTS.purple.end }}
                 />
                 <div className="mt-4 space-y-2 w-full">
                   <div className="flex items-center justify-between text-sm">
