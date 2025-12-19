@@ -156,6 +156,7 @@ function DonutChart({
   const total = segments.reduce((acc, s) => acc + s.value, 0);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
+  const center = size / 2;
 
   // Trigger animation on mount
   useEffect(() => {
@@ -171,28 +172,48 @@ function DonutChart({
       const dashLength = percentage * circumference;
       const offset = cumulativeOffset;
       cumulativeOffset += dashLength;
-      return { ...segment, dashLength, offset, percentage, id: `donut-gradient-${idx}` };
+      // Calculate angle for gradient direction (radial sweep effect)
+      const startAngle = (offset / circumference) * 360;
+      const endAngle = ((offset + dashLength) / circumference) * 360;
+      const midAngle = ((startAngle + endAngle) / 2) * (Math.PI / 180);
+      return {
+        ...segment,
+        dashLength,
+        offset,
+        percentage,
+        id: `donut-gradient-${idx}-${Date.now()}`,
+        midAngle
+      };
     });
   }, [segments, total, circumference]);
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
-        {/* Define gradients */}
+        {/* Define gradients with userSpaceOnUse for proper circular rendering */}
         <defs>
-          {segmentData.map((segment) => (
+          {segmentData.map((segment, idx) => (
             segment.gradient && (
-              <linearGradient key={segment.id} id={segment.id} x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient
+                key={segment.id}
+                id={segment.id}
+                gradientUnits="userSpaceOnUse"
+                x1={center - radius}
+                y1={center}
+                x2={center + radius}
+                y2={center}
+              >
                 <stop offset="0%" stopColor={segment.gradient.start} />
-                <stop offset="100%" stopColor={segment.gradient.end} />
+                <stop offset="50%" stopColor={segment.gradient.end} stopOpacity="0.9" />
+                <stop offset="100%" stopColor={segment.gradient.start} />
               </linearGradient>
             )
           ))}
         </defs>
         {/* Background circle with subtle gradient */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={center}
+          cy={center}
           r={radius}
           fill="none"
           stroke="#F1F5F9"
@@ -202,8 +223,8 @@ function DonutChart({
         {segmentData.map((segment, i) => (
           <circle
             key={i}
-            cx={size / 2}
-            cy={size / 2}
+            cx={center}
+            cy={center}
             r={radius}
             fill="none"
             stroke={segment.gradient ? `url(#${segment.id})` : segment.color}
@@ -215,7 +236,7 @@ function DonutChart({
             style={{
               transition: `stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)`,
               transitionDelay: `${i * 200}ms`,
-              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))'
             }}
           />
         ))}
@@ -347,7 +368,7 @@ function StackedBar({ segments, height = 12 }: { segments: { value: number; colo
 function RadialProgress({
   value,
   size = 120,
-  strokeWidth = 10,
+  strokeWidth = 12,
   color = '#8B5CF6',
   label = 'Health',
   gradient
@@ -364,7 +385,8 @@ function RadialProgress({
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, value));
   const targetDashOffset = circumference - (progress / 100) * circumference;
-  const gradientId = `radial-gradient-${label.replace(/\s/g, '-')}`;
+  const gradientId = `radial-gradient-${label.replace(/\s/g, '-')}-${Date.now()}`;
+  const center = size / 2;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsAnimated(true), 250);
@@ -376,32 +398,33 @@ function RadialProgress({
       <svg width={size} height={size} className="transform -rotate-90">
         {gradient && (
           <defs>
-            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient
+              id={gradientId}
+              gradientUnits="userSpaceOnUse"
+              x1={center - radius}
+              y1={center}
+              x2={center + radius}
+              y2={center}
+            >
               <stop offset="0%" stopColor={gradient.start} />
-              <stop offset="100%" stopColor={gradient.end} />
+              <stop offset="50%" stopColor={gradient.end} />
+              <stop offset="100%" stopColor={gradient.start} />
             </linearGradient>
           </defs>
         )}
+        {/* Background track */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke="url(#radial-bg-gradient)"
-          strokeWidth={strokeWidth}
-          style={{ stroke: 'linear-gradient(135deg, #F8FAFC, #F1F5F9)' }}
-        />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={center}
+          cy={center}
           r={radius}
           fill="none"
           stroke="#F1F5F9"
           strokeWidth={strokeWidth}
         />
+        {/* Progress arc with gradient */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
+          cx={center}
+          cy={center}
           r={radius}
           fill="none"
           stroke={gradient ? `url(#${gradientId})` : color}
@@ -411,7 +434,7 @@ function RadialProgress({
           strokeDashoffset={isAnimated ? targetDashOffset : circumference}
           style={{
             transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
-            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+            filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.15))'
           }}
         />
       </svg>
@@ -450,12 +473,13 @@ function MiniRadialProgress({
 }) {
   const [isAnimated, setIsAnimated] = useState(false);
   const size = 80;
-  const strokeWidth = 8;
+  const strokeWidth = 10;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, (value / maxValue) * 100));
   const targetDashOffset = circumference - (progress / 100) * circumference;
-  const gradientId = `mini-radial-${label.replace(/\s/g, '-')}-${delay}`;
+  const gradientId = `mini-radial-${label.replace(/\s/g, '-')}-${delay}-${Date.now()}`;
+  const center = size / 2;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsAnimated(true), 300 + delay);
@@ -465,18 +489,26 @@ function MiniRadialProgress({
   return (
     <div className="text-center">
       <div className="relative w-20 h-20 mx-auto mb-2">
-        <svg className="w-full h-full transform -rotate-90">
+        <svg className="w-full h-full transform -rotate-90" viewBox={`0 0 ${size} ${size}`}>
           {gradient && (
             <defs>
-              <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient
+                id={gradientId}
+                gradientUnits="userSpaceOnUse"
+                x1={center - radius}
+                y1={center}
+                x2={center + radius}
+                y2={center}
+              >
                 <stop offset="0%" stopColor={gradient.start} />
-                <stop offset="100%" stopColor={gradient.end} />
+                <stop offset="50%" stopColor={gradient.end} />
+                <stop offset="100%" stopColor={gradient.start} />
               </linearGradient>
             </defs>
           )}
-          <circle cx="40" cy="40" r={radius} fill="none" stroke="#F1F5F9" strokeWidth={strokeWidth} />
+          <circle cx={center} cy={center} r={radius} fill="none" stroke="#F1F5F9" strokeWidth={strokeWidth} />
           <circle
-            cx="40" cy="40" r={radius} fill="none"
+            cx={center} cy={center} r={radius} fill="none"
             stroke={gradient ? `url(#${gradientId})` : color}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
@@ -484,7 +516,7 @@ function MiniRadialProgress({
             strokeDashoffset={isAnimated ? targetDashOffset : circumference}
             style={{
               transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.1))'
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))'
             }}
           />
         </svg>
@@ -497,7 +529,7 @@ function MiniRadialProgress({
             transitionDelay: '0.6s'
           }}
         >
-          <span className="text-xl font-bold text-gray-900">{displayValue}</span>
+          <span className="text-lg font-bold text-gray-900">{displayValue}</span>
         </div>
       </div>
       <p
@@ -736,14 +768,15 @@ function UseCaseItem({
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate">{name}</p>
         <div className="flex items-center gap-2 mt-1">
-          <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full"
               style={{
                 width: isAnimated ? `${percent}%` : '0%',
-                backgroundColor: PASTEL.lavender.text,
+                background: `linear-gradient(90deg, ${CHART_GRADIENTS.purple.start}, ${CHART_GRADIENTS.purple.mid}, ${CHART_GRADIENTS.purple.end})`,
                 transition: 'width 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
-                transitionDelay: '0.15s'
+                transitionDelay: '0.15s',
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3)'
               }}
             />
           </div>
