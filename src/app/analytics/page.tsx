@@ -3,8 +3,6 @@
 import { useMemo, useState, useRef, useEffect } from 'react';
 import {
   Users,
-  TrendingUp,
-  TrendingDown,
   Clock,
   MessageCircle,
   Zap,
@@ -13,16 +11,12 @@ import {
   Calendar,
   ChevronDown,
   X,
-  AlertCircle,
   Globe,
   DollarSign,
   Briefcase,
   BarChart3,
-  CheckCircle2,
   Download,
   Flame,
-  Sun,
-  Snowflake,
   ArrowUpRight,
   ArrowDownRight,
   Sparkles,
@@ -34,16 +28,57 @@ import { useLeads } from '@/context/LeadContext';
 import clsx from 'clsx';
 
 // ============================================================================
-// PASTEL COLOR SYSTEM (International Standard)
+// PASTEL COLOR SYSTEM (International Standard) with Gradients
 // ============================================================================
 const PASTEL = {
-  lavender: { bg: '#EEF2FF', border: '#E0E7FF', text: '#4338CA', light: '#F5F7FF' },
-  mint: { bg: '#ECFDF5', border: '#D1FAE5', text: '#047857', light: '#F0FDF9' },
-  peach: { bg: '#FFF7ED', border: '#FED7AA', text: '#C2410C', light: '#FFFAF5' },
-  yellow: { bg: '#FFFBEB', border: '#FDE68A', text: '#B45309', light: '#FFFEF5' },
-  cyan: { bg: '#ECFEFF', border: '#CFFAFE', text: '#0E7490', light: '#F0FDFF' },
-  pink: { bg: '#FFF1F2', border: '#FECDD3', text: '#BE123C', light: '#FFF5F6' },
-  slate: { bg: '#F8FAFC', border: '#E2E8F0', text: '#475569', light: '#FAFBFC' },
+  lavender: {
+    bg: '#EEF2FF', border: '#E0E7FF', text: '#4338CA', light: '#F5F7FF',
+    gradient: 'linear-gradient(135deg, #C7D2FE 0%, #A5B4FC 50%, #818CF8 100%)',
+    soft: 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)'
+  },
+  mint: {
+    bg: '#ECFDF5', border: '#D1FAE5', text: '#047857', light: '#F0FDF9',
+    gradient: 'linear-gradient(135deg, #A7F3D0 0%, #6EE7B7 50%, #34D399 100%)',
+    soft: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)'
+  },
+  peach: {
+    bg: '#FFF7ED', border: '#FED7AA', text: '#C2410C', light: '#FFFAF5',
+    gradient: 'linear-gradient(135deg, #FED7AA 0%, #FDBA74 50%, #FB923C 100%)',
+    soft: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)'
+  },
+  yellow: {
+    bg: '#FFFBEB', border: '#FDE68A', text: '#B45309', light: '#FFFEF5',
+    gradient: 'linear-gradient(135deg, #FDE68A 0%, #FCD34D 50%, #FBBF24 100%)',
+    soft: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)'
+  },
+  cyan: {
+    bg: '#ECFEFF', border: '#CFFAFE', text: '#0E7490', light: '#F0FDFF',
+    gradient: 'linear-gradient(135deg, #A5F3FC 0%, #67E8F9 50%, #22D3EE 100%)',
+    soft: 'linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 100%)'
+  },
+  pink: {
+    bg: '#FFF1F2', border: '#FECDD3', text: '#BE123C', light: '#FFF5F6',
+    gradient: 'linear-gradient(135deg, #FECDD3 0%, #FDA4AF 50%, #FB7185 100%)',
+    soft: 'linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%)'
+  },
+  slate: {
+    bg: '#F8FAFC', border: '#E2E8F0', text: '#475569', light: '#FAFBFC',
+    gradient: 'linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 50%, #94A3B8 100%)',
+    soft: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)'
+  },
+};
+
+// Chart gradient colors for SVG
+const CHART_GRADIENTS = {
+  hot: { start: '#FED7AA', mid: '#FDBA74', end: '#F97316' },
+  warm: { start: '#FEF08A', mid: '#FDE047', end: '#FBBF24' },
+  cold: { start: '#E2E8F0', mid: '#CBD5E1', end: '#94A3B8' },
+  purple: { start: '#DDD6FE', mid: '#C4B5FD', end: '#A78BFA' },
+  blue: { start: '#BFDBFE', mid: '#93C5FD', end: '#60A5FA' },
+  green: { start: '#BBF7D0', mid: '#86EFAC', end: '#4ADE80' },
+  teal: { start: '#99F6E4', mid: '#5EEAD4', end: '#2DD4BF' },
+  rose: { start: '#FECDD3', mid: '#FDA4AF', end: '#FB7185' },
+  amber: { start: '#FDE68A', mid: '#FCD34D', end: '#F59E0B' },
 };
 
 // ============================================================================
@@ -103,7 +138,7 @@ function Sparkline({ data, color, height = 32 }: { data: number[]; color: string
   );
 }
 
-// Donut Chart Component with Clockwise Sweep Animation
+// Donut Chart Component with Clockwise Sweep Animation and Gradients
 function DonutChart({
   segments,
   size = 160,
@@ -111,7 +146,7 @@ function DonutChart({
   centerLabel,
   centerValue
 }: {
-  segments: { value: number; color: string; label: string }[];
+  segments: { value: number; color: string; label: string; gradient?: { start: string; end: string } }[];
   size?: number;
   strokeWidth?: number;
   centerLabel?: string;
@@ -131,19 +166,30 @@ function DonutChart({
   // Calculate cumulative offsets for each segment
   const segmentData = useMemo(() => {
     let cumulativeOffset = 0;
-    return segments.map((segment) => {
+    return segments.map((segment, idx) => {
       const percentage = total > 0 ? segment.value / total : 0;
       const dashLength = percentage * circumference;
       const offset = cumulativeOffset;
       cumulativeOffset += dashLength;
-      return { ...segment, dashLength, offset, percentage };
+      return { ...segment, dashLength, offset, percentage, id: `donut-gradient-${idx}` };
     });
   }, [segments, total, circumference]);
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
-        {/* Background circle */}
+        {/* Define gradients */}
+        <defs>
+          {segmentData.map((segment) => (
+            segment.gradient && (
+              <linearGradient key={segment.id} id={segment.id} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={segment.gradient.start} />
+                <stop offset="100%" stopColor={segment.gradient.end} />
+              </linearGradient>
+            )
+          ))}
+        </defs>
+        {/* Background circle with subtle gradient */}
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -152,7 +198,7 @@ function DonutChart({
           stroke="#F1F5F9"
           strokeWidth={strokeWidth}
         />
-        {/* Animated segments */}
+        {/* Animated segments with gradients */}
         {segmentData.map((segment, i) => (
           <circle
             key={i}
@@ -160,7 +206,7 @@ function DonutChart({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke={segment.color}
+            stroke={segment.gradient ? `url(#${segment.id})` : segment.color}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
             strokeDasharray={`${segment.dashLength} ${circumference}`}
@@ -168,7 +214,8 @@ function DonutChart({
             className="donut-segment"
             style={{
               transition: `stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)`,
-              transitionDelay: `${i * 200}ms`
+              transitionDelay: `${i * 200}ms`,
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
             }}
           />
         ))}
@@ -187,8 +234,8 @@ function DonutChart({
   );
 }
 
-// Funnel Chart Component with Cascade Animation
-function FunnelChart({ stages }: { stages: { label: string; value: number; color: string }[] }) {
+// Funnel Chart Component with Cascade Animation and Pastel Gradients
+function FunnelChart({ stages }: { stages: { label: string; value: number; color: string; gradient?: { start: string; mid: string; end: string } }[] }) {
   const [isAnimated, setIsAnimated] = useState(false);
   const maxValue = Math.max(...stages.map(s => s.value));
 
@@ -203,6 +250,9 @@ function FunnelChart({ stages }: { stages: { label: string; value: number; color
         const width = maxValue > 0 ? (stage.value / maxValue) * 100 : 0;
         const prevValue = i > 0 ? stages[i - 1].value : stage.value;
         const dropoff = prevValue > 0 ? Math.round(((prevValue - stage.value) / prevValue) * 100) : 0;
+        const gradient = stage.gradient
+          ? `linear-gradient(90deg, ${stage.gradient.start} 0%, ${stage.gradient.mid} 50%, ${stage.gradient.end} 100%)`
+          : `linear-gradient(90deg, ${stage.color}30, ${stage.color}70, ${stage.color})`;
 
         return (
           <div
@@ -224,15 +274,16 @@ function FunnelChart({ stages }: { stages: { label: string; value: number; color
                 )}
               </div>
             </div>
-            <div className="h-8 bg-gray-100 rounded-lg overflow-hidden relative">
+            <div className="h-8 rounded-lg overflow-hidden relative" style={{ background: 'linear-gradient(90deg, #F8FAFC, #F1F5F9)' }}>
               <div
                 className="h-full rounded-lg flex items-center justify-end pr-3"
                 style={{
                   width: isAnimated ? `${width}%` : '0%',
-                  background: `linear-gradient(90deg, ${stage.color}40, ${stage.color})`,
+                  background: gradient,
                   minWidth: isAnimated && stage.value > 0 ? '20%' : '0%',
                   transition: `width 1s cubic-bezier(0.4, 0, 0.2, 1)`,
-                  transitionDelay: `${i * 150 + 200}ms`
+                  transitionDelay: `${i * 150 + 200}ms`,
+                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.05)'
                 }}
               >
               </div>
@@ -244,8 +295,8 @@ function FunnelChart({ stages }: { stages: { label: string; value: number; color
   );
 }
 
-// Horizontal Stacked Bar with Grow Animation
-function StackedBar({ segments, height = 12 }: { segments: { value: number; color: string; label: string }[]; height?: number }) {
+// Horizontal Stacked Bar with Grow Animation and Pastel Gradients
+function StackedBar({ segments, height = 12 }: { segments: { value: number; color: string; label: string; gradient?: { start: string; end: string } }[]; height?: number }) {
   const [isAnimated, setIsAnimated] = useState(false);
   const total = segments.reduce((acc, s) => acc + s.value, 0);
 
@@ -261,21 +312,27 @@ function StackedBar({ segments, height = 12 }: { segments: { value: number; colo
         style={{
           height,
           transform: isAnimated ? 'scaleX(1)' : 'scaleX(0)',
-          transformOrigin: 'left center'
+          transformOrigin: 'left center',
+          background: 'linear-gradient(90deg, #F8FAFC, #F1F5F9)',
+          boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.05)'
         }}
       >
         {segments.map((segment, i) => {
           const percentage = total > 0 ? (segment.value / total) * 100 : 0;
+          const background = segment.gradient
+            ? `linear-gradient(90deg, ${segment.gradient.start}, ${segment.gradient.end})`
+            : segment.color;
           return (
             <div
               key={i}
               className="first:rounded-l-full last:rounded-r-full"
               style={{
                 width: isAnimated ? `${percentage}%` : '0%',
-                backgroundColor: segment.color,
+                background,
                 minWidth: segment.value > 0 && isAnimated ? '4px' : '0',
                 transition: `width 0.8s cubic-bezier(0.4, 0, 0.2, 1)`,
-                transitionDelay: `${i * 100 + 300}ms`
+                transitionDelay: `${i * 100 + 300}ms`,
+                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3)'
               }}
               title={`${segment.label}: ${segment.value}`}
             />
@@ -286,13 +343,28 @@ function StackedBar({ segments, height = 12 }: { segments: { value: number; colo
   );
 }
 
-// Radial Progress Ring with Sweep Animation
-function RadialProgress({ value, size = 120, strokeWidth = 10, color = '#8B5CF6', label = 'Health' }: { value: number; size?: number; strokeWidth?: number; color?: string; label?: string }) {
+// Radial Progress Ring with Sweep Animation and Pastel Gradient
+function RadialProgress({
+  value,
+  size = 120,
+  strokeWidth = 10,
+  color = '#8B5CF6',
+  label = 'Health',
+  gradient
+}: {
+  value: number;
+  size?: number;
+  strokeWidth?: number;
+  color?: string;
+  label?: string;
+  gradient?: { start: string; end: string };
+}) {
   const [isAnimated, setIsAnimated] = useState(false);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, value));
   const targetDashOffset = circumference - (progress / 100) * circumference;
+  const gradientId = `radial-gradient-${label.replace(/\s/g, '-')}`;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsAnimated(true), 250);
@@ -302,6 +374,23 @@ function RadialProgress({ value, size = 120, strokeWidth = 10, color = '#8B5CF6'
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
+        {gradient && (
+          <defs>
+            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={gradient.start} />
+              <stop offset="100%" stopColor={gradient.end} />
+            </linearGradient>
+          </defs>
+        )}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="url(#radial-bg-gradient)"
+          strokeWidth={strokeWidth}
+          style={{ stroke: 'linear-gradient(135deg, #F8FAFC, #F1F5F9)' }}
+        />
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -315,13 +404,14 @@ function RadialProgress({ value, size = 120, strokeWidth = 10, color = '#8B5CF6'
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke={color}
+          stroke={gradient ? `url(#${gradientId})` : color}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={isAnimated ? targetDashOffset : circumference}
           style={{
-            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)'
+            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
           }}
         />
       </svg>
@@ -340,14 +430,15 @@ function RadialProgress({ value, size = 120, strokeWidth = 10, color = '#8B5CF6'
   );
 }
 
-// Mini Radial Progress for Conversation Quality Section
+// Mini Radial Progress for Conversation Quality Section with Pastel Gradient
 function MiniRadialProgress({
   value,
   maxValue,
   color,
   displayValue,
   label,
-  delay = 0
+  delay = 0,
+  gradient
 }: {
   value: number;
   maxValue: number;
@@ -355,6 +446,7 @@ function MiniRadialProgress({
   displayValue: string | number;
   label: string;
   delay?: number;
+  gradient?: { start: string; end: string };
 }) {
   const [isAnimated, setIsAnimated] = useState(false);
   const size = 80;
@@ -363,6 +455,7 @@ function MiniRadialProgress({
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, (value / maxValue) * 100));
   const targetDashOffset = circumference - (progress / 100) * circumference;
+  const gradientId = `mini-radial-${label.replace(/\s/g, '-')}-${delay}`;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsAnimated(true), 300 + delay);
@@ -373,14 +466,25 @@ function MiniRadialProgress({
     <div className="text-center">
       <div className="relative w-20 h-20 mx-auto mb-2">
         <svg className="w-full h-full transform -rotate-90">
+          {gradient && (
+            <defs>
+              <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={gradient.start} />
+                <stop offset="100%" stopColor={gradient.end} />
+              </linearGradient>
+            </defs>
+          )}
           <circle cx="40" cy="40" r={radius} fill="none" stroke="#F1F5F9" strokeWidth={strokeWidth} />
           <circle
-            cx="40" cy="40" r={radius} fill="none" stroke={color} strokeWidth={strokeWidth}
+            cx="40" cy="40" r={radius} fill="none"
+            stroke={gradient ? `url(#${gradientId})` : color}
+            strokeWidth={strokeWidth}
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={isAnimated ? targetDashOffset : circumference}
             style={{
-              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
+              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.1))'
             }}
           />
         </svg>
@@ -1269,9 +1373,9 @@ export default function AnalyticsPage() {
               <div className="flex items-center justify-center py-4">
                 <DonutChart
                   segments={[
-                    { value: leadTemperature.hot, color: '#F97316', label: 'Hot' },
-                    { value: leadTemperature.warm, color: '#FBBF24', label: 'Warm' },
-                    { value: leadTemperature.cold, color: '#94A3B8', label: 'Cold' },
+                    { value: leadTemperature.hot, color: '#F97316', label: 'Hot', gradient: { start: CHART_GRADIENTS.hot.start, end: CHART_GRADIENTS.hot.end } },
+                    { value: leadTemperature.warm, color: '#FBBF24', label: 'Warm', gradient: { start: CHART_GRADIENTS.warm.start, end: CHART_GRADIENTS.warm.end } },
+                    { value: leadTemperature.cold, color: '#94A3B8', label: 'Cold', gradient: { start: CHART_GRADIENTS.cold.start, end: CHART_GRADIENTS.cold.end } },
                   ]}
                   centerValue={leadTemperature.total}
                   centerLabel="Total"
@@ -1279,12 +1383,12 @@ export default function AnalyticsPage() {
               </div>
               <div className="flex justify-center gap-6 mt-4">
                 {[
-                  { label: 'Hot', value: leadTemperature.hot, color: '#F97316' },
-                  { label: 'Warm', value: leadTemperature.warm, color: '#FBBF24' },
-                  { label: 'Cold', value: leadTemperature.cold, color: '#94A3B8' },
+                  { label: 'Hot', value: leadTemperature.hot, gradient: CHART_GRADIENTS.hot },
+                  { label: 'Warm', value: leadTemperature.warm, gradient: CHART_GRADIENTS.warm },
+                  { label: 'Cold', value: leadTemperature.cold, gradient: CHART_GRADIENTS.cold },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                    <div className="w-3 h-3 rounded-full" style={{ background: `linear-gradient(135deg, ${item.gradient.start}, ${item.gradient.end})` }} />
                     <span className="text-xs text-gray-600">{item.label}</span>
                     <span className="text-xs font-semibold text-gray-900">{item.value}</span>
                   </div>
@@ -1299,9 +1403,9 @@ export default function AnalyticsPage() {
             <SectionCard title="Buyer Journey" subtitle="Funnel progression" icon={Layers}>
               <FunnelChart
                 stages={[
-                  { label: 'Awareness', value: stats.byStage.awareness, color: '#8B5CF6' },
-                  { label: 'Consideration', value: stats.byStage.consideration, color: '#3B82F6' },
-                  { label: 'Decision', value: stats.byStage.decision, color: '#10B981' },
+                  { label: 'Awareness', value: stats.byStage.awareness, color: '#8B5CF6', gradient: CHART_GRADIENTS.purple },
+                  { label: 'Consideration', value: stats.byStage.consideration, color: '#3B82F6', gradient: CHART_GRADIENTS.blue },
+                  { label: 'Decision', value: stats.byStage.decision, color: '#10B981', gradient: CHART_GRADIENTS.green },
                 ]}
               />
               <p className="text-[11px] text-gray-400 text-center mt-6">
@@ -1318,16 +1422,16 @@ export default function AnalyticsPage() {
                   </div>
                   <div className="space-y-2">
                     {[
-                      { label: 'High', value: stats.byIntent.high, color: '#10B981' },
-                      { label: 'Medium', value: stats.byIntent.medium, color: '#FBBF24' },
-                      { label: 'Low', value: stats.byIntent.low, color: '#94A3B8' },
+                      { label: 'High', value: stats.byIntent.high, gradient: `linear-gradient(90deg, ${CHART_GRADIENTS.green.start}, ${CHART_GRADIENTS.green.end})` },
+                      { label: 'Medium', value: stats.byIntent.medium, gradient: `linear-gradient(90deg, ${CHART_GRADIENTS.amber.start}, ${CHART_GRADIENTS.amber.end})` },
+                      { label: 'Low', value: stats.byIntent.low, gradient: `linear-gradient(90deg, ${CHART_GRADIENTS.cold.start}, ${CHART_GRADIENTS.cold.end})` },
                     ].map((item, idx) => (
                       <div key={item.label} className="flex items-center gap-3">
                         <span className="text-[11px] text-gray-500 w-14">{item.label}</span>
                         <div className="flex-1">
                           <AnimatedBar
                             percent={stats.total > 0 ? (item.value / stats.total) * 100 : 0}
-                            color={item.color}
+                            gradient={item.gradient}
                             delay={idx * 100}
                           />
                         </div>
@@ -1374,22 +1478,22 @@ export default function AnalyticsPage() {
               <div className="space-y-4">
                 <StackedBar
                   segments={[
-                    { value: sentimentData.veryPositive, color: '#10B981', label: 'Very Positive' },
-                    { value: sentimentData.positive, color: '#6EE7B7', label: 'Positive' },
-                    { value: sentimentData.neutral, color: '#D1D5DB', label: 'Neutral' },
-                    { value: sentimentData.negative, color: '#FDA4AF', label: 'Negative' },
+                    { value: sentimentData.veryPositive, color: '#10B981', label: 'Very Positive', gradient: { start: CHART_GRADIENTS.green.start, end: CHART_GRADIENTS.green.end } },
+                    { value: sentimentData.positive, color: '#6EE7B7', label: 'Positive', gradient: { start: CHART_GRADIENTS.teal.start, end: CHART_GRADIENTS.teal.end } },
+                    { value: sentimentData.neutral, color: '#D1D5DB', label: 'Neutral', gradient: { start: CHART_GRADIENTS.cold.start, end: CHART_GRADIENTS.cold.end } },
+                    { value: sentimentData.negative, color: '#FDA4AF', label: 'Negative', gradient: { start: CHART_GRADIENTS.rose.start, end: CHART_GRADIENTS.rose.end } },
                   ]}
                   height={16}
                 />
                 <div className="flex flex-wrap justify-center gap-4">
                   {[
-                    { label: 'Very Positive', value: sentimentData.veryPositive, color: '#10B981' },
-                    { label: 'Positive', value: sentimentData.positive, color: '#6EE7B7' },
-                    { label: 'Neutral', value: sentimentData.neutral, color: '#D1D5DB' },
-                    { label: 'Negative', value: sentimentData.negative, color: '#FDA4AF' },
+                    { label: 'Very Positive', value: sentimentData.veryPositive, gradient: CHART_GRADIENTS.green },
+                    { label: 'Positive', value: sentimentData.positive, gradient: CHART_GRADIENTS.teal },
+                    { label: 'Neutral', value: sentimentData.neutral, gradient: CHART_GRADIENTS.cold },
+                    { label: 'Negative', value: sentimentData.negative, gradient: CHART_GRADIENTS.rose },
                   ].map(item => (
                     <div key={item.label} className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                      <div className="w-2.5 h-2.5 rounded-full" style={{ background: `linear-gradient(135deg, ${item.gradient.start}, ${item.gradient.end})` }} />
                       <span className="text-[11px] text-gray-600">{item.label}</span>
                       <span className="text-xs font-semibold text-gray-900">{item.value}</span>
                     </div>
@@ -1411,6 +1515,7 @@ export default function AnalyticsPage() {
                   displayValue={conversationMetrics.avgMessages}
                   label="Avg Messages"
                   delay={0}
+                  gradient={{ start: CHART_GRADIENTS.purple.start, end: CHART_GRADIENTS.purple.end }}
                 />
                 <MiniRadialProgress
                   value={conversationMetrics.avgDuration}
@@ -1419,6 +1524,7 @@ export default function AnalyticsPage() {
                   displayValue={conversationMetrics.avgDuration}
                   label="Avg Minutes"
                   delay={150}
+                  gradient={{ start: CHART_GRADIENTS.green.start, end: CHART_GRADIENTS.green.end }}
                 />
                 <MiniRadialProgress
                   value={dataQuality.avgCompleteness}
@@ -1427,6 +1533,7 @@ export default function AnalyticsPage() {
                   displayValue={`${dataQuality.avgCompleteness}%`}
                   label="Completion"
                   delay={300}
+                  gradient={{ start: CHART_GRADIENTS.amber.start, end: CHART_GRADIENTS.amber.end }}
                 />
               </div>
               <p className="text-[11px] text-gray-400 text-center mt-2">
@@ -1489,7 +1596,11 @@ export default function AnalyticsPage() {
             {/* Data Health */}
             <SectionCard title="Data Health" subtitle="Profile completeness" icon={Shield}>
               <div className="flex flex-col items-center py-4">
-                <RadialProgress value={dataQuality.avgCompleteness} color="#8B5CF6" />
+                <RadialProgress
+                  value={dataQuality.avgCompleteness}
+                  color="#8B5CF6"
+                  gradient={{ start: CHART_GRADIENTS.purple.start, end: CHART_GRADIENTS.purple.end }}
+                />
                 <div className="mt-4 space-y-2 w-full">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">With email</span>
