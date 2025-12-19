@@ -418,13 +418,13 @@ function RadialProgress({
             <linearGradient
               id={gradientId}
               gradientUnits="userSpaceOnUse"
-              x1="0"
+              x1={center}
               y1={center - radius}
-              x2="0"
+              x2={center}
               y2={center + radius}
             >
-              <stop offset="0%" stopColor={gradient.start} />
-              <stop offset="100%" stopColor={gradient.end} />
+              <stop offset="0%" stopColor={gradient.end} />
+              <stop offset="100%" stopColor={gradient.start} />
             </linearGradient>
           </defs>
         )}
@@ -449,8 +449,7 @@ function RadialProgress({
           strokeDasharray={circumference}
           strokeDashoffset={isAnimated ? targetDashOffset : circumference}
           style={{
-            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
-            filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.15))'
+            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         />
       </svg>
@@ -511,13 +510,13 @@ function MiniRadialProgress({
               <linearGradient
                 id={gradientId}
                 gradientUnits="userSpaceOnUse"
-                x1="0"
+                x1={center}
                 y1={center - radius}
-                x2="0"
+                x2={center}
                 y2={center + radius}
               >
-                <stop offset="0%" stopColor={gradient.start} />
-                <stop offset="100%" stopColor={gradient.end} />
+                <stop offset="0%" stopColor={gradient.end} />
+                <stop offset="100%" stopColor={gradient.start} />
               </linearGradient>
             </defs>
           )}
@@ -530,8 +529,7 @@ function MiniRadialProgress({
             strokeDasharray={circumference}
             strokeDashoffset={isAnimated ? targetDashOffset : circumference}
             style={{
-              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))'
+              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           />
         </svg>
