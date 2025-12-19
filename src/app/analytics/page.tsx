@@ -385,7 +385,7 @@ function StackedBar({ segments, height = 12 }: { segments: { value: number; colo
 function RadialProgress({
   value,
   size = 140,
-  strokeWidth = 14,
+  strokeWidth = 10,
   color = '#8B5CF6',
   label = 'Health',
   gradient
@@ -492,8 +492,8 @@ function MiniRadialProgress({
   gradient?: { start: string; end: string };
 }) {
   const [isAnimated, setIsAnimated] = useState(false);
-  const size = 88;
-  const strokeWidth = 12;
+  const size = 90;
+  const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, (value / maxValue) * 100));
@@ -1567,7 +1567,7 @@ export default function AnalyticsPage() {
                 <MiniRadialProgress
                   value={conversationMetrics.avgMessages}
                   maxValue={20}
-                  color="#A78BFA"
+                  color="#6366F1"
                   displayValue={conversationMetrics.avgMessages}
                   label="Avg Messages"
                   delay={0}
@@ -1575,7 +1575,7 @@ export default function AnalyticsPage() {
                 <MiniRadialProgress
                   value={conversationMetrics.avgDuration}
                   maxValue={30}
-                  color="#6EE7B7"
+                  color="#22C55E"
                   displayValue={conversationMetrics.avgDuration}
                   label="Avg Minutes"
                   delay={150}
@@ -1583,7 +1583,7 @@ export default function AnalyticsPage() {
                 <MiniRadialProgress
                   value={dataQuality.avgCompleteness}
                   maxValue={100}
-                  color="#FBBF24"
+                  color="#F97316"
                   displayValue={`${dataQuality.avgCompleteness}%`}
                   label="Completion"
                   delay={300}
@@ -1651,7 +1651,7 @@ export default function AnalyticsPage() {
               <div className="flex flex-col items-center py-4">
                 <RadialProgress
                   value={dataQuality.avgCompleteness}
-                  color="#A78BFA"
+                  color="#6366F1"
                 />
                 <div className="mt-4 space-y-2 w-full">
                   <div className="flex items-center justify-between text-sm">
