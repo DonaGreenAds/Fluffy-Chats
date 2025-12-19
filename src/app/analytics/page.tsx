@@ -384,8 +384,8 @@ function StackedBar({ segments, height = 12 }: { segments: { value: number; colo
 // Radial Progress Ring with Sweep Animation and Pastel Gradient
 function RadialProgress({
   value,
-  size = 140,
-  strokeWidth = 10,
+  size = 160,
+  strokeWidth = 14,
   color = '#8B5CF6',
   label = 'Health',
   gradient
@@ -439,8 +439,9 @@ function RadialProgress({
           cy={center}
           r={radius}
           fill="none"
-          stroke="#F1F5F9"
+          stroke="#E5E7EB"
           strokeWidth={strokeWidth}
+          opacity={0.5}
         />
         {/* Progress arc with gradient */}
         <circle
@@ -454,7 +455,8 @@ function RadialProgress({
           strokeDasharray={circumference}
           strokeDashoffset={isAnimated ? targetDashOffset : circumference}
           style={{
-            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)'
+            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))'
           }}
         />
       </svg>
@@ -466,8 +468,8 @@ function RadialProgress({
           transitionDelay: '0.8s'
         }}
       >
-        <span className="text-2xl font-bold text-gray-900">{value}%</span>
-        <span className="text-[10px] text-gray-500 uppercase tracking-wide">{label}</span>
+        <span className="text-3xl font-bold text-gray-900">{value}%</span>
+        <span className="text-[11px] text-gray-500 uppercase tracking-wide">{label}</span>
       </div>
     </div>
   );
@@ -492,8 +494,8 @@ function MiniRadialProgress({
   gradient?: { start: string; end: string };
 }) {
   const [isAnimated, setIsAnimated] = useState(false);
-  const size = 90;
-  const strokeWidth = 8;
+  const size = 110;
+  const strokeWidth = 12;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, (value / maxValue) * 100));
@@ -530,7 +532,7 @@ function MiniRadialProgress({
               </linearGradient>
             </defs>
           )}
-          <circle cx={center} cy={center} r={radius} fill="none" stroke="#F1F5F9" strokeWidth={strokeWidth} />
+          <circle cx={center} cy={center} r={radius} fill="none" stroke="#E5E7EB" strokeWidth={strokeWidth} opacity={0.5} />
           <circle
             cx={center} cy={center} r={radius} fill="none"
             stroke={gradient ? `url(#${gradientId})` : color}
@@ -539,7 +541,8 @@ function MiniRadialProgress({
             strokeDasharray={circumference}
             strokeDashoffset={isAnimated ? targetDashOffset : circumference}
             style={{
-              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
+              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)',
+              filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))'
             }}
           />
         </svg>
@@ -552,7 +555,7 @@ function MiniRadialProgress({
             transitionDelay: '0.6s'
           }}
         >
-          <span className="text-lg font-bold text-gray-900">{displayValue}</span>
+          <span className="text-xl font-bold text-gray-900">{displayValue}</span>
         </div>
       </div>
       <p
