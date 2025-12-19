@@ -405,6 +405,11 @@ function RadialProgress({
   const gradientId = `radial-gradient-${label.replace(/\s/g, '-')}-${Date.now()}`;
   const center = size / 2;
 
+  // Calculate end point of arc based on progress (arc starts at top, goes clockwise)
+  const endAngle = (progress / 100) * 360;
+  const endX = center + radius * Math.sin((endAngle) * Math.PI / 180);
+  const endY = center - radius * Math.cos((endAngle) * Math.PI / 180);
+
   useEffect(() => {
     const timer = setTimeout(() => setIsAnimated(true), 250);
     return () => clearTimeout(timer);
@@ -420,11 +425,11 @@ function RadialProgress({
               gradientUnits="userSpaceOnUse"
               x1={center}
               y1={center - radius}
-              x2={center}
-              y2={center + radius}
+              x2={endX}
+              y2={endY}
             >
-              <stop offset="0%" stopColor={gradient.end} />
-              <stop offset="100%" stopColor={gradient.start} />
+              <stop offset="0%" stopColor={gradient.start} />
+              <stop offset="100%" stopColor={gradient.end} />
             </linearGradient>
           </defs>
         )}
@@ -496,6 +501,11 @@ function MiniRadialProgress({
   const gradientId = `mini-radial-${label.replace(/\s/g, '-')}-${delay}-${Date.now()}`;
   const center = size / 2;
 
+  // Calculate end point of arc based on progress
+  const endAngle = (progress / 100) * 360;
+  const endX = center + radius * Math.sin((endAngle) * Math.PI / 180);
+  const endY = center - radius * Math.cos((endAngle) * Math.PI / 180);
+
   useEffect(() => {
     const timer = setTimeout(() => setIsAnimated(true), 300 + delay);
     return () => clearTimeout(timer);
@@ -512,11 +522,11 @@ function MiniRadialProgress({
                 gradientUnits="userSpaceOnUse"
                 x1={center}
                 y1={center - radius}
-                x2={center}
-                y2={center + radius}
+                x2={endX}
+                y2={endY}
               >
-                <stop offset="0%" stopColor={gradient.end} />
-                <stop offset="100%" stopColor={gradient.start} />
+                <stop offset="0%" stopColor={gradient.start} />
+                <stop offset="100%" stopColor={gradient.end} />
               </linearGradient>
             </defs>
           )}
