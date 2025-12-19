@@ -141,8 +141,8 @@ function Sparkline({ data, color, height = 32 }: { data: number[]; color: string
 // Donut Chart Component with Clockwise Sweep Animation and Gradients
 function DonutChart({
   segments,
-  size = 160,
-  strokeWidth = 24,
+  size = 180,
+  strokeWidth = 28,
   centerLabel,
   centerValue
 }: {
@@ -172,17 +172,12 @@ function DonutChart({
       const dashLength = percentage * circumference;
       const offset = cumulativeOffset;
       cumulativeOffset += dashLength;
-      // Calculate angle for gradient direction (radial sweep effect)
-      const startAngle = (offset / circumference) * 360;
-      const endAngle = ((offset + dashLength) / circumference) * 360;
-      const midAngle = ((startAngle + endAngle) / 2) * (Math.PI / 180);
       return {
         ...segment,
         dashLength,
         offset,
         percentage,
-        id: `donut-gradient-${idx}-${Date.now()}`,
-        midAngle
+        id: `donut-gradient-${idx}-${Date.now()}`
       };
     });
   }, [segments, total, circumference]);
@@ -209,7 +204,7 @@ function DonutChart({
             )
           ))}
         </defs>
-        {/* Background circle with subtle gradient */}
+        {/* Background circle */}
         <circle
           cx={center}
           cy={center}
@@ -218,7 +213,7 @@ function DonutChart({
           stroke="#F1F5F9"
           strokeWidth={strokeWidth}
         />
-        {/* Animated segments with gradients */}
+        {/* Animated segments with gradients - no round linecap for seamless connection */}
         {segmentData.map((segment, i) => (
           <circle
             key={i}
@@ -228,14 +223,12 @@ function DonutChart({
             fill="none"
             stroke={segment.gradient ? `url(#${segment.id})` : segment.color}
             strokeWidth={strokeWidth}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             strokeDasharray={`${segment.dashLength} ${circumference}`}
             strokeDashoffset={isAnimated ? -segment.offset : circumference}
-            className="donut-segment"
             style={{
               transition: `stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)`,
-              transitionDelay: `${i * 200}ms`,
-              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))'
+              transitionDelay: `${i * 150}ms`
             }}
           />
         ))}
@@ -246,8 +239,8 @@ function DonutChart({
           className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700"
           style={{ opacity: isAnimated ? 1 : 0, transitionDelay: '600ms' }}
         >
-          {centerValue && <span className="text-2xl font-bold text-gray-900">{centerValue}</span>}
-          {centerLabel && <span className="text-xs text-gray-500">{centerLabel}</span>}
+          {centerValue && <span className="text-3xl font-bold text-gray-900">{centerValue}</span>}
+          {centerLabel && <span className="text-sm text-gray-500">{centerLabel}</span>}
         </div>
       )}
     </div>
@@ -366,8 +359,8 @@ function StackedBar({ segments, height = 12 }: { segments: { value: number; colo
 // Radial Progress Ring with Sweep Animation and Pastel Gradient
 function RadialProgress({
   value,
-  size = 120,
-  strokeWidth = 12,
+  size = 140,
+  strokeWidth = 14,
   color = '#8B5CF6',
   label = 'Health',
   gradient
@@ -470,8 +463,8 @@ function MiniRadialProgress({
   gradient?: { start: string; end: string };
 }) {
   const [isAnimated, setIsAnimated] = useState(false);
-  const size = 80;
-  const strokeWidth = 10;
+  const size = 88;
+  const strokeWidth = 12;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, (value / maxValue) * 100));
@@ -486,7 +479,7 @@ function MiniRadialProgress({
 
   return (
     <div className="text-center">
-      <div className="relative w-20 h-20 mx-auto mb-2">
+      <div className="relative w-22 h-22 mx-auto mb-2" style={{ width: size, height: size }}>
         <svg className="w-full h-full transform -rotate-90" viewBox={`0 0 ${size} ${size}`}>
           {gradient && (
             <defs>
