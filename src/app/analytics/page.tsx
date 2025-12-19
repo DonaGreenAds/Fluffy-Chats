@@ -138,7 +138,21 @@ function Sparkline({ data, color, height = 32 }: { data: number[]; color: string
   );
 }
 
-// Donut Chart Component with Clockwise Sweep Animation and Gradients
+// Helper function to create arc path
+function describeArc(cx: number, cy: number, radius: number, startAngle: number, endAngle: number): string {
+  const start = {
+    x: cx + radius * Math.cos((startAngle - 90) * Math.PI / 180),
+    y: cy + radius * Math.sin((startAngle - 90) * Math.PI / 180)
+  };
+  const end = {
+    x: cx + radius * Math.cos((endAngle - 90) * Math.PI / 180),
+    y: cy + radius * Math.sin((endAngle - 90) * Math.PI / 180)
+  };
+  const largeArcFlag = endAngle - startAngle <= 180 ? 0 : 1;
+  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
+}
+
+// Donut Chart Component with Arc Paths for seamless segments
 function DonutChart({
   segments,
   size = 180,
@@ -155,7 +169,6 @@ function DonutChart({
   const [isAnimated, setIsAnimated] = useState(false);
   const total = segments.reduce((acc, s) => acc + s.value, 0);
   const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
   const center = size / 2;
 
   // Trigger animation on mount
@@ -164,45 +177,57 @@ function DonutChart({
     return () => clearTimeout(timer);
   }, []);
 
-  // Calculate cumulative offsets for each segment
+  // Calculate arc data for each segment
   const segmentData = useMemo(() => {
-    let cumulativeOffset = 0;
+    let currentAngle = 0;
     return segments.map((segment, idx) => {
       const percentage = total > 0 ? segment.value / total : 0;
-      const dashLength = percentage * circumference;
-      const offset = cumulativeOffset;
-      cumulativeOffset += dashLength;
+      const angle = percentage * 360;
+      const startAngle = currentAngle;
+      const endAngle = currentAngle + angle;
+      currentAngle = endAngle;
+
+      // Create arc path
+      const path = percentage > 0 ? describeArc(center, center, radius, startAngle, endAngle - 0.5) : '';
+      const pathLength = percentage * 2 * Math.PI * radius;
+
       return {
         ...segment,
-        dashLength,
-        offset,
+        startAngle,
+        endAngle,
         percentage,
+        path,
+        pathLength,
         id: `donut-gradient-${idx}-${Date.now()}`
       };
     });
-  }, [segments, total, circumference]);
+  }, [segments, total, radius, center]);
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="transform -rotate-90">
-        {/* Define gradients with userSpaceOnUse for proper circular rendering */}
+      <svg width={size} height={size}>
+        {/* Define gradients */}
         <defs>
-          {segmentData.map((segment) => (
-            segment.gradient && (
+          {segmentData.map((segment) => {
+            if (!segment.gradient) return null;
+            // Calculate gradient direction based on segment position
+            const midAngle = ((segment.startAngle + segment.endAngle) / 2 - 90) * Math.PI / 180;
+            const gradientLength = radius * 1.2;
+            return (
               <linearGradient
                 key={segment.id}
                 id={segment.id}
                 gradientUnits="userSpaceOnUse"
-                x1="0"
-                y1={center - radius}
-                x2="0"
-                y2={center + radius}
+                x1={center - gradientLength * Math.cos(midAngle - Math.PI / 2)}
+                y1={center - gradientLength * Math.sin(midAngle - Math.PI / 2)}
+                x2={center + gradientLength * Math.cos(midAngle - Math.PI / 2)}
+                y2={center + gradientLength * Math.sin(midAngle - Math.PI / 2)}
               >
                 <stop offset="0%" stopColor={segment.gradient.start} />
                 <stop offset="100%" stopColor={segment.gradient.end} />
               </linearGradient>
-            )
-          ))}
+            );
+          })}
         </defs>
         {/* Background circle */}
         <circle
@@ -213,24 +238,24 @@ function DonutChart({
           stroke="#F1F5F9"
           strokeWidth={strokeWidth}
         />
-        {/* Animated segments with gradients - no round linecap for seamless connection */}
+        {/* Arc segments */}
         {segmentData.map((segment, i) => (
-          <circle
-            key={i}
-            cx={center}
-            cy={center}
-            r={radius}
-            fill="none"
-            stroke={segment.gradient ? `url(#${segment.id})` : segment.color}
-            strokeWidth={strokeWidth}
-            strokeLinecap="butt"
-            strokeDasharray={`${segment.dashLength} ${circumference}`}
-            strokeDashoffset={isAnimated ? -segment.offset : circumference}
-            style={{
-              transition: `stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)`,
-              transitionDelay: `${i * 150}ms`
-            }}
-          />
+          segment.path && (
+            <path
+              key={i}
+              d={segment.path}
+              fill="none"
+              stroke={segment.gradient ? `url(#${segment.id})` : segment.color}
+              strokeWidth={strokeWidth}
+              strokeLinecap="butt"
+              style={{
+                strokeDasharray: segment.pathLength,
+                strokeDashoffset: isAnimated ? 0 : segment.pathLength,
+                transition: `stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)`,
+                transitionDelay: `${i * 100}ms`
+              }}
+            />
+          )
         ))}
       </svg>
       {/* Center label with fade-in */}
