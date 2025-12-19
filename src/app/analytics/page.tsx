@@ -1016,8 +1016,8 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Charts Row 2 - Buyer Stage & Conversion Metrics */}
-          <div className="grid grid-cols-3 gap-5">
+          {/* Charts Row 2 - Buyer Stage & Business Analysis */}
+          <div className="grid grid-cols-2 gap-5">
             {/* Buyer Stage */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-900">
               <div className="flex items-center gap-3 mb-4">
@@ -1044,77 +1044,6 @@ export default function AnalyticsPage() {
               </ResponsiveContainer>
             </div>
 
-            {/* Conversion Metrics */}
-            <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1000">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
-                  <Zap className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
-                </div>
-                <h3 className="text-sm font-semibold text-neutral-900">Conversion Metrics</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="group/bar">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-[var(--text-secondary)]">High Intent Rate</span>
-                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.intentRate}%</span>
-                  </div>
-                  <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[var(--success)] rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: `${conversionMetrics.intentRate}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="group/bar">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-[var(--text-secondary)]">Hot Lead Rate</span>
-                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.hotRate}%</span>
-                  </div>
-                  <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[var(--hot-primary)] rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: `${conversionMetrics.hotRate}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="group/bar">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-[var(--text-secondary)]">Decision Stage Rate</span>
-                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.decisionRate}%</span>
-                  </div>
-                  <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[var(--warm-primary)] rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: `${conversionMetrics.decisionRate}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="group/bar">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-[var(--text-secondary)]">Contacted Rate</span>
-                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.contactedRate}%</span>
-                  </div>
-                  <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[var(--accent-2)] rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: `${conversionMetrics.contactedRate}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="group/bar">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-[var(--text-secondary)]">Conversion Rate</span>
-                    <span className="text-sm font-bold text-[var(--text)]">{conversionMetrics.conversionRate}%</span>
-                  </div>
-                  <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[var(--accent-1)] rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: `${conversionMetrics.conversionRate}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* Business Type & Trust */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1100">
@@ -1242,31 +1171,8 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Charts Row 4 - Source, Channel, Region, Budget */}
-          <div className="grid grid-cols-4 gap-5">
-            {/* Source Breakdown */}
-            <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1400">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
-                  <Globe className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
-                </div>
-                <h3 className="text-sm font-semibold text-neutral-900">Lead Sources</h3>
-              </div>
-              <div className="space-y-2">
-                {sourceData.length > 0 ? sourceData.map((item, idx) => (
-                  <div key={item.name} className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors">
-                    <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-[var(--accent-1)] text-white text-xs flex items-center justify-center font-medium">{idx + 1}</span>
-                      <span className="text-xs text-neutral-700 font-medium">{item.name}</span>
-                    </div>
-                    <span className="text-sm font-bold text-neutral-900">{item.value}</span>
-                  </div>
-                )) : (
-                  <div className="text-center py-8 text-neutral-400 text-sm">No source data</div>
-                )}
-              </div>
-            </div>
-
+          {/* Charts Row 4 - Channel, Region, Budget */}
+          <div className="grid grid-cols-3 gap-5">
             {/* Channel Breakdown */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1500">
               <div className="flex items-center gap-3 mb-4">
@@ -1337,50 +1243,8 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Charts Row 5 - Data Quality & Conversation Stats */}
-          <div className="grid grid-cols-4 gap-5">
-            {/* Data Quality */}
-            <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1800">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[var(--accent-1)] transition-colors duration-300">
-                  <CheckCircle2 className="w-4 h-4 text-neutral-600 group-hover:text-white transition-colors duration-300" />
-                </div>
-                <h3 className="text-sm font-semibold text-neutral-900">Data Quality</h3>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors group/item">
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-neutral-400 group-hover/item:text-neutral-900 transition-colors" />
-                    <span className="text-xs text-neutral-600">Has Phone</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-bold text-neutral-900 text-sm">{dataQuality.hasPhone}</span>
-                    <span className="text-xs text-neutral-500 ml-1">({dataQuality.phoneRate}%)</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors group/item">
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-neutral-400 group-hover/item:text-neutral-900 transition-colors" />
-                    <span className="text-xs text-neutral-600">Has Email</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-bold text-neutral-900 text-sm">{dataQuality.hasEmail}</span>
-                    <span className="text-xs text-neutral-500 ml-1">({dataQuality.emailRate}%)</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-2.5 bg-neutral-50 rounded-xl hover:bg-neutral-100 transition-colors group/item">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-neutral-400 group-hover/item:text-neutral-900 transition-colors" />
-                    <span className="text-xs text-neutral-600">Has Company</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-bold text-neutral-900 text-sm">{dataQuality.hasCompany}</span>
-                    <span className="text-xs text-neutral-500 ml-1">({dataQuality.companyRate}%)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          {/* Charts Row 5 - Completeness, Conversation Stats & Use Cases */}
+          <div className="grid grid-cols-3 gap-5">
             {/* Avg Completeness - Circular Progress */}
             <div className="group bg-white rounded-3xl p-5 border border-neutral-200/80 shadow-sm hover:shadow-xl hover:shadow-neutral-200/50 transition-all duration-500 animate-slide-up animation-delay-1900">
               <div className="flex items-center gap-3 mb-3">
@@ -1485,43 +1349,6 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Summary Footer */}
-          <div className="bg-gradient-to-r from-[var(--accent-1)] to-[var(--accent-2)] rounded-3xl p-6 shadow-xl shadow-[var(--accent-1)]/30 animate-slide-up animation-delay-2200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center">
-                  <BarChart3 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Analytics Summary</h3>
-                  <p className="text-white/80 text-sm">
-                    {selectedPreset === 'Custom'
-                      ? `${formatDisplayDate(dateRange.start)} - ${formatDisplayDate(dateRange.end)}`
-                      : selectedPreset
-                    }
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-8">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-white">{stats.total}</p>
-                  <p className="text-white/70 text-xs">Total Leads</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-white">{conversationMetrics.totalMessages}</p>
-                  <p className="text-white/70 text-xs">Messages</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-white">{stats.avgScore}</p>
-                  <p className="text-white/70 text-xs">Avg Score</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-white">{conversionMetrics.intentRate}%</p>
-                  <p className="text-white/70 text-xs">High Intent</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </>
       )}
 
