@@ -187,9 +187,15 @@ function DonutChart({
   );
 }
 
-// Funnel Chart Component
+// Funnel Chart Component with Cascade Animation
 function FunnelChart({ stages }: { stages: { label: string; value: number; color: string }[] }) {
+  const [isAnimated, setIsAnimated] = useState(false);
   const maxValue = Math.max(...stages.map(s => s.value));
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 150);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="space-y-3">
@@ -199,7 +205,16 @@ function FunnelChart({ stages }: { stages: { label: string; value: number; color
         const dropoff = prevValue > 0 ? Math.round(((prevValue - stage.value) / prevValue) * 100) : 0;
 
         return (
-          <div key={stage.label} className="relative">
+          <div
+            key={stage.label}
+            className="relative"
+            style={{
+              opacity: isAnimated ? 1 : 0,
+              transform: isAnimated ? 'translateX(0)' : 'translateX(-20px)',
+              transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1)`,
+              transitionDelay: `${i * 150}ms`
+            }}
+          >
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs font-medium text-gray-600">{stage.label}</span>
               <div className="flex items-center gap-2">
@@ -211,11 +226,13 @@ function FunnelChart({ stages }: { stages: { label: string; value: number; color
             </div>
             <div className="h-8 bg-gray-100 rounded-lg overflow-hidden relative">
               <div
-                className="h-full rounded-lg transition-all duration-1000 ease-out flex items-center justify-end pr-3"
+                className="h-full rounded-lg flex items-center justify-end pr-3"
                 style={{
-                  width: `${width}%`,
+                  width: isAnimated ? `${width}%` : '0%',
                   background: `linear-gradient(90deg, ${stage.color}40, ${stage.color})`,
-                  minWidth: stage.value > 0 ? '20%' : '0%'
+                  minWidth: isAnimated && stage.value > 0 ? '20%' : '0%',
+                  transition: `width 1s cubic-bezier(0.4, 0, 0.2, 1)`,
+                  transitionDelay: `${i * 150 + 200}ms`
                 }}
               >
               </div>
@@ -227,23 +244,38 @@ function FunnelChart({ stages }: { stages: { label: string; value: number; color
   );
 }
 
-// Horizontal Stacked Bar
+// Horizontal Stacked Bar with Grow Animation
 function StackedBar({ segments, height = 12 }: { segments: { value: number; color: string; label: string }[]; height?: number }) {
+  const [isAnimated, setIsAnimated] = useState(false);
   const total = segments.reduce((acc, s) => acc + s.value, 0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 200);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="w-full">
-      <div className="flex rounded-full overflow-hidden" style={{ height }}>
+      <div
+        className="flex rounded-full overflow-hidden transition-all duration-300"
+        style={{
+          height,
+          transform: isAnimated ? 'scaleX(1)' : 'scaleX(0)',
+          transformOrigin: 'left center'
+        }}
+      >
         {segments.map((segment, i) => {
           const percentage = total > 0 ? (segment.value / total) * 100 : 0;
           return (
             <div
               key={i}
-              className="transition-all duration-700 ease-out first:rounded-l-full last:rounded-r-full"
+              className="first:rounded-l-full last:rounded-r-full"
               style={{
-                width: `${percentage}%`,
+                width: isAnimated ? `${percentage}%` : '0%',
                 backgroundColor: segment.color,
-                minWidth: segment.value > 0 ? '4px' : '0'
+                minWidth: segment.value > 0 && isAnimated ? '4px' : '0',
+                transition: `width 0.8s cubic-bezier(0.4, 0, 0.2, 1)`,
+                transitionDelay: `${i * 100 + 300}ms`
               }}
               title={`${segment.label}: ${segment.value}`}
             />
@@ -254,12 +286,18 @@ function StackedBar({ segments, height = 12 }: { segments: { value: number; colo
   );
 }
 
-// Radial Progress Ring
-function RadialProgress({ value, size = 120, strokeWidth = 10, color = '#8B5CF6' }: { value: number; size?: number; strokeWidth?: number; color?: string }) {
+// Radial Progress Ring with Sweep Animation
+function RadialProgress({ value, size = 120, strokeWidth = 10, color = '#8B5CF6', label = 'Health' }: { value: number; size?: number; strokeWidth?: number; color?: string; label?: string }) {
+  const [isAnimated, setIsAnimated] = useState(false);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(100, Math.max(0, value));
-  const dashOffset = circumference - (progress / 100) * circumference;
+  const targetDashOffset = circumference - (progress / 100) * circumference;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 250);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -281,13 +319,409 @@ function RadialProgress({ value, size = 120, strokeWidth = 10, color = '#8B5CF6'
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
-          strokeDashoffset={dashOffset}
-          className="transition-all duration-1000 ease-out"
+          strokeDashoffset={isAnimated ? targetDashOffset : circumference}
+          style={{
+            transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
+      <div
+        className="absolute inset-0 flex flex-col items-center justify-center"
+        style={{
+          opacity: isAnimated ? 1 : 0,
+          transition: 'opacity 0.5s ease-out',
+          transitionDelay: '0.8s'
+        }}
+      >
         <span className="text-2xl font-bold text-gray-900">{value}%</span>
-        <span className="text-[10px] text-gray-500 uppercase tracking-wide">Health</span>
+        <span className="text-[10px] text-gray-500 uppercase tracking-wide">{label}</span>
+      </div>
+    </div>
+  );
+}
+
+// Mini Radial Progress for Conversation Quality Section
+function MiniRadialProgress({
+  value,
+  maxValue,
+  color,
+  displayValue,
+  label,
+  delay = 0
+}: {
+  value: number;
+  maxValue: number;
+  color: string;
+  displayValue: string | number;
+  label: string;
+  delay?: number;
+}) {
+  const [isAnimated, setIsAnimated] = useState(false);
+  const size = 80;
+  const strokeWidth = 8;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const progress = Math.min(100, Math.max(0, (value / maxValue) * 100));
+  const targetDashOffset = circumference - (progress / 100) * circumference;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 300 + delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div className="text-center">
+      <div className="relative w-20 h-20 mx-auto mb-2">
+        <svg className="w-full h-full transform -rotate-90">
+          <circle cx="40" cy="40" r={radius} fill="none" stroke="#F1F5F9" strokeWidth={strokeWidth} />
+          <circle
+            cx="40" cy="40" r={radius} fill="none" stroke={color} strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={isAnimated ? targetDashOffset : circumference}
+            style={{
+              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
+          />
+        </svg>
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            opacity: isAnimated ? 1 : 0,
+            transform: isAnimated ? 'scale(1)' : 'scale(0.8)',
+            transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            transitionDelay: '0.6s'
+          }}
+        >
+          <span className="text-xl font-bold text-gray-900">{displayValue}</span>
+        </div>
+      </div>
+      <p
+        className="text-xs text-gray-500"
+        style={{
+          opacity: isAnimated ? 1 : 0,
+          transition: 'opacity 0.4s ease-out',
+          transitionDelay: '0.8s'
+        }}
+      >
+        {label}
+      </p>
+    </div>
+  );
+}
+
+// Animated Horizontal Bar for list items
+function AnimatedBar({
+  percent,
+  color,
+  gradient,
+  delay = 0,
+  height = 'h-2'
+}: {
+  percent: number;
+  color?: string;
+  gradient?: string;
+  delay?: number;
+  height?: string;
+}) {
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 200 + delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div className={`${height} bg-gray-100 rounded-full overflow-hidden`}>
+      <div
+        className={`${height} rounded-full`}
+        style={{
+          width: isAnimated ? `${percent}%` : '0%',
+          background: gradient || color || '#8B5CF6',
+          transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
+      />
+    </div>
+  );
+}
+
+// Animated Urgency Card
+function UrgencyCard({
+  label,
+  value,
+  color,
+  delay = 0
+}: {
+  label: string;
+  value: number;
+  color: string;
+  delay?: number;
+}) {
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 300 + delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div
+      className="text-center p-2 rounded-xl"
+      style={{
+        backgroundColor: `${color}10`,
+        opacity: isAnimated ? 1 : 0,
+        transform: isAnimated ? 'scale(1)' : 'scale(0.8)',
+        transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
+      }}
+    >
+      <p
+        className="text-lg font-bold"
+        style={{
+          color: color,
+          opacity: isAnimated ? 1 : 0,
+          transition: 'opacity 0.3s ease-out',
+          transitionDelay: '0.2s'
+        }}
+      >
+        {value}
+      </p>
+      <p className="text-[9px] text-gray-500">{label}</p>
+    </div>
+  );
+}
+
+// Animated Channel Item
+function ChannelItem({
+  name,
+  value,
+  percent,
+  delay = 0
+}: {
+  name: string;
+  value: number;
+  percent: number;
+  delay?: number;
+}) {
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 200 + delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div
+      className="flex items-center gap-3 p-3 rounded-xl"
+      style={{
+        backgroundColor: PASTEL.mint.light,
+        opacity: isAnimated ? 1 : 0,
+        transform: isAnimated ? 'translateX(0)' : 'translateX(-20px)',
+        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+      }}
+    >
+      <div className="p-2 rounded-lg" style={{ backgroundColor: PASTEL.mint.bg }}>
+        <MessageCircle className="w-4 h-4" style={{ color: PASTEL.mint.text }} strokeWidth={1.5} />
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-medium text-gray-900">{name}</p>
+        <p className="text-[11px] text-gray-500">{percent}% of leads</p>
+      </div>
+      <span
+        className="text-lg font-bold text-gray-900"
+        style={{
+          opacity: isAnimated ? 1 : 0,
+          transition: 'opacity 0.4s ease-out',
+          transitionDelay: '0.25s'
+        }}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+// Animated Topic Card
+function TopicCard({
+  name,
+  value,
+  rank,
+  isTop,
+  delay = 0
+}: {
+  name: string;
+  value: number;
+  rank: number;
+  isTop: boolean;
+  delay?: number;
+}) {
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 300 + delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div
+      className="p-4 rounded-xl text-center transition-all hover:scale-105"
+      style={{
+        backgroundColor: isTop ? PASTEL.lavender.bg : PASTEL.slate.bg,
+        opacity: isAnimated ? 1 : 0,
+        transform: isAnimated ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
+        transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+      }}
+    >
+      <div
+        className="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-2"
+        style={{
+          backgroundColor: isTop ? PASTEL.lavender.text : PASTEL.slate.text,
+          color: 'white',
+          transform: isAnimated ? 'scale(1)' : 'scale(0)',
+          transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          transitionDelay: '0.2s'
+        }}
+      >
+        {rank}
+      </div>
+      <p className="text-xs text-gray-600 truncate mb-1">{name}</p>
+      <p
+        className="text-xl font-bold text-gray-900"
+        style={{
+          opacity: isAnimated ? 1 : 0,
+          transition: 'opacity 0.4s ease-out',
+          transitionDelay: '0.35s'
+        }}
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
+
+// Animated Use Case Item
+function UseCaseItem({
+  name,
+  value,
+  percent,
+  delay = 0
+}: {
+  name: string;
+  value: number;
+  percent: number;
+  delay?: number;
+}) {
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 200 + delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div
+      className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+      style={{
+        opacity: isAnimated ? 1 : 0,
+        transform: isAnimated ? 'translateX(0)' : 'translateX(-15px)',
+        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+      }}
+    >
+      <div className="p-2 rounded-lg" style={{ backgroundColor: PASTEL.lavender.bg }}>
+        <Briefcase className="w-4 h-4" style={{ color: PASTEL.lavender.text }} strokeWidth={1.5} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-900 truncate">{name}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full"
+              style={{
+                width: isAnimated ? `${percent}%` : '0%',
+                backgroundColor: PASTEL.lavender.text,
+                transition: 'width 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+                transitionDelay: '0.15s'
+              }}
+            />
+          </div>
+          <span
+            className="text-[10px] text-gray-500"
+            style={{
+              opacity: isAnimated ? 1 : 0,
+              transition: 'opacity 0.3s ease-out',
+              transitionDelay: '0.5s'
+            }}
+          >
+            {percent}%
+          </span>
+        </div>
+      </div>
+      <span
+        className="text-lg font-bold text-gray-900"
+        style={{
+          opacity: isAnimated ? 1 : 0,
+          transition: 'opacity 0.4s ease-out',
+          transitionDelay: '0.3s'
+        }}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+// Animated Budget Bar with percentage label
+function BudgetBar({
+  name,
+  value,
+  percent,
+  delay = 0
+}: {
+  name: string;
+  value: number;
+  percent: number;
+  delay?: number;
+}) {
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 200 + delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  return (
+    <div
+      style={{
+        opacity: isAnimated ? 1 : 0,
+        transform: isAnimated ? 'translateY(0)' : 'translateY(10px)',
+        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+      }}
+    >
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-sm text-gray-700">{name}</span>
+        <span className="text-sm font-semibold text-gray-900">{value}</span>
+      </div>
+      <div className="h-3 rounded-lg overflow-hidden" style={{ backgroundColor: PASTEL.yellow.bg }}>
+        <div
+          className="h-full rounded-lg flex items-center justify-end pr-2"
+          style={{
+            width: isAnimated ? `${percent}%` : '0%',
+            background: `linear-gradient(90deg, ${PASTEL.yellow.border}, ${PASTEL.yellow.text}40)`,
+            transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+            transitionDelay: '0.2s'
+          }}
+        >
+          <span
+            className="text-[9px] font-medium"
+            style={{
+              color: PASTEL.yellow.text,
+              opacity: isAnimated ? 1 : 0,
+              transition: 'opacity 0.3s ease-out',
+              transitionDelay: '0.8s'
+            }}
+          >
+            {percent}%
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -887,16 +1321,14 @@ export default function AnalyticsPage() {
                       { label: 'High', value: stats.byIntent.high, color: '#10B981' },
                       { label: 'Medium', value: stats.byIntent.medium, color: '#FBBF24' },
                       { label: 'Low', value: stats.byIntent.low, color: '#94A3B8' },
-                    ].map(item => (
+                    ].map((item, idx) => (
                       <div key={item.label} className="flex items-center gap-3">
                         <span className="text-[11px] text-gray-500 w-14">{item.label}</span>
-                        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full rounded-full transition-all duration-700"
-                            style={{
-                              width: `${stats.total > 0 ? (item.value / stats.total) * 100 : 0}%`,
-                              backgroundColor: item.color
-                            }}
+                        <div className="flex-1">
+                          <AnimatedBar
+                            percent={stats.total > 0 ? (item.value / stats.total) * 100 : 0}
+                            color={item.color}
+                            delay={idx * 100}
                           />
                         </div>
                         <span className="text-xs font-semibold text-gray-900 w-8 text-right">{item.value}</span>
@@ -915,11 +1347,14 @@ export default function AnalyticsPage() {
                       { label: 'High', value: stats.byUrgency.high, color: '#F97316' },
                       { label: 'Medium', value: stats.byUrgency.medium, color: '#FBBF24' },
                       { label: 'Low', value: stats.byUrgency.low, color: '#94A3B8' },
-                    ].map(item => (
-                      <div key={item.label} className="text-center p-2 rounded-xl" style={{ backgroundColor: `${item.color}10` }}>
-                        <p className="text-lg font-bold" style={{ color: item.color }}>{item.value}</p>
-                        <p className="text-[9px] text-gray-500">{item.label}</p>
-                      </div>
+                    ].map((item, idx) => (
+                      <UrgencyCard
+                        key={item.label}
+                        label={item.label}
+                        value={item.value}
+                        color={item.color}
+                        delay={idx * 80}
+                      />
                     ))}
                   </div>
                 </div>
@@ -969,57 +1404,30 @@ export default function AnalyticsPage() {
             {/* Conversation Depth */}
             <SectionCard title="Conversation Quality" subtitle="Engagement depth metrics" icon={MessageCircle}>
               <div className="flex items-center justify-around py-4">
-                <div className="text-center">
-                  <div className="relative w-20 h-20 mx-auto mb-2">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F1F5F9" strokeWidth="8" />
-                      <circle
-                        cx="40" cy="40" r="32" fill="none" stroke="#8B5CF6" strokeWidth="8"
-                        strokeLinecap="round"
-                        strokeDasharray={`${(conversationMetrics.avgMessages / 20) * 201} 201`}
-                        className="transition-all duration-1000"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xl font-bold text-gray-900">{conversationMetrics.avgMessages}</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-500">Avg Messages</p>
-                </div>
-                <div className="text-center">
-                  <div className="relative w-20 h-20 mx-auto mb-2">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F1F5F9" strokeWidth="8" />
-                      <circle
-                        cx="40" cy="40" r="32" fill="none" stroke="#10B981" strokeWidth="8"
-                        strokeLinecap="round"
-                        strokeDasharray={`${(conversationMetrics.avgDuration / 30) * 201} 201`}
-                        className="transition-all duration-1000"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xl font-bold text-gray-900">{conversationMetrics.avgDuration}</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-500">Avg Minutes</p>
-                </div>
-                <div className="text-center">
-                  <div className="relative w-20 h-20 mx-auto mb-2">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle cx="40" cy="40" r="32" fill="none" stroke="#F1F5F9" strokeWidth="8" />
-                      <circle
-                        cx="40" cy="40" r="32" fill="none" stroke="#F59E0B" strokeWidth="8"
-                        strokeLinecap="round"
-                        strokeDasharray={`${(dataQuality.avgCompleteness / 100) * 201} 201`}
-                        className="transition-all duration-1000"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xl font-bold text-gray-900">{dataQuality.avgCompleteness}%</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-500">Completion</p>
-                </div>
+                <MiniRadialProgress
+                  value={conversationMetrics.avgMessages}
+                  maxValue={20}
+                  color="#8B5CF6"
+                  displayValue={conversationMetrics.avgMessages}
+                  label="Avg Messages"
+                  delay={0}
+                />
+                <MiniRadialProgress
+                  value={conversationMetrics.avgDuration}
+                  maxValue={30}
+                  color="#10B981"
+                  displayValue={conversationMetrics.avgDuration}
+                  label="Avg Minutes"
+                  delay={150}
+                />
+                <MiniRadialProgress
+                  value={dataQuality.avgCompleteness}
+                  maxValue={100}
+                  color="#F59E0B"
+                  displayValue={`${dataQuality.avgCompleteness}%`}
+                  label="Completion"
+                  delay={300}
+                />
               </div>
               <p className="text-[11px] text-gray-400 text-center mt-2">
                 Higher engagement indicates stronger lead qualification.
@@ -1048,15 +1456,12 @@ export default function AnalyticsPage() {
                         </div>
                         <span className="text-sm font-semibold text-gray-900">{item.value}</span>
                       </div>
-                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full rounded-full transition-all duration-700"
-                          style={{
-                            width: `${(item.value / maxValue) * 100}%`,
-                            background: `linear-gradient(90deg, ${PASTEL.cyan.border}, ${PASTEL.cyan.text})`
-                          }}
-                        />
-                      </div>
+                      <AnimatedBar
+                        percent={(item.value / maxValue) * 100}
+                        gradient={`linear-gradient(90deg, ${PASTEL.cyan.border}, ${PASTEL.cyan.text})`}
+                        delay={idx * 100}
+                        height="h-1.5"
+                      />
                     </div>
                   );
                 }) : <p className="text-sm text-gray-400 text-center py-8">No regional data</p>}
@@ -1066,19 +1471,16 @@ export default function AnalyticsPage() {
             {/* Channels */}
             <SectionCard title="Channels" subtitle="Lead sources" icon={Zap}>
               <div className="space-y-3">
-                {channelData.length > 0 ? channelData.map((item) => {
+                {channelData.length > 0 ? channelData.map((item, idx) => {
                   const percent = stats.total > 0 ? Math.round((item.value / stats.total) * 100) : 0;
                   return (
-                    <div key={item.name} className="flex items-center gap-3 p-3 rounded-xl" style={{ backgroundColor: PASTEL.mint.light }}>
-                      <div className="p-2 rounded-lg" style={{ backgroundColor: PASTEL.mint.bg }}>
-                        <MessageCircle className="w-4 h-4" style={{ color: PASTEL.mint.text }} strokeWidth={1.5} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">{item.name}</p>
-                        <p className="text-[11px] text-gray-500">{percent}% of leads</p>
-                      </div>
-                      <span className="text-lg font-bold text-gray-900">{item.value}</span>
-                    </div>
+                    <ChannelItem
+                      key={item.name}
+                      name={item.name}
+                      value={item.value}
+                      percent={percent}
+                      delay={idx * 100}
+                    />
                   );
                 }) : <p className="text-sm text-gray-400 text-center py-8">No channel data</p>}
               </div>
@@ -1116,27 +1518,17 @@ export default function AnalyticsPage() {
             {/* Budget Ranges */}
             <SectionCard title="Budget Intelligence" subtitle="Expected investment ranges" icon={DollarSign}>
               <div className="space-y-3">
-                {budgetData.length > 0 ? budgetData.map((item) => {
+                {budgetData.length > 0 ? budgetData.map((item, idx) => {
                   const maxValue = budgetData[0]?.value || 1;
                   const percent = Math.round((item.value / maxValue) * 100);
                   return (
-                    <div key={item.name}>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-sm text-gray-700">{item.name}</span>
-                        <span className="text-sm font-semibold text-gray-900">{item.value}</span>
-                      </div>
-                      <div className="h-3 rounded-lg overflow-hidden" style={{ backgroundColor: PASTEL.yellow.bg }}>
-                        <div
-                          className="h-full rounded-lg transition-all duration-700 flex items-center justify-end pr-2"
-                          style={{
-                            width: `${percent}%`,
-                            background: `linear-gradient(90deg, ${PASTEL.yellow.border}, ${PASTEL.yellow.text}40)`
-                          }}
-                        >
-                          <span className="text-[9px] font-medium" style={{ color: PASTEL.yellow.text }}>{percent}%</span>
-                        </div>
-                      </div>
-                    </div>
+                    <BudgetBar
+                      key={item.name}
+                      name={item.name}
+                      value={item.value}
+                      percent={percent}
+                      delay={idx * 120}
+                    />
                   );
                 }) : <p className="text-sm text-gray-400 text-center py-8">No budget data</p>}
               </div>
@@ -1145,27 +1537,16 @@ export default function AnalyticsPage() {
             {/* Use Cases */}
             <SectionCard title="Use Cases" subtitle="What leads are looking for" icon={Briefcase}>
               <div className="space-y-2">
-                {useCaseData.length > 0 ? useCaseData.map((item) => {
+                {useCaseData.length > 0 ? useCaseData.map((item, idx) => {
                   const percent = stats.total > 0 ? Math.round((item.value / stats.total) * 100) : 0;
                   return (
-                    <div key={item.name} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <div className="p-2 rounded-lg" style={{ backgroundColor: PASTEL.lavender.bg }}>
-                        <Briefcase className="w-4 h-4" style={{ color: PASTEL.lavender.text }} strokeWidth={1.5} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="h-full rounded-full transition-all duration-700"
-                              style={{ width: `${percent}%`, backgroundColor: PASTEL.lavender.text }}
-                            />
-                          </div>
-                          <span className="text-[10px] text-gray-500">{percent}%</span>
-                        </div>
-                      </div>
-                      <span className="text-lg font-bold text-gray-900">{item.value}</span>
-                    </div>
+                    <UseCaseItem
+                      key={item.name}
+                      name={item.name}
+                      value={item.value}
+                      percent={percent}
+                      delay={idx * 100}
+                    />
                   );
                 }) : <p className="text-sm text-gray-400 text-center py-8">No use case data</p>}
               </div>
@@ -1178,23 +1559,14 @@ export default function AnalyticsPage() {
           <SectionCard title="Conversation Topics" subtitle="Most discussed subjects" icon={MessageCircle}>
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
               {topicData.length > 0 ? topicData.map((item, idx) => (
-                <div
+                <TopicCard
                   key={item.name}
-                  className="p-4 rounded-xl text-center transition-all hover:scale-105"
-                  style={{ backgroundColor: idx === 0 ? PASTEL.lavender.bg : PASTEL.slate.bg }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-2"
-                    style={{
-                      backgroundColor: idx === 0 ? PASTEL.lavender.text : PASTEL.slate.text,
-                      color: 'white'
-                    }}
-                  >
-                    {idx + 1}
-                  </div>
-                  <p className="text-xs text-gray-600 truncate mb-1">{item.name}</p>
-                  <p className="text-xl font-bold text-gray-900">{item.value}</p>
-                </div>
+                  name={item.name}
+                  value={item.value}
+                  rank={idx + 1}
+                  isTop={idx === 0}
+                  delay={idx * 80}
+                />
               )) : <p className="col-span-5 text-sm text-gray-400 text-center py-8">No topic data</p>}
             </div>
           </SectionCard>
