@@ -702,19 +702,23 @@ function ChannelItem({
   );
 }
 
-// Animated Topic Card
+// Animated Topic Card with hover-based color swap
 function TopicCard({
   name,
   value,
   rank,
-  isTop,
-  delay = 0
+  isHighlighted,
+  delay = 0,
+  onMouseEnter,
+  onMouseLeave
 }: {
   name: string;
   value: number;
   rank: number;
-  isTop: boolean;
+  isHighlighted: boolean;
   delay?: number;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 }) {
   const [isAnimated, setIsAnimated] = useState(false);
 
@@ -725,21 +729,23 @@ function TopicCard({
 
   return (
     <div
-      className="p-4 rounded-xl text-center transition-all hover:scale-105"
+      className="p-4 rounded-xl text-center cursor-pointer"
       style={{
-        backgroundColor: isTop ? PASTEL.lavender.bg : PASTEL.slate.bg,
+        backgroundColor: isHighlighted ? PASTEL.lavender.bg : PASTEL.slate.bg,
         opacity: isAnimated ? 1 : 0,
         transform: isAnimated ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
-        transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
       }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div
         className="w-8 h-8 rounded-xl flex items-center justify-center mx-auto mb-2"
         style={{
-          backgroundColor: isTop ? PASTEL.lavender.text : PASTEL.slate.text,
+          backgroundColor: isHighlighted ? PASTEL.lavender.text : PASTEL.slate.text,
           color: 'white',
           transform: isAnimated ? 'scale(1)' : 'scale(0)',
-          transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
           transitionDelay: '0.2s'
         }}
       >
@@ -756,6 +762,34 @@ function TopicCard({
       >
         {value}
       </p>
+    </div>
+  );
+}
+
+// Topic Cards Container with interactive hover swap
+function TopicCardsContainer({ topics }: { topics: { name: string; value: number }[] }) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      {topics.length > 0 ? topics.map((item, idx) => {
+        // When hovering on a card, that card gets highlighted (purple)
+        // and the first card loses its highlight
+        const isHighlighted = hoveredIndex === null ? idx === 0 : hoveredIndex === idx;
+
+        return (
+          <TopicCard
+            key={item.name}
+            name={item.name}
+            value={item.value}
+            rank={idx + 1}
+            isHighlighted={isHighlighted}
+            delay={idx * 80}
+            onMouseEnter={() => setHoveredIndex(idx)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          />
+        );
+      }) : <p className="col-span-5 text-sm text-gray-400 text-center py-8">No topic data</p>}
     </div>
   );
 }
@@ -1723,18 +1757,7 @@ export default function AnalyticsPage() {
               TOP TOPICS
               ================================================================ */}
           <SectionCard title="Conversation Topics" subtitle="Most discussed subjects" icon={MessageCircle}>
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-              {topicData.length > 0 ? topicData.map((item, idx) => (
-                <TopicCard
-                  key={item.name}
-                  name={item.name}
-                  value={item.value}
-                  rank={idx + 1}
-                  isTop={idx === 0}
-                  delay={idx * 80}
-                />
-              )) : <p className="col-span-5 text-sm text-gray-400 text-center py-8">No topic data</p>}
-            </div>
+            <TopicCardsContainer topics={topicData} />
           </SectionCard>
         </div>
       )}
