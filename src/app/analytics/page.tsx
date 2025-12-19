@@ -103,7 +103,7 @@ function Sparkline({ data, color, height = 32 }: { data: number[]; color: string
   );
 }
 
-// Donut Chart Component
+// Donut Chart Component with Clockwise Sweep Animation
 function DonutChart({
   segments,
   size = 160,
@@ -117,14 +117,33 @@ function DonutChart({
   centerLabel?: string;
   centerValue?: string | number;
 }) {
+  const [isAnimated, setIsAnimated] = useState(false);
   const total = segments.reduce((acc, s) => acc + s.value, 0);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  let currentOffset = 0;
+
+  // Trigger animation on mount
+  useEffect(() => {
+    const timer = setTimeout(() => setIsAnimated(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Calculate cumulative offsets for each segment
+  const segmentData = useMemo(() => {
+    let cumulativeOffset = 0;
+    return segments.map((segment) => {
+      const percentage = total > 0 ? segment.value / total : 0;
+      const dashLength = percentage * circumference;
+      const offset = cumulativeOffset;
+      cumulativeOffset += dashLength;
+      return { ...segment, dashLength, offset, percentage };
+    });
+  }, [segments, total, circumference]);
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
+        {/* Background circle */}
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -133,32 +152,33 @@ function DonutChart({
           stroke="#F1F5F9"
           strokeWidth={strokeWidth}
         />
-        {segments.map((segment, i) => {
-          const percentage = total > 0 ? segment.value / total : 0;
-          const dashLength = percentage * circumference;
-          const offset = currentOffset;
-          currentOffset += dashLength;
-
-          return (
-            <circle
-              key={i}
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill="none"
-              stroke={segment.color}
-              strokeWidth={strokeWidth}
-              strokeDasharray={`${dashLength} ${circumference}`}
-              strokeDashoffset={-offset}
-              strokeLinecap="round"
-              className="transition-all duration-1000 ease-out"
-              style={{ animationDelay: `${i * 150}ms` }}
-            />
-          );
-        })}
+        {/* Animated segments */}
+        {segmentData.map((segment, i) => (
+          <circle
+            key={i}
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke={segment.color}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeDasharray={`${segment.dashLength} ${circumference}`}
+            strokeDashoffset={isAnimated ? -segment.offset : circumference}
+            className="donut-segment"
+            style={{
+              transition: `stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)`,
+              transitionDelay: `${i * 200}ms`
+            }}
+          />
+        ))}
       </svg>
+      {/* Center label with fade-in */}
       {(centerLabel || centerValue) && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700"
+          style={{ opacity: isAnimated ? 1 : 0, transitionDelay: '600ms' }}
+        >
           {centerValue && <span className="text-2xl font-bold text-gray-900">{centerValue}</span>}
           {centerLabel && <span className="text-xs text-gray-500">{centerLabel}</span>}
         </div>
