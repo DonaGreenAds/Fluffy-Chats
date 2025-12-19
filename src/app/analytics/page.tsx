@@ -1567,7 +1567,7 @@ export default function AnalyticsPage() {
                 <MiniRadialProgress
                   value={conversationMetrics.avgMessages}
                   maxValue={20}
-                  color="#8B5CF6"
+                  color="#A78BFA"
                   displayValue={conversationMetrics.avgMessages}
                   label="Avg Messages"
                   delay={0}
@@ -1575,7 +1575,7 @@ export default function AnalyticsPage() {
                 <MiniRadialProgress
                   value={conversationMetrics.avgDuration}
                   maxValue={30}
-                  color="#10B981"
+                  color="#6EE7B7"
                   displayValue={conversationMetrics.avgDuration}
                   label="Avg Minutes"
                   delay={150}
@@ -1583,7 +1583,7 @@ export default function AnalyticsPage() {
                 <MiniRadialProgress
                   value={dataQuality.avgCompleteness}
                   maxValue={100}
-                  color="#F59E0B"
+                  color="#FBBF24"
                   displayValue={`${dataQuality.avgCompleteness}%`}
                   label="Completion"
                   delay={300}
@@ -1651,7 +1651,7 @@ export default function AnalyticsPage() {
               <div className="flex flex-col items-center py-4">
                 <RadialProgress
                   value={dataQuality.avgCompleteness}
-                  color="#8B5CF6"
+                  color="#A78BFA"
                 />
                 <div className="mt-4 space-y-2 w-full">
                   <div className="flex items-center justify-between text-sm">
