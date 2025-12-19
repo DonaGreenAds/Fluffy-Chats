@@ -486,155 +486,165 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Main Analytics Grid */}
-          <div className="grid lg:grid-cols-3 gap-5">
+          {/* Main Analytics Grid - 5 Separate Cards */}
+          <div className="grid lg:grid-cols-5 gap-4">
             {/* Lead Temperature */}
-            <div className="bg-white rounded-2xl border border-[var(--border)] p-5" style={{ boxShadow: 'var(--shadow-card)' }}>
-              <div className="flex items-center gap-2 mb-5">
-                <div className="p-2 rounded-lg bg-[var(--surface-2)]">
-                  <ThermometerSun className="w-4 h-4 text-[var(--muted)]" />
+            <div className="bg-white rounded-2xl border border-[var(--border)] p-4" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-1.5 rounded-lg bg-[var(--surface-2)]">
+                  <ThermometerSun className="w-3.5 h-3.5 text-[var(--muted)]" />
                 </div>
-                <h3 className="font-semibold text-sm text-[var(--text)]">Lead Temperature</h3>
+                <h3 className="font-semibold text-xs text-[var(--text)]">Lead Temperature</h3>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <Flame className="w-4 h-4 text-[var(--hot-primary)]" />
-                      <span className="text-sm text-[var(--text-2)]">Hot</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 text-[var(--hot-primary)]" />
+                      <span className="text-xs text-[var(--text-2)]">Hot</span>
                     </div>
-                    <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.hot} leads</span>
+                    <span className="text-xs font-semibold text-[var(--text)]">{leadTemperature.hot}</span>
                   </div>
                   <ProgressBar value={leadTemperature.hot} max={leadTemperature.total} color="linear-gradient(90deg, var(--hot-primary), var(--hot-light))" showLabel={false} />
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <Sun className="w-4 h-4 text-[var(--warm-primary)]" />
-                      <span className="text-sm text-[var(--text-2)]">Warm</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <Sun className="w-3.5 h-3.5 text-[var(--warm-primary)]" />
+                      <span className="text-xs text-[var(--text-2)]">Warm</span>
                     </div>
-                    <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.warm} leads</span>
+                    <span className="text-xs font-semibold text-[var(--text)]">{leadTemperature.warm}</span>
                   </div>
                   <ProgressBar value={leadTemperature.warm} max={leadTemperature.total} color="linear-gradient(90deg, var(--warm-primary), var(--warm-light))" showLabel={false} />
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <Snowflake className="w-4 h-4 text-[var(--cold-primary)]" />
-                      <span className="text-sm text-[var(--text-2)]">Cold</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <Snowflake className="w-3.5 h-3.5 text-[var(--cold-primary)]" />
+                      <span className="text-xs text-[var(--text-2)]">Cold</span>
                     </div>
-                    <span className="text-sm font-semibold text-[var(--text)]">{leadTemperature.cold} leads</span>
+                    <span className="text-xs font-semibold text-[var(--text)]">{leadTemperature.cold}</span>
                   </div>
                   <ProgressBar value={leadTemperature.cold} max={leadTemperature.total} color="var(--cold-primary)" showLabel={false} />
                 </div>
               </div>
             </div>
 
-            {/* Intent & Stage */}
-            <div className="bg-white rounded-2xl border border-[var(--border)] p-5" style={{ boxShadow: 'var(--shadow-card)' }}>
-              <div className="flex items-center gap-2 mb-5">
-                <div className="p-2 rounded-lg bg-[var(--surface-2)]">
-                  <Target className="w-4 h-4 text-[var(--muted)]" />
+            {/* Intent Level - Separate Card */}
+            <div className="bg-white rounded-2xl border border-[var(--border)] p-4" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-1.5 rounded-lg bg-[var(--surface-2)]">
+                  <Target className="w-3.5 h-3.5 text-[var(--muted)]" />
                 </div>
-                <h3 className="font-semibold text-sm text-[var(--text)]">Intent & Stage</h3>
+                <h3 className="font-semibold text-xs text-[var(--text)]">Intent Level</h3>
               </div>
 
-              <div className="mb-5">
-                <p className="text-xs text-[var(--muted)] mb-3 font-medium uppercase tracking-wide">Intent Level</p>
-                <div className="space-y-3">
-                  <div>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-xs text-[var(--text-2)]">High Intent</span>
-                      <span className="text-xs font-semibold text-[var(--text)]">{stats.byIntent.high}</span>
-                    </div>
-                    <ProgressBar value={stats.byIntent.high} max={stats.total} color="var(--success)" showLabel={false} />
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-xs text-[var(--text-2)]">High</span>
+                    <span className="text-xs font-semibold text-[var(--text)]">{stats.byIntent.high}</span>
                   </div>
-                  <div>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-xs text-[var(--text-2)]">Medium</span>
-                      <span className="text-xs font-semibold text-[var(--text)]">{stats.byIntent.medium}</span>
-                    </div>
-                    <ProgressBar value={stats.byIntent.medium} max={stats.total} color="var(--warning)" showLabel={false} />
-                  </div>
-                  <div>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-xs text-[var(--text-2)]">Low</span>
-                      <span className="text-xs font-semibold text-[var(--text)]">{stats.byIntent.low}</span>
-                    </div>
-                    <ProgressBar value={stats.byIntent.low} max={stats.total} color="var(--cold-primary)" showLabel={false} />
-                  </div>
+                  <ProgressBar value={stats.byIntent.high} max={stats.total} color="var(--success)" showLabel={false} />
                 </div>
-              </div>
-
-              <div>
-                <p className="text-xs text-[var(--muted)] mb-3 font-medium uppercase tracking-wide">Buyer Stage</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { label: 'Aware', value: stats.byStage.awareness, color: 'var(--accent-1)' },
-                    { label: 'Consider', value: stats.byStage.consideration, color: 'var(--info)' },
-                    { label: 'Decision', value: stats.byStage.decision, color: 'var(--success)' },
-                  ].map((stage) => (
-                    <div key={stage.label} className="text-center p-3 bg-[var(--surface-2)] rounded-xl">
-                      <p className="text-xl font-bold text-[var(--text)]">{stage.value}</p>
-                      <p className="text-[10px] text-[var(--muted)]">{stage.label}</p>
-                      <div className="w-full h-1 mt-2 rounded-full overflow-hidden bg-[var(--surface-3)]">
-                        <div className="h-full rounded-full transition-all" style={{ width: `${stats.total ? (stage.value / stats.total) * 100 : 0}%`, background: stage.color }} />
-                      </div>
-                    </div>
-                  ))}
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-xs text-[var(--text-2)]">Medium</span>
+                    <span className="text-xs font-semibold text-[var(--text)]">{stats.byIntent.medium}</span>
+                  </div>
+                  <ProgressBar value={stats.byIntent.medium} max={stats.total} color="var(--warning)" showLabel={false} />
+                </div>
+                <div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-xs text-[var(--text-2)]">Low</span>
+                    <span className="text-xs font-semibold text-[var(--text)]">{stats.byIntent.low}</span>
+                  </div>
+                  <ProgressBar value={stats.byIntent.low} max={stats.total} color="var(--cold-primary)" showLabel={false} />
                 </div>
               </div>
             </div>
 
-            {/* Urgency & Sentiment */}
-            <div className="bg-white rounded-2xl border border-[var(--border)] p-5" style={{ boxShadow: 'var(--shadow-card)' }}>
-              <div className="flex items-center gap-2 mb-5">
-                <div className="p-2 rounded-lg bg-[var(--surface-2)]">
-                  <AlertTriangle className="w-4 h-4 text-[var(--muted)]" />
+            {/* Buyer Stage - Separate Card */}
+            <div className="bg-white rounded-2xl border border-[var(--border)] p-4" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-1.5 rounded-lg bg-[var(--surface-2)]">
+                  <TrendingUp className="w-3.5 h-3.5 text-[var(--muted)]" />
                 </div>
-                <h3 className="font-semibold text-sm text-[var(--text)]">Urgency & Sentiment</h3>
+                <h3 className="font-semibold text-xs text-[var(--text)]">Buyer Stage</h3>
               </div>
 
-              <div className="mb-5">
-                <p className="text-xs text-[var(--muted)] mb-3 font-medium uppercase tracking-wide">Urgency Level</p>
-                <div className="flex gap-2">
-                  {[
-                    { label: 'Critical', value: stats.byUrgency.critical, color: 'var(--danger)' },
-                    { label: 'High', value: stats.byUrgency.high, color: '#F97316' },
-                    { label: 'Medium', value: stats.byUrgency.medium, color: 'var(--warning)' },
-                    { label: 'Low', value: stats.byUrgency.low, color: 'var(--cold-primary)' },
-                  ].map((u) => (
-                    <div key={u.label} className="flex-1 text-center p-2 bg-[var(--surface-2)] rounded-lg">
-                      <div className="w-2.5 h-2.5 rounded-full mx-auto mb-1" style={{ background: u.color }} />
-                      <p className="text-lg font-bold text-[var(--text)]">{u.value}</p>
-                      <p className="text-[9px] text-[var(--muted)]">{u.label}</p>
+              <div className="space-y-2">
+                {[
+                  { label: 'Awareness', value: stats.byStage.awareness, color: 'var(--accent-1)' },
+                  { label: 'Consideration', value: stats.byStage.consideration, color: 'var(--info)' },
+                  { label: 'Decision', value: stats.byStage.decision, color: 'var(--success)' },
+                ].map((stage) => (
+                  <div key={stage.label} className="flex items-center justify-between p-2 bg-[var(--surface-2)] rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full" style={{ background: stage.color }} />
+                      <span className="text-xs text-[var(--text-2)]">{stage.label}</span>
                     </div>
-                  ))}
+                    <span className="text-sm font-bold text-[var(--text)]">{stage.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Urgency Level - Separate Card */}
+            <div className="bg-white rounded-2xl border border-[var(--border)] p-4" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-1.5 rounded-lg bg-[var(--surface-2)]">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[var(--muted)]" />
                 </div>
+                <h3 className="font-semibold text-xs text-[var(--text)]">Urgency Level</h3>
               </div>
 
-              <div>
-                <p className="text-xs text-[var(--muted)] mb-3 font-medium uppercase tracking-wide">Sentiment</p>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between p-2 bg-[var(--success-soft)] rounded-lg">
-                    <span className="text-xs font-medium text-[var(--success-text)]">Very Positive</span>
-                    <span className="text-sm font-bold text-[var(--success)]">{sentimentData.veryPositive}</span>
+              <div className="space-y-2">
+                {[
+                  { label: 'Critical', value: stats.byUrgency.critical, color: 'var(--danger)' },
+                  { label: 'High', value: stats.byUrgency.high, color: '#F97316' },
+                  { label: 'Medium', value: stats.byUrgency.medium, color: 'var(--warning)' },
+                  { label: 'Low', value: stats.byUrgency.low, color: 'var(--cold-primary)' },
+                ].map((u) => (
+                  <div key={u.label} className="flex items-center justify-between p-2 bg-[var(--surface-2)] rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full" style={{ background: u.color }} />
+                      <span className="text-xs text-[var(--text-2)]">{u.label}</span>
+                    </div>
+                    <span className="text-sm font-bold text-[var(--text)]">{u.value}</span>
                   </div>
-                  <div className="flex items-center justify-between p-2 bg-green-50 rounded-lg">
-                    <span className="text-xs font-medium text-green-700">Positive</span>
-                    <span className="text-sm font-bold text-green-600">{sentimentData.positive}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-[var(--surface-2)] rounded-lg">
-                    <span className="text-xs font-medium text-[var(--muted)]">Neutral</span>
-                    <span className="text-sm font-bold text-[var(--text-2)]">{sentimentData.neutral}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2 bg-[var(--danger-soft)] rounded-lg">
-                    <span className="text-xs font-medium text-[var(--danger-text)]">Negative</span>
-                    <span className="text-sm font-bold text-[var(--danger)]">{sentimentData.negative}</span>
-                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Sentiment - Separate Card */}
+            <div className="bg-white rounded-2xl border border-[var(--border)] p-4" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-1.5 rounded-lg bg-[var(--surface-2)]">
+                  <Activity className="w-3.5 h-3.5 text-[var(--muted)]" />
+                </div>
+                <h3 className="font-semibold text-xs text-[var(--text)]">Sentiment</h3>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-2 bg-[var(--success-soft)] rounded-lg">
+                  <span className="text-xs font-medium text-[var(--success-text)]">Very Positive</span>
+                  <span className="text-sm font-bold text-[var(--success)]">{sentimentData.veryPositive}</span>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-green-50 rounded-lg">
+                  <span className="text-xs font-medium text-green-700">Positive</span>
+                  <span className="text-sm font-bold text-green-600">{sentimentData.positive}</span>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-[var(--surface-2)] rounded-lg">
+                  <span className="text-xs font-medium text-[var(--muted)]">Neutral</span>
+                  <span className="text-sm font-bold text-[var(--text-2)]">{sentimentData.neutral}</span>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-[var(--danger-soft)] rounded-lg">
+                  <span className="text-xs font-medium text-[var(--danger-text)]">Negative</span>
+                  <span className="text-sm font-bold text-[var(--danger)]">{sentimentData.negative}</span>
                 </div>
               </div>
             </div>
