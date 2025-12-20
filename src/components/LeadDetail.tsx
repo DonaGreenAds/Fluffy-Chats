@@ -415,8 +415,11 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                 <ArrowLeft className="w-5 h-5 text-[var(--muted-foreground)]" />
               </button>
               <div
-                className="w-12 h-12 rounded-full flex items-center justify-center font-semibold text-base"
+                className="flex items-center justify-center font-semibold text-base"
                 style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
                   backgroundColor: ['#FEF3C7', '#EDE9FE', '#D1FAE5', '#FCE7F3', '#DBEAFE', '#FFE4E6'][lead.prospect_name.charCodeAt(0) % 6],
                   color: ['#92400E', '#5B21B6', '#065F46', '#9D174D', '#1E40AF', '#9F1239'][lead.prospect_name.charCodeAt(0) % 6]
                 }}
