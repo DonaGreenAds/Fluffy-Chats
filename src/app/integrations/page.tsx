@@ -714,31 +714,29 @@ export default function IntegrationsPage() {
           </div>
         )}
 
-        {/* Stats Row - Redesigned */}
+        {/* Stats Row - Redesigned with pastel backgrounds and strokes */}
         <div className="grid grid-cols-4 gap-5 mb-8">
           {[
-            { icon: Link2, label: 'Connected Apps', value: connectedCount, bg: '#ECFEFF' },
-            { icon: Database, label: 'Total Synced', value: totalExports, bg: '#F5F3FF' },
-            { icon: Users, label: 'Available Leads', value: leads.length, bg: '#EEF2FF' },
-            { icon: TrendingUp, label: 'Success Rate', value: `${successRate}%`, bg: '#ECFDF3', isSuccess: true },
+            { icon: Link2, label: 'Connected Apps', value: connectedCount, bg: '#ECFEFF', border: '#A5F3FC', iconBg: '#CFFAFE', iconColor: '#0891B2' },
+            { icon: Database, label: 'Total Synced', value: totalExports, bg: '#F5F3FF', border: '#DDD6FE', iconBg: '#EDE9FE', iconColor: '#7C3AED' },
+            { icon: Users, label: 'Available Leads', value: leads.length, bg: '#EEF2FF', border: '#C7D2FE', iconBg: '#E0E7FF', iconColor: '#4F46E5' },
+            { icon: TrendingUp, label: 'Success Rate', value: `${successRate}%`, bg: '#ECFDF3', border: '#A7F3D0', iconBg: '#D1FAE5', iconColor: '#059669', isSuccess: true },
           ].map((stat, index) => (
             <div
               key={stat.label}
-              className="bg-white rounded-[14px] p-5 transition-all duration-200 hover:shadow-sm"
+              className="rounded-[14px] p-5 transition-all duration-200 hover:shadow-sm"
               style={{
-                boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                backgroundColor: stat.bg,
+                border: `1px solid ${stat.border}`,
                 animationDelay: `${index * 50}ms`
               }}
             >
               <div className="flex items-start gap-3">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ backgroundColor: stat.bg }}
+                  style={{ backgroundColor: stat.iconBg }}
                 >
-                  <stat.icon className={clsx(
-                    'w-5 h-5',
-                    stat.isSuccess ? 'text-[#059669]' : 'text-[#6B7280]'
-                  )} />
+                  <stat.icon className="w-5 h-5" style={{ color: stat.iconColor }} />
                 </div>
                 <div>
                   <p className="text-xs text-[#6B7280] mb-0.5">{stat.label}</p>
@@ -767,7 +765,7 @@ export default function IntegrationsPage() {
                   key={integration.id}
                   className="bg-white rounded-[14px] overflow-hidden transition-all duration-200 hover:shadow-md group"
                   style={{
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    border: '1px solid #E5E7EB',
                     minHeight: '280px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -1166,7 +1164,7 @@ export default function IntegrationsPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-[14px] p-6" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+        <div className="bg-white rounded-[14px] p-6" style={{ border: '1px solid #E5E7EB' }}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-medium text-[#111827]">Recent Activity</h2>
             {activityLogs.length > 0 && (
