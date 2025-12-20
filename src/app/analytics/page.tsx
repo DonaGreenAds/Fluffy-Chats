@@ -1349,12 +1349,12 @@ export default function AnalyticsPage() {
             </button>
 
             {showDatePicker && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-[#DDD6FE] rounded-2xl shadow-xl z-50 overflow-hidden animate-fadeIn">
-                <div className="p-4 border-b border-[#EDE9FE]">
+              <div className="absolute right-0 top-full mt-2 w-[340px] bg-white border border-[#E9E5FF] rounded-2xl shadow-xl z-50 overflow-hidden animate-fadeIn">
+                <div className="p-4 border-b border-[#F3F0FF]">
                   <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-[#5B21B6]">Select Period</h4>
+                    <h4 className="font-semibold text-[#6D28D9]">Select Period</h4>
                     <button onClick={() => setShowDatePicker(false)} className="p-1.5 hover:bg-[#F5F3FF] rounded-lg transition-colors">
-                      <X className="w-4 h-4 text-[#8B5CF6]" />
+                      <X className="w-4 h-4 text-[#A78BFA]" />
                     </button>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
@@ -1366,7 +1366,7 @@ export default function AnalyticsPage() {
                           "px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                           selectedPreset === preset.label
                             ? "bg-[#8B5CF6] text-white"
-                            : "bg-[#F5F3FF] text-[#5B21B6] hover:bg-[#EDE9FE]"
+                            : "bg-[#FAF8FF] text-[#7C3AED] hover:bg-[#F3EEFF] border border-[#EDE9FE]"
                         )}
                       >
                         {preset.label}
@@ -1374,12 +1374,24 @@ export default function AnalyticsPage() {
                     ))}
                   </div>
                 </div>
-                <div className="p-4 bg-[#FAFAFF]">
-                  <p className="text-[10px] text-[#7C3AED] mb-2 font-medium uppercase tracking-wide">Custom Range</p>
-                  <div className="flex items-center gap-2">
-                    <input type="date" value={dateRange.start} onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))} className="flex-1 px-3 py-2 border border-[#DDD6FE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] bg-white" />
-                    <span className="text-[#A78BFA]">–</span>
-                    <input type="date" value={dateRange.end} onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))} className="flex-1 px-3 py-2 border border-[#DDD6FE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] bg-white" />
+                <div className="p-4 bg-[#FCFBFF]">
+                  <p className="text-[10px] text-[#8B5CF6] mb-2 font-medium uppercase tracking-wide">Custom Range</p>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="date"
+                      value={dateRange.start}
+                      onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                      className="flex-1 px-3 py-2.5 border border-[#E9E5FF] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#A78BFA] bg-white min-w-0"
+                      style={{ minWidth: '130px' }}
+                    />
+                    <span className="text-[#C4B5FD] font-medium">–</span>
+                    <input
+                      type="date"
+                      value={dateRange.end}
+                      onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                      className="flex-1 px-3 py-2.5 border border-[#E9E5FF] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#A78BFA] bg-white min-w-0"
+                      style={{ minWidth: '130px' }}
+                    />
                   </div>
                   <button onClick={() => applyCustomRange(dateRange.start, dateRange.end)} className="w-full mt-3 px-4 py-2.5 bg-[#8B5CF6] text-white rounded-xl text-sm font-medium hover:bg-[#7C3AED] transition-colors">
                     Apply
