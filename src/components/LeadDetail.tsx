@@ -440,38 +440,47 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                   )}
                 </div>
                 <p className="text-[var(--muted-foreground)]">{lead.company_name && lead.company_name !== 'unknown' ? lead.company_name : 'Company not provided'}</p>
-                {/* Action Buttons */}
-                <div className="flex items-center gap-3 mt-4">
-                  <button
-                    onClick={markAsContacted}
-                    disabled={isContacted}
-                    className={clsx(
-                      'inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm',
-                      isContacted
-                        ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-sky-400 to-cyan-400 text-white hover:from-sky-500 hover:to-cyan-500 hover:shadow-md hover:shadow-sky-200 active:scale-[0.98]'
-                    )}
-                  >
-                    <UserCheck className="w-4 h-4" />
-                    <span>{isContacted ? 'Contacted' : 'Mark as Contacted'}</span>
-                  </button>
-                  <button
-                    onClick={handleSendClick}
-                    className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 hover:shadow-md hover:shadow-indigo-200 active:scale-[0.98]"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span>Send to CRM</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setWebhookResult(null);
-                      setShowWebhookModal(true);
-                    }}
-                    className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 hover:shadow-md hover:shadow-violet-200 active:scale-[0.98]"
-                  >
-                    <Webhook className="w-4 h-4" />
-                    <span>Send to Webhook</span>
-                  </button>
+                {/* Action Container */}
+                <div className="mt-4 p-4 bg-[#F9FAFB] rounded-[14px] border-t border-[#E5E7EB]">
+                  <div className="flex items-center gap-3">
+                    {/* Primary Action - Mark as Contacted */}
+                    <button
+                      onClick={markAsContacted}
+                      disabled={isContacted}
+                      className={clsx(
+                        'inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200',
+                        isContacted
+                          ? 'bg-[#ECFDF3] text-[#065F46] cursor-default'
+                          : 'bg-[#ECFDF3] text-[#065F46] hover:bg-[#D1FAE5] hover:shadow-sm active:scale-[0.98] cursor-pointer'
+                      )}
+                    >
+                      <UserCheck className="w-4 h-4" />
+                      <span>{isContacted ? 'Contacted' : 'Mark as Contacted'}</span>
+                      {isContacted && <CheckCircle2 className="w-3.5 h-3.5 ml-0.5" />}
+                    </button>
+
+                    {/* Secondary Action - Send to CRM */}
+                    <button
+                      onClick={handleSendClick}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-[#111827] border border-[#E5E7EB] hover:bg-[#EEF2FF] hover:border-[#C7D2FE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
+                    >
+                      <Send className="w-3.5 h-3.5 text-[#6B7280]" />
+                      <span>Send to CRM</span>
+                    </button>
+
+                    {/* Secondary Action - Send to Webhook */}
+                    <button
+                      onClick={() => {
+                        setWebhookResult(null);
+                        setShowWebhookModal(true);
+                      }}
+                      title="Trigger automation"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-[#111827] border border-[#E5E7EB] hover:bg-[#F5F3FF] hover:border-[#DDD6FE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
+                    >
+                      <Plug className="w-3.5 h-3.5 text-[#6B7280]" />
+                      <span>Send to Webhook</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
