@@ -458,7 +458,7 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                       onClick={markAsContacted}
                       disabled={isContacted}
                       title={isContacted ? 'Already contacted' : 'Mark this lead as contacted'}
-                      style={{ minWidth: '140px' }}
+                      style={{ flex: 1 }}
                       className={clsx(
                         'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                         isContacted
@@ -474,7 +474,7 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                     <button
                       onClick={handleSendClick}
                       title="Push lead to CRM"
-                      style={{ minWidth: '140px' }}
+                      style={{ flex: 1 }}
                       className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-[#F5F3FF] text-[#3730A3] hover:bg-[#EDE9FE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
                     >
                       <Send className="w-4 h-4" />
@@ -488,7 +488,7 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                         setShowWebhookModal(true);
                       }}
                       title="Trigger automation"
-                      style={{ minWidth: '140px' }}
+                      style={{ flex: 1 }}
                       className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-[#ECFEFF] text-[#0F766E] hover:bg-[#CFFAFE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
                     >
                       <Plug className="w-4 h-4" />
