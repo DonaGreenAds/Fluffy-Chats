@@ -415,8 +415,11 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                 <ArrowLeft className="w-5 h-5 text-[var(--muted-foreground)]" />
               </button>
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-[var(--text)] font-bold text-xl"
-                style={{ backgroundColor: `var(--avatar-${['pink', 'mint', 'lavender', 'peach', 'sage', 'sky', 'coral'][lead.prospect_name.charCodeAt(0) % 7]})` }}
+                className="w-11 h-11 rounded-xl flex items-center justify-center font-semibold text-base border border-[#E5E7EB]"
+                style={{
+                  backgroundColor: ['#EEF2FF', '#ECFDF3', '#FFF7ED', '#FDF2F8', '#F0FDF4', '#ECFEFF'][lead.prospect_name.charCodeAt(0) % 6],
+                  color: '#374151'
+                }}
               >
                 {lead.prospect_name === 'unknown' || lead.prospect_name === 'Unknown Lead'
                   ? (lead.company_name && lead.company_name !== 'unknown' ? lead.company_name.charAt(0).toUpperCase() : 'L')
@@ -441,30 +444,32 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                 </div>
                 <p className="text-[var(--muted-foreground)]">{lead.company_name && lead.company_name !== 'unknown' ? lead.company_name : 'Company not provided'}</p>
                 {/* Action Container */}
-                <div className="mt-4 p-4 bg-[#F9FAFB] rounded-[14px] border-t border-[#E5E7EB]">
-                  <div className="flex items-center gap-3">
+                <div className="mt-4 p-4 bg-[#F9FAFB] rounded-[14px]">
+                  <div className="flex items-center gap-2.5">
                     {/* Primary Action - Mark as Contacted */}
                     <button
                       onClick={markAsContacted}
                       disabled={isContacted}
+                      title={isContacted ? 'Already contacted' : 'Mark this lead as contacted'}
                       className={clsx(
-                        'inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200',
+                        'inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                         isContacted
-                          ? 'bg-[#ECFDF3] text-[#065F46] cursor-default'
+                          ? 'bg-[#D1FAE5] text-[#065F46] cursor-default opacity-80'
                           : 'bg-[#ECFDF3] text-[#065F46] hover:bg-[#D1FAE5] hover:shadow-sm active:scale-[0.98] cursor-pointer'
                       )}
                     >
                       <UserCheck className="w-4 h-4" />
                       <span>{isContacted ? 'Contacted' : 'Mark as Contacted'}</span>
-                      {isContacted && <CheckCircle2 className="w-3.5 h-3.5 ml-0.5" />}
+                      {isContacted && <CheckCircle2 className="w-3.5 h-3.5" />}
                     </button>
 
                     {/* Secondary Action - Send to CRM */}
                     <button
                       onClick={handleSendClick}
-                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-[#111827] border border-[#E5E7EB] hover:bg-[#EEF2FF] hover:border-[#C7D2FE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
+                      title="Push lead to CRM"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-[#F5F3FF] text-[#3730A3] hover:bg-[#EDE9FE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
                     >
-                      <Send className="w-3.5 h-3.5 text-[#6B7280]" />
+                      <Send className="w-3.5 h-3.5" />
                       <span>Send to CRM</span>
                     </button>
 
@@ -475,9 +480,9 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                         setShowWebhookModal(true);
                       }}
                       title="Trigger automation"
-                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 bg-white text-[#111827] border border-[#E5E7EB] hover:bg-[#F5F3FF] hover:border-[#DDD6FE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-[#ECFEFF] text-[#0F766E] hover:bg-[#CFFAFE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
                     >
-                      <Plug className="w-3.5 h-3.5 text-[#6B7280]" />
+                      <Plug className="w-3.5 h-3.5" />
                       <span>Send to Webhook</span>
                     </button>
                   </div>
