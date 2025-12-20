@@ -415,9 +415,9 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                 <ArrowLeft className="w-5 h-5 text-[var(--muted-foreground)]" />
               </button>
               <div
-                className="w-11 h-11 rounded-full flex items-center justify-center font-semibold text-base border border-[#E5E7EB]"
+                className="w-12 h-12 rounded-full flex items-center justify-center font-semibold text-base bg-white"
                 style={{
-                  backgroundColor: ['#EEF2FF', '#ECFDF3', '#FFF7ED', '#FDF2F8', '#F0FDF4', '#ECFEFF'][lead.prospect_name.charCodeAt(0) % 6],
+                  border: `2px solid ${['#FCD34D', '#A78BFA', '#6EE7B7', '#F9A8D4', '#93C5FD', '#FDA4AF'][lead.prospect_name.charCodeAt(0) % 6]}`,
                   color: '#374151'
                 }}
               >
