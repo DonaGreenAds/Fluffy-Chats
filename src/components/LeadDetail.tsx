@@ -446,20 +446,20 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                     onClick={markAsContacted}
                     disabled={isContacted}
                     className={clsx(
-                      'inline-flex items-center justify-center gap-2 h-9 px-4 rounded-lg text-xs font-medium transition-all duration-200',
+                      'inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-all duration-200',
                       isContacted
                         ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 cursor-not-allowed'
                         : 'bg-sky-50 text-sky-600 border border-sky-200 hover:bg-sky-100 hover:border-sky-300'
                     )}
                   >
-                    <UserCheck className="w-3.5 h-3.5" />
+                    <UserCheck className="w-4 h-4" />
                     <span>{isContacted ? 'Contacted' : 'Mark as Contacted'}</span>
                   </button>
                   <button
                     onClick={handleSendClick}
-                    className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-lg text-xs font-medium transition-all duration-200 bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300"
+                    className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-all duration-200 bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300"
                   >
-                    <Send className="w-3.5 h-3.5" />
+                    <Send className="w-4 h-4" />
                     <span>Send to CRM</span>
                   </button>
                   <button
@@ -467,9 +467,9 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                       setWebhookResult(null);
                       setShowWebhookModal(true);
                     }}
-                    className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-lg text-xs font-medium transition-all duration-200 bg-violet-50 text-violet-600 border border-violet-200 hover:bg-violet-100 hover:border-violet-300"
+                    className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-all duration-200 bg-violet-50 text-violet-600 border border-violet-200 hover:bg-violet-100 hover:border-violet-300"
                   >
-                    <Webhook className="w-3.5 h-3.5" />
+                    <Webhook className="w-4 h-4" />
                     <span>Send to Webhook</span>
                   </button>
                 </div>
