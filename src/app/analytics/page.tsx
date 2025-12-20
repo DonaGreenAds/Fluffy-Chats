@@ -1349,12 +1349,12 @@ export default function AnalyticsPage() {
             </button>
 
             {showDatePicker && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 overflow-hidden animate-fadeIn">
-                <div className="p-4 border-b border-gray-100">
+              <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-[#DDD6FE] rounded-2xl shadow-xl z-50 overflow-hidden animate-fadeIn">
+                <div className="p-4 border-b border-[#EDE9FE]">
                   <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-gray-900">Select Period</h4>
-                    <button onClick={() => setShowDatePicker(false)} className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
-                      <X className="w-4 h-4 text-gray-400" />
+                    <h4 className="font-semibold text-[#5B21B6]">Select Period</h4>
+                    <button onClick={() => setShowDatePicker(false)} className="p-1.5 hover:bg-[#F5F3FF] rounded-lg transition-colors">
+                      <X className="w-4 h-4 text-[#8B5CF6]" />
                     </button>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
@@ -1365,8 +1365,8 @@ export default function AnalyticsPage() {
                         className={clsx(
                           "px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                           selectedPreset === preset.label
-                            ? "bg-gray-900 text-white"
-                            : "bg-gray-50 text-gray-700 hover:bg-gray-100"
+                            ? "bg-[#8B5CF6] text-white"
+                            : "bg-[#F5F3FF] text-[#5B21B6] hover:bg-[#EDE9FE]"
                         )}
                       >
                         {preset.label}
@@ -1374,14 +1374,14 @@ export default function AnalyticsPage() {
                     ))}
                   </div>
                 </div>
-                <div className="p-4 bg-gray-50">
-                  <p className="text-[10px] text-gray-500 mb-2 font-medium uppercase tracking-wide">Custom Range</p>
+                <div className="p-4 bg-[#FAFAFF]">
+                  <p className="text-[10px] text-[#7C3AED] mb-2 font-medium uppercase tracking-wide">Custom Range</p>
                   <div className="flex items-center gap-2">
-                    <input type="date" value={dateRange.start} onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 bg-white" />
-                    <span className="text-gray-400">–</span>
-                    <input type="date" value={dateRange.end} onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 bg-white" />
+                    <input type="date" value={dateRange.start} onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))} className="flex-1 px-3 py-2 border border-[#DDD6FE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] bg-white" />
+                    <span className="text-[#A78BFA]">–</span>
+                    <input type="date" value={dateRange.end} onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))} className="flex-1 px-3 py-2 border border-[#DDD6FE] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] bg-white" />
                   </div>
-                  <button onClick={() => applyCustomRange(dateRange.start, dateRange.end)} className="w-full mt-3 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors">
+                  <button onClick={() => applyCustomRange(dateRange.start, dateRange.end)} className="w-full mt-3 px-4 py-2.5 bg-[#8B5CF6] text-white rounded-xl text-sm font-medium hover:bg-[#7C3AED] transition-colors">
                     Apply
                   </button>
                 </div>
