@@ -458,25 +458,26 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                       onClick={markAsContacted}
                       disabled={isContacted}
                       title={isContacted ? 'Already contacted' : 'Mark this lead as contacted'}
+                      style={{ minWidth: '140px' }}
                       className={clsx(
-                        'inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                        'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                         isContacted
-                          ? 'bg-[#D1FAE5] text-[#065F46] cursor-default opacity-80'
+                          ? 'bg-[#ECFDF3] text-[#065F46] cursor-default'
                           : 'bg-[#ECFDF3] text-[#065F46] hover:bg-[#D1FAE5] hover:shadow-sm active:scale-[0.98] cursor-pointer'
                       )}
                     >
                       <UserCheck className="w-4 h-4" />
                       <span>{isContacted ? 'Contacted' : 'Mark as Contacted'}</span>
-                      {isContacted && <CheckCircle2 className="w-3.5 h-3.5" />}
                     </button>
 
                     {/* Secondary Action - Send to CRM */}
                     <button
                       onClick={handleSendClick}
                       title="Push lead to CRM"
+                      style={{ minWidth: '140px' }}
                       className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-[#F5F3FF] text-[#3730A3] hover:bg-[#EDE9FE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
                     >
-                      <Send className="w-3.5 h-3.5" />
+                      <Send className="w-4 h-4" />
                       <span>Send to CRM</span>
                     </button>
 
@@ -487,9 +488,10 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                         setShowWebhookModal(true);
                       }}
                       title="Trigger automation"
+                      style={{ minWidth: '140px' }}
                       className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-[#ECFEFF] text-[#0F766E] hover:bg-[#CFFAFE] hover:shadow-sm active:scale-[0.98] cursor-pointer"
                     >
-                      <Plug className="w-3.5 h-3.5" />
+                      <Plug className="w-4 h-4" />
                       <span>Send to Webhook</span>
                     </button>
                   </div>
