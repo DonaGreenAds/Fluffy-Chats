@@ -419,7 +419,11 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                 style={{
                   width: '48px',
                   height: '48px',
-                  borderRadius: '50%',
+                  minWidth: '48px',
+                  minHeight: '48px',
+                  borderRadius: '9999px',
+                  flexShrink: 0,
+                  aspectRatio: '1 / 1',
                   backgroundColor: ['#FEF3C7', '#EDE9FE', '#D1FAE5', '#FCE7F3', '#DBEAFE', '#FFE4E6'][lead.prospect_name.charCodeAt(0) % 6],
                   color: ['#92400E', '#5B21B6', '#065F46', '#9D174D', '#1E40AF', '#9F1239'][lead.prospect_name.charCodeAt(0) % 6]
                 }}
