@@ -695,9 +695,29 @@ export default function IntegrationsPage() {
     <div className="min-h-screen" style={{ backgroundColor: '#F9FAFB' }}>
       <div className="max-w-6xl mx-auto p-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-[#111827] mb-1">Integrations</h1>
-          <p className="text-[#6B7280]">Connect your CRM, spreadsheets, and automation tools</p>
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-semibold text-[#111827] mb-1">Integrations</h1>
+            <p className="text-[#6B7280]">Connect your CRM, spreadsheets, and automation tools</p>
+          </div>
+          <button
+            onClick={() => {
+              // Sync all connected integrations
+              const connectedIntegrations = integrations.filter(i => i.status === 'connected');
+              if (connectedIntegrations.length === 0) {
+                alert('No integrations connected. Please connect an integration first.');
+                return;
+              }
+              connectedIntegrations.forEach(integration => {
+                handleSync(integration.id);
+              });
+            }}
+            disabled={isSyncing !== null || connectedCount === 0}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-[#8B5CF6] text-white hover:bg-[#7C3AED] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <RefreshCw className={clsx('w-4 h-4', isSyncing && 'animate-spin')} />
+            Sync All
+          </button>
         </div>
 
         {/* Sync Error Alert */}
