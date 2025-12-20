@@ -441,15 +441,15 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                 </div>
                 <p className="text-[var(--muted-foreground)]">{lead.company_name && lead.company_name !== 'unknown' ? lead.company_name : 'Company not provided'}</p>
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2 mt-3">
+                <div className="flex items-center gap-3 mt-4">
                   <button
                     onClick={markAsContacted}
                     disabled={isContacted}
                     className={clsx(
-                      'inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-all duration-200',
+                      'inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm',
                       isContacted
-                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 cursor-not-allowed'
-                        : 'bg-sky-50 text-sky-600 border border-sky-200 hover:bg-sky-100 hover:border-sky-300'
+                        ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-sky-400 to-cyan-400 text-white hover:from-sky-500 hover:to-cyan-500 hover:shadow-md hover:shadow-sky-200 active:scale-[0.98]'
                     )}
                   >
                     <UserCheck className="w-4 h-4" />
@@ -457,7 +457,7 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                   </button>
                   <button
                     onClick={handleSendClick}
-                    className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-all duration-200 bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300"
+                    className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 hover:shadow-md hover:shadow-indigo-200 active:scale-[0.98]"
                   >
                     <Send className="w-4 h-4" />
                     <span>Send to CRM</span>
@@ -467,7 +467,7 @@ export default function LeadDetail({ lead, onClose }: LeadDetailProps) {
                       setWebhookResult(null);
                       setShowWebhookModal(true);
                     }}
-                    className="inline-flex items-center justify-center gap-2 h-10 px-5 rounded-lg text-sm font-medium transition-all duration-200 bg-violet-50 text-violet-600 border border-violet-200 hover:bg-violet-100 hover:border-violet-300"
+                    className="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-sm bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 hover:shadow-md hover:shadow-violet-200 active:scale-[0.98]"
                   >
                     <Webhook className="w-4 h-4" />
                     <span>Send to Webhook</span>
